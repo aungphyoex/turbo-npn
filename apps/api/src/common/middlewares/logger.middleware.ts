@@ -4,12 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private readonly _logger: Logger;
-  constructor() {
-    this._logger = new Logger('LoggerMiddleware');
-  }
+  constructor(private readonly logger: Logger) {}
   use(req: Request, res: Response, next: NextFunction) {
-    this._logger.log(
+    this.logger.log(
       concatStr([req.method, req.originalUrl, res.statusCode]),
       'Request',
     );

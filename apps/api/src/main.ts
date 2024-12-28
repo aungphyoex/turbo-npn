@@ -14,6 +14,9 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService<Env>);
   const logger = app.get(Logger);
+  app.useStaticAssets('./uploads', {
+    prefix: '/assets',
+  });
   app.enableCors({ credentials: true, origin: '*' });
   app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new ReqLogInterceptor());

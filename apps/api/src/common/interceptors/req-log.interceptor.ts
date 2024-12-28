@@ -11,9 +11,9 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class ReqLogInterceptor implements NestInterceptor {
-  private readonly _logger: Logger;
+  private readonly logger: Logger;
   constructor() {
-    this._logger = new Logger('REQUEST INTERCEPTOR', { timestamp: true });
+    this.logger = new Logger('REQUEST INTERCEPTOR', { timestamp: true });
   }
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest();
@@ -21,13 +21,13 @@ export class ReqLogInterceptor implements NestInterceptor {
     /* *
      * Before the request is handled, log the request details
      * */
-    this._logger.log(concatStr([req.method, req.originalUrl]));
+    this.logger.log(concatStr([req.method, req.originalUrl]));
     return next.handle().pipe(
       tap(() =>
         /* *
          * After the request is handled, log the response details
          * */
-        this._logger.log(
+        this.logger.log(
           concatStr([req.method, req.originalUrl, res.statusCode]),
         ),
       ),
