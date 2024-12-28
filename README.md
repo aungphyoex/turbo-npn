@@ -1,4 +1,4 @@
-<img src="apps/web/public/preview.png" width="100%">
+<img src="assets/preview.png" width="100%" style="border-radius:15px">
 
 ## NestJS & NextJS Boilerplate with Turborepo
 
@@ -78,6 +78,8 @@ turborepo
 
 The backend is powered by NestJS, with TypeORM configured to use PostgreSQL. JWT access token and refresh token
 authentication is implemented for secure API access. Nodemailer is used to handle email services.
+
+<img src="assets/lifecycle.png" width="100%" style="border-radius:15px">
 
 ### Frontend (NextJS)
 
