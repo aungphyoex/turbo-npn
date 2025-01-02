@@ -13,4 +13,4 @@ export const getRandomInt = (min: number, max: number) => {
 };
 
 export * from './bcrypt';
-export * from './env';
+export * from './validateEnv';

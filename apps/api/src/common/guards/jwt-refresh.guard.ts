@@ -1,4 +1,4 @@
-import { Env } from '@/common/schemas/env.schema';
+import { Env } from '@/common/utils';
 import { User } from '@/features/users/entities/user.entity';
 import {
   CanActivate,
