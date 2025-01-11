@@ -16,9 +16,9 @@
       "cache": false,
       "persistent": true
     },
-    "prod": {
+    "start": {
       "cache": false,
-      "dependsOn": ["^prod"]
+      "dependsOn": ["^start"]
     },
     "test": {
       "cache": false,

@@ -4,10 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "check-types": "tsc --noEmit",
     "dev": "next dev --turbopack",
     "lint": "next lint",
-    "prod": "next start",
     "start": "next start"
   },
   "dependencies": {
