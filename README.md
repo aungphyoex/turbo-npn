@@ -70,7 +70,6 @@ turborepo
 │   ├── ui               # ui/UI component library
 │   ├── ts-config        # Shared typescript configuration files
 │   ├── eslint-config    # Shared eslint configuration files
-│   └── utils            # Shared utility functions
 └── turbo.json           # Turborepo configuration
 ```
 
@@ -88,6 +87,21 @@ frontend authentication.
 Micro-Frontend with Turborepo
 Using Turborepo, the project supports a micro-frontend architecture, enabling shared libraries and configurations across
 apps.
+
+### To Add New UI Components to the UI Package
+
+```shell
+cd packages/ui
+```
+
+Then run the following command:
+
+```shell
+pnpm dlx shadcn@latest add
+```
+
+This will add the latest version of shadcn to the UI package.
+
 
 ### Scripts
 
