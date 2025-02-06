@@ -29,7 +29,6 @@ const OpengraphImage = async () =>
           width: '100%',
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`https://www.aungpyaephyo.com/og-logo.png`}
           alt="opengraph logo"

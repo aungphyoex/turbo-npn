@@ -32,6 +32,8 @@ export const bootstrap = async (app: NestExpressApplication) => {
 
   await swagger(app);
   await app.listen(configService.get('PORT')!, () => {
-    logger.log(`This application started at ${configService.get('PORT')}`);
+    logger.log(
+      `This application started at ${configService.get('HOST')}:${configService.get('PORT')}`,
+    );
   });
 };

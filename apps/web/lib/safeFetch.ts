@@ -5,15 +5,15 @@ export const safeFetch = async <T extends ZodSchema<unknown>>(
   schema: T,
   url: URL | RequestInfo,
   init?: RequestInit,
-): Promise<{ error: string | null; data: z.TypeOf<T> }> => {
+): Promise<[string | null, z.TypeOf<T>]> => {
   const response: Response = await fetch(`${env.API_URL}${url}`, init);
   const res = await response.json();
 
   if (!response.ok) {
-    return {
-      error: `HTTP error! Status: ${response.status} - ${response.statusText}`,
-      data: null,
-    };
+    return [
+      `HTTP error! Status: ${response.status} - ${response.statusText}`,
+      null,
+    ];
   }
 
   const validateFields = schema.safeParse(res);
@@ -21,14 +21,8 @@ export const safeFetch = async <T extends ZodSchema<unknown>>(
   if (!validateFields.success) {
     console.log(res);
     console.log('Validation errors:', validateFields.error);
-    return {
-      error: `Validation error: ${validateFields.error.message}`,
-      data: null,
-    };
+    return [`Validation error: ${validateFields.error.message}`, null];
   }
 
-  return {
-    data: validateFields.data,
-    error: null,
-  };
+  return [null, validateFields.data];
 };

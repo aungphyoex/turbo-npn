@@ -102,7 +102,6 @@ pnpm dlx shadcn@latest add
 
 This will add the latest version of shadcn to the UI package.
 
-
 ### Scripts
 
 - **pnpm add:api** - Adds a package specifically to the api workspace.

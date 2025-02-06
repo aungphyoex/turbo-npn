@@ -3,7 +3,6 @@ import { metadata } from '@/lib';
 import '@repo/ui/globals.css';
 import { cn } from '@repo/ui/lib/utils';
 import { Poppins } from 'next/font/google';
-import './tailwind.css';
 
 const font_poppins = Poppins({
   weight: ['400', '500', '600', '700', '800', '900'],
