@@ -32,13 +32,6 @@ export class User extends Base {
   name: string;
 
   @Column({
-    nullable: false,
-    type: 'boolean',
-    default: true,
-  })
-  isActive: boolean;
-
-  @Column({
     nullable: true,
     type: 'varchar',
   })
