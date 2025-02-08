@@ -4,9 +4,13 @@ import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
 import { CreateUserDto } from '@/features/users/dto/create-user.dto';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -66,5 +70,53 @@ export class AuthController {
       message: 'Refresh token generated successfully',
       access_token: data.access_token,
     };
+  }
+
+  @ApiOperation({ summary: 'Verify email address' })
+  @ApiResponse({ status: 201, description: 'Email verified successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired token' })
+  @ApiResponse({ status: 404, description: 'Token not found' })
+  @Public()
+  @Post('verify-email')
+  async verifyEmail(@Body() verifyEmailDto: VerifyEmailDto) {
+    await this.authService.verifyEmail(verifyEmailDto.token);
+    return { message: 'Email verified successfully' };
+  }
+
+  @ApiOperation({ summary: 'Request password reset' })
+  @ApiResponse({ status: 201, description: 'Password reset email sent' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @Public()
+  @Post('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    await this.authService.forgotPassword(forgotPasswordDto.email);
+    return { message: 'Password reset instructions sent to your email' };
+  }
+
+  @ApiOperation({ summary: 'Reset password with token' })
+  @ApiResponse({ status: 201, description: 'Password reset successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid or expired token' })
+  @ApiResponse({ status: 404, description: 'Token not found' })
+  @Public()
+  @Post('reset-password')
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    await this.authService.resetPassword(
+      resetPasswordDto.token,
+      resetPasswordDto.password,
+      resetPasswordDto.confirmPassword,
+    );
+    return { message: 'Password reset successfully' };
+  }
+
+  @ApiOperation({ summary: 'Change password while authenticated' })
+  @ApiResponse({ status: 201, description: 'Password changed successfully' })
+  @ApiResponse({ status: 401, description: 'Current password is incorrect' })
+  @ApiResponse({ status: 400, description: 'Invalid new password or passwords do not match' })
+  @ApiBearerAuth()
+  @Post('change-password')
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto, @Request() req) {
+    changePasswordDto.user_id = req.user.sub;
+    await this.authService.changePassword(changePasswordDto);
+    return { message: 'Password changed successfully' };
   }
 }
