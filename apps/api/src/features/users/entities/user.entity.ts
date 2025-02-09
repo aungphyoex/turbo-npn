@@ -14,7 +14,6 @@ export class User extends Base {
   @Column({
     nullable: false,
     type: 'varchar',
-    default: true,
   })
   password: string;
 
@@ -32,17 +31,40 @@ export class User extends Base {
   name: string;
 
   @Column({
-    nullable: false,
-    type: 'boolean',
-    default: true,
-  })
-  isActive: boolean;
-
-  @Column({
     nullable: true,
     type: 'varchar',
   })
   refreshToken: string | null;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  isEmailVerified: boolean;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  emailVerificationToken: string | null;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  emailVerificationTokenExpires: Date | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  passwordResetToken: string | null;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  passwordResetTokenExpires: Date | null;
 
   @BeforeInsert()
   async hashPassword() {
