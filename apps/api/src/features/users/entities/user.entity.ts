@@ -14,7 +14,6 @@ export class User extends Base {
   @Column({
     nullable: false,
     type: 'varchar',
-    default: true,
   })
   password: string;
 
@@ -32,11 +31,23 @@ export class User extends Base {
   name: string;
 
   @Column({
-    nullable: false,
-    type: 'boolean',
-    default: true,
+    nullable: true,
+    type: 'varchar',
   })
-  isActive: boolean;
+  emailVerificationToken: string | null;
+
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+  })
+  emailVerificationTokenExpires: Date | null;
+
+  @Column({
+    nullable: true,
+    type: 'boolean',
+    default: false,
+  })
+  isEmailVerified: boolean;
 
   @Column({
     nullable: true,

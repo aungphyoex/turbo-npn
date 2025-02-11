@@ -17,13 +17,12 @@ export const bootstrap = async (app: NestExpressApplication) => {
     origin: configService.get('ALLOW_CORS_URL'),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   });
-  app.setGlobalPrefix('api');
   app.useLogger(logger);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
-      transform: false,
+      transform: true,
       transformOptions: {
         enableImplicitConversion: true,
       },

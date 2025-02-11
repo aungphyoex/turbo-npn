@@ -1,23 +1,24 @@
-<img src="assets/preview.png" width="100%" style="border-radius:15px">
+<img src="assets/preview.png" width="100%" alt="hello">
 
 ## NestJS & NextJS Boilerplate with Turborepo
 
-This repository provides a scalable and efficient monorepo setup using Turborepo. It includes NestJS for backend
-services and NextJS for frontend applications, with a suite of tools and libraries configured for seamless development
+This repository provides a scalable and efficient `monorepo` setup using Turborepo. It includes `NestJS` for backend
+services and `NextJS` for frontend applications, with a suite of tools and libraries configured for seamless development
 and deployment.
 
 ### **Features**
 
-1. [x] NestJS backend
-2. [x] NextJS (v15) frontend
-3. [x] SWC for fast TypeScript and JavaScript transpilation
-4. [x] pnpm for efficient dependency management
-5. [x] JWT Access Token & Refresh Token Authentication for secure API access
-6. [x] PostgreSQL database with TypeORM
-7. [x] Nodemailer for email services
-8. [x] Linting and Formatting pre-configured for code quality
-9. [x] Micro-Frontend Support with Turborepo
-10. [x] Shadcn/UI integration for styled components
+- `NestJS (v11)` backend
+- `NextJS (v15)` frontend
+- `SWC` for fast TypeScript and JavaScript transpilation
+- `pnpm` for efficient dependency management
+- `JWT` Access Token & Refresh Token Authentication for secure API access
+- `PostgreSQL` database with TypeORM
+- `Nodemailer` for email services
+- `Linting` and `Formatting` pre-configured for code quality
+- `Micro-Frontend` Support with Turborepo
+- `Shadcn/UI` integration for styled components
+- `Tailwindcss(v4)` integration in `@repo/ui`
 
 ### **Table of Contents**
 
@@ -33,13 +34,13 @@ and deployment.
 Clone the repository:
 
 ```shell
-git clone https://github.com/devaungphyo/turborepo.git
+git clone https://github.com/devaungphyo/turbo-npn.git
 ```
 
 Navigate to the project directory:
 
 ```shell
-cd turborepo
+cd turbo-npn
 ```
 
 Install dependencies using pnpm:
@@ -78,7 +79,7 @@ turborepo
 The backend is powered by NestJS, with TypeORM configured to use PostgreSQL. JWT access token and refresh token
 authentication is implemented for secure API access. Nodemailer is used to handle email services.
 
-<img src="assets/lifecycle.png" width="100%" style="border-radius:15px">
+<img src="assets/lifecycle.png" alt="life cycle" width="100%">
 
 ### Frontend (NextJS)
 
@@ -102,23 +103,33 @@ pnpm dlx shadcn@latest add
 
 This will add the latest version of shadcn to the UI package.
 
+`If you got an error in the UI package, change the import path`
+
+```tsx
+// form
+import { cn } from '@repo/lib/utils';
+
+// to
+import { cn } from '@repo/ui/lib/utils';
+```
+
 ### Scripts
 
-- **pnpm add:api** - Adds a package specifically to the api workspace.
-- **pnpm add:web** - Adds a package specifically to the web workspace.
-- **pnpm build** - Builds both the backend and frontend for production using TurboRepo.
-- **pnpm changeset** - Creates a new changeset for versioning updates.
-- **pnpm clear:modules** - Clears all node_modules in the project using npkill.
-- **pnpm commit** - Opens an interactive commit message interface using Commitizen (cz).
-- **pnpm dev** - Starts both the backend and frontend in development mode using TurboRepo.
-- **pnpm dev:api** - Starts the backend (api) in development mode.
-- **pnpm dev:web** - Starts the frontend (web) in development mode.
-- **pnpm format** - Formats the codebase according to the pre-configured Prettier rules.
-- **pnpm format:check** - Checks the codebase formatting against Prettier rules without modifying files.
-- **pnpm lint** - Lints all code in the repository using TurboRepo.
-- **pnpm prepare** - Runs Husky to set up Git hooks.
-- **pnpm prod** - Starts both the backend and frontend in production mode.
-- **pnpm test** - Runs all tests defined in the repository using TurboRepo.
+- `pnpm add:api` - Adds a package specifically to the api workspace.
+- `pnpm add:web` - Adds a package specifically to the web workspace.
+- `pnpm build` - Builds both the backend and frontend for production using TurboRepo.
+- `pnpm changeset` - Creates a new changeset for versioning updates.
+- `pnpm clear:modules` - Clears all node_modules in the project using npkill.
+- `pnpm commit` - Opens an interactive commit message interface using Commitizen (cz).
+- `pnpm dev` - Starts both the backend and frontend in development mode using TurboRepo.
+- `pnpm dev:api` - Starts the backend (api) in development mode.
+- `pnpm dev:web` - Starts the frontend (web) in development mode.
+- `pnpm format` - Formats the codebase according to the pre-configured Prettier rules.
+- `pnpm format:check` - Checks the codebase formatting against Prettier rules without modifying files.
+- `pnpm lint` - Lints all code in the repository using TurboRepo.
+- `pnpm prepare` - Runs Husky to set up Git hooks.
+- `pnpm prod` - Starts both the backend and frontend in production mode.
+- `pnpm test` - Runs all tests defined in the repository using TurboRepo.
 
 ### Contributing
 

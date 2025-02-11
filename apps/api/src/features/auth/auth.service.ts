@@ -1,4 +1,5 @@
 import { Env, validateString } from '@/common/utils';
+import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
 import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
@@ -7,7 +8,8 @@ import { ValidateUserDto } from '@/features/auth/dto/validate-user.dto';
 import AuthTokensInterface from '@/features/auth/interfaces/auth-tokens.interface';
 import LoginUserInterface from '@/features/auth/interfaces/login-user.interface';
 import RefreshTokenInterface from '@/features/auth/interfaces/refresh-token.interface';
-import { CreateUserDto } from '@/features/users/dto/create-user.dto';
+import { MailService } from '@/features/mail/mail.service';
+import RegisterMail from '@/features/mail/templates/register.mail';
 import { User } from '@/features/users/entities/user.entity';
 import {
   BadRequestException,
@@ -26,12 +28,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<Env>,
     @InjectRepository(User) private readonly UserRepository: Repository<User>,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const user = this.UserRepository.create(createUserDto);
-      await this.UserRepository.save(user);
+      await this.UserRepository.insert(user);
       return user;
     } catch {
       throw new BadRequestException(
@@ -91,6 +94,15 @@ export class AuthService {
     await this.updateRefreshToken({
       refresh_token: tokens.refresh_token,
       user,
+    });
+    await this.mailService.sendEmail({
+      from: `Turbo NPN <${this.config.get('MAIL_USERNAME')}>`,
+      to: [user.email],
+      subject: 'Confirm your email',
+      html: RegisterMail({
+        name: user.name,
+        code: 1234,
+      }),
     });
     return { data: user, tokens };
   }

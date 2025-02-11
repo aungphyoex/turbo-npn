@@ -1,27 +1,34 @@
 import Providers from '@/components/providers';
-import { metadata } from '@/lib';
 import '@repo/ui/globals.css';
 import { cn } from '@repo/ui/lib/utils';
-import { Poppins } from 'next/font/google';
+import { Metadata } from 'next';
+import localFont from 'next/font/local';
+import { ReactNode } from 'react';
 
-const font_poppins = Poppins({
-  weight: ['400', '500', '600', '700', '800', '900'],
-  subsets: ['latin'],
-  display: 'auto',
+const GeistSans = localFont({
+  src: './fonts/GeistVF.woff',
+  variable: '--font-geist-sans',
+});
+const GeistMono = localFont({
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-geist-mono',
 });
 
-export const generateMetadata = async () => {
-  return metadata;
-};
+export const metadata = {
+  title: {
+    default: 'Turbo NPN',
+    template: '%s | Turbo NPN',
+  },
+} satisfies Metadata;
 
 const RootLayout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) => (
   <html lang="en" suppressHydrationWarning>
     <body
-      className={cn(font_poppins.className, 'antialiased')}
+      className={cn(GeistMono.variable, GeistSans.variable, 'antialiased')}
       suppressHydrationWarning
     >
       <Providers>{children}</Providers>

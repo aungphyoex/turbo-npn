@@ -1,9 +1,9 @@
 import { Public } from '@/common/decorators';
 import { JwtRefreshGuard } from '@/common/guards/jwt-refresh.guard';
+import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
 import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { CreateUserDto } from '@/features/users/dto/create-user.dto';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
