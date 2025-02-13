@@ -1,5 +1,6 @@
 import { Public } from '@/common/decorators';
 import { JwtRefreshGuard } from '@/common/guards/jwt-refresh.guard';
+import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
 import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
 import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
@@ -37,6 +38,12 @@ export class AuthController {
   async signOut(@Body() signOutUserDto: SignOutUserDto) {
     await this.authService.signOut(signOutUserDto);
     return { message: 'User signed out successfully' };
+  }
+
+  @Post('confirm-email')
+  async confirmEmail(@Body() confirmEmailDto: ConfirmEmailDto) {
+    await this.authService.confirmEmail(confirmEmailDto);
+    return { message: 'Email confirmed successfully' };
   }
 
   @Public()

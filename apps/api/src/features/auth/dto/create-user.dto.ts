@@ -23,4 +23,8 @@ export class CreateUserDto {
     message: 'Name must be a string',
   })
   name: string;
+
+  emailVerificationToken: string | null;
+
+  emailVerificationTokenExpires: Date | null;
 }
