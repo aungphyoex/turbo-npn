@@ -17,7 +17,7 @@
     "format:check": "prettier . --check",
     "lint": "turbo lint",
     "prepare": "husky",
-    "prod": "turbo prod",
+    "start": "turbo start",
     "test": "turbo test"
   },
   "config": {

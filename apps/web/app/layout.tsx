@@ -1,6 +1,6 @@
 import Providers from '@/components/providers';
-import '@repo/ui/globals.css';
-import { cn } from '@repo/ui/lib/utils';
+import '@repo/shadcn/globals.css';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { ReactNode } from 'react';

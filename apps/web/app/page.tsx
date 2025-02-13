@@ -1,6 +1,6 @@
-import { Button } from '@repo/ui/button';
-import { Loader2 } from '@repo/ui/icon';
-import { Input } from '@repo/ui/input';
+import { Button } from '@repo/shadcn/button';
+import { Loader2 } from '@repo/shadcn/icon';
+import { Input } from '@repo/shadcn/input';
 
 const Page = () => {
   return (

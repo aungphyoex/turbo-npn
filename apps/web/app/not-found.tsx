@@ -1,7 +1,7 @@
 'use client';
-import { Button } from '@repo/ui/button';
-import { RotateCw } from '@repo/ui/icon';
-import { cn } from '@repo/ui/lib/utils';
+import { Button } from '@repo/shadcn/button';
+import { RotateCw } from '@repo/shadcn/icon';
+import { cn } from '@repo/shadcn/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 

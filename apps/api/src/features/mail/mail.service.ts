@@ -10,10 +10,9 @@ export class MailService {
   ) {}
 
   async sendEmail(mailOptions: ISendMailOptions): Promise<void> {
-    const { from, ...options } = mailOptions;
     await this.mailerService.sendMail({
       from: `Turbo NPN <${this.config.get('MAIL_USERNAME')}>`,
-      ...options,
+      ...mailOptions,
     });
   }
 }

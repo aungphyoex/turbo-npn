@@ -18,7 +18,7 @@ and deployment.
 - `Linting` and `Formatting` pre-configured for code quality
 - `Micro-Frontend` Support with Turborepo
 - `Shadcn/UI` integration for styled components
-- `Tailwindcss(v4)` integration in `@repo/ui`
+- `Tailwindcss(v4)` integration in `@repo/shadcn`
 
 ### **Table of Contents**
 
@@ -68,7 +68,7 @@ turborepo
 │   ├── api              # NestJS application
 │   └── web              # NextJS application
 ├── packages
-│   ├── ui               # ui/UI component library
+│   ├── shadcn               # shadcn/UI component library
 │   ├── ts-config        # Shared typescript configuration files
 │   ├── eslint-config    # Shared eslint configuration files
 └── turbo.json           # Turborepo configuration
@@ -92,7 +92,7 @@ apps.
 ### To Add New UI Components to the UI Package
 
 ```shell
-cd packages/ui
+cd packages/shadcn
 ```
 
 Then run the following command:
@@ -110,7 +110,7 @@ This will add the latest version of shadcn to the UI package.
 import { cn } from '@repo/lib/utils';
 
 // to
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@repo/shadcn/lib/utils';
 ```
 
 ### Scripts
