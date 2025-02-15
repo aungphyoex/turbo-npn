@@ -10,7 +10,8 @@
     },
     "lint": {
       "dependsOn": ["^lint"],
-      "cache": false
+      "cache": false,
+      "outputLogs": "full"
     },
     "dev": {
       "cache": false,

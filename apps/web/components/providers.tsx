@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@repo/shadcn/themes-provider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { ReactNode } from 'react';
 
@@ -5,7 +6,16 @@ type ProvidersProps = {
   children: ReactNode;
 };
 const Providers = ({ children }: Readonly<ProvidersProps>) => {
-  return <NuqsAdapter>{children}</NuqsAdapter>;
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <NuqsAdapter>{children}</NuqsAdapter>
+    </ThemeProvider>
+  );
 };
 
 export default Providers;
