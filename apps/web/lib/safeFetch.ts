@@ -7,6 +7,7 @@ export const safeFetch = async <T extends ZodSchema<unknown>>(
   init?: RequestInit,
 ): Promise<[string | null, z.TypeOf<T>]> => {
   const response: Response = await fetch(`${env.API_URL}${url}`, init);
+
   const res = await response.json();
 
   if (!response.ok) {

@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
+    "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "react": "^19.0.0",
@@ -33,6 +35,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/ts-config": "workspace:*",
     "@tailwindcss/postcss": "^4.0.6",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "autoprefixer": "^10.4.20",

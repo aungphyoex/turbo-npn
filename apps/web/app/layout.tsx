@@ -19,6 +19,20 @@ export const metadata = {
     default: 'Turbo NPN',
     template: '%s | Turbo NPN',
   },
+  openGraph: {
+    type: 'website',
+    title: 'Turbo NPN',
+    description: 'Turbo NPN is the name of the website',
+    url: 'https://turbo-npn.com',
+    images: [
+      {
+        url: '/og-bg.png',
+        width: 1200,
+        height: 628,
+        alt: 'Turbo NPN Logo',
+      },
+    ],
+  },
 } satisfies Metadata;
 
 const RootLayout = ({

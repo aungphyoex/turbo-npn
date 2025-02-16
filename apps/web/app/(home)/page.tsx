@@ -1,4 +1,20 @@
-import { Wifi } from '@repo/shadcn/icon';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@repo/shadcn/accordion';
+import { Button } from '@repo/shadcn/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@repo/shadcn/card';
+import { Input } from '@repo/shadcn/input';
+import { Label } from '@repo/shadcn/label';
 import { ModeSwitcher } from '@repo/shadcn/mode-switcher';
 
 const Page = () => {
@@ -104,30 +120,59 @@ const Page = () => {
         <ModeSwitcher />
       </nav>
       <div className="flex-1 w-full flex flex-col justify-center items-center">
-        <div className="flex flex-col gap-5">
-          <div className="relative flex flex-col gap-5">
-            <div
-              style={{
-                transform: 'translate(-50%, -50%)',
-              }}
-              className="absolute left-1/2 top-1/2 -z-10 mx-auto rounded-full border p-16 [mask-image:linear-gradient(to_top,transparent,transparent,white,white,white,transparent,transparent)]  md:p-32"
-            >
-              <div className="size-full rounded-full border p-16 md:p-32">
-                <div className="size-full rounded-full border"></div>
-              </div>
-            </div>
-            <span className="mx-auto flex size-16 items-center justify-center rounded-full border md:size-20">
-              <Wifi className="size-6" />
-            </span>
-            <h2 className="mx-auto max-w-screen-lg text-balance text-center text-3xl font-medium md:text-6xl">
-              Blocks built with Shadcn & Tailwind
-            </h2>
-            <p className="mx-auto max-w-screen-md text-center text-muted-foreground md:text-lg">
-              Finely crafted components built with React, Tailwind and Shadcn
-              UI. Developers can copy and paste these blocks directly into their
-              project.
-            </p>
-          </div>
+        <div className="max-w-lg w-full flex items-center gap-2">
+          <Input />
+          <Button>Submit</Button>
+        </div>
+
+        <div className="max-w-lg w-full mt-16 flex justify-center items-center">
+          <Card className="w-[350px]">
+            <CardHeader>
+              <CardTitle>Create project</CardTitle>
+              <CardDescription>
+                Deploy your new project in one-click.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" placeholder="Name of your project" />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button variant="outline">Cancel</Button>
+              <Button>Deploy</Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        <div className="max-w-lg w-full mt-16">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Is it accessible?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It adheres to the WAI-ARIA design pattern.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Is it styled?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It comes with default styles that matches the other
+                components&apos; aesthetic.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger>Is it animated?</AccordionTrigger>
+              <AccordionContent>
+                Yes. It animated by default, but you can disable it if you
+                prefer.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </section>
