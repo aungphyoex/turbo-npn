@@ -11,7 +11,7 @@ const Providers = ({ children }: Readonly<ProvidersProps>) => {
       attribute="class"
       defaultTheme="system"
       enableSystem
-      disableTransitionOnChange
+      disableTransitionOnChange={false}
     >
       <NuqsAdapter>{children}</NuqsAdapter>
     </ThemeProvider>

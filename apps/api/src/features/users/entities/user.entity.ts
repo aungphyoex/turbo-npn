@@ -55,6 +55,25 @@ export class User extends Base {
   })
   refreshToken: string | null;
 
+  @Column({
+    nullable: true,
+    type: 'varchar',
+  })
+  passwordResetToken: string | null;
+
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+  })
+  passwordResetTokenExpires: Date | null;
+
+  @BeforeInsert()
+  async generateUsername() {
+    if (!this.username) {
+      this.username = this.email.split('@')[0];
+    }
+  }
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await hashString(this.password);
