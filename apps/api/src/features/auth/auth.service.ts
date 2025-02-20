@@ -1,4 +1,4 @@
-import { Env, validateString } from '@/common/utils';
+import { Env, hashString, validateString } from '@/common/utils';
 import { ChangePasswordDto } from '@/features/auth/dto/change-password.dto';
 import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
 import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
@@ -200,9 +200,7 @@ export class AuthService {
 
   //Reset Password
   async resetPassword(dto: ResetPasswordDto): Promise<void> {
-    const user = await this.UserRepository.findOne({
-      where: { id: dto.identifier },
-    });
+    const user = await this.findUser(dto.identifier);
     if (!user) throw new NotFoundException('User not found');
     if (user.passwordResetToken !== dto.resetToken)
       throw new BadRequestException('Invalid password reset token');
@@ -211,7 +209,7 @@ export class AuthService {
       new Date() > user.passwordResetTokenExpires
     )
       throw new BadRequestException('Password reset token expired');
-    user.password = dto.newPassword;
+    user.password = await hashString(dto.newPassword);
     user.passwordResetToken = null;
     user.passwordResetTokenExpires = null;
     await this.UserRepository.save(user);
@@ -227,8 +225,15 @@ export class AuthService {
   //Change Password
   async changePassword(dto: ChangePasswordDto): Promise<void> {
     const user = await this.validateUser(dto);
-    user.password = dto.newPassword;
+    user.password = await hashString(dto.newPassword);
     await this.UserRepository.save(user);
+    await this.mailService.sendEmail({
+      to: [user.email],
+      subject: 'Password Change Successful',
+      html: ChangePasswordMail({
+        name: user.name,
+      }),
+    });
   }
 
   //Sign Out User Account

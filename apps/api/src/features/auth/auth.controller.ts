@@ -8,7 +8,7 @@ import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -43,7 +43,7 @@ export class AuthController {
     return { message: 'User signed out successfully' };
   }
 
-  @Post('confirm-email')
+  @Patch('confirm-email')
   async confirmEmail(@Body() confirmEmailDto: ConfirmEmailDto) {
     await this.authService.confirmEmail(confirmEmailDto);
     return { message: 'Email confirmed successfully' };
@@ -55,21 +55,20 @@ export class AuthController {
     return { message: 'Password reset link sent to your email' };
   }
 
-  @Post('reset-password')
+  @Patch('reset-password')
   async resetPassword(@Body() changePasswordDto: ResetPasswordDto) {
     await this.authService.resetPassword(changePasswordDto);
     return { message: 'Password changed successfully' };
   }
 
-  @Post('change-password')
+  @Patch('change-password')
   async changePassword(@Body() changePasswordDto: ChangePasswordDto) {
     await this.authService.changePassword(changePasswordDto);
     return { message: 'Password changed successfully' };
   }
 
-  @Public()
   @UseGuards(JwtRefreshGuard)
-  @Post('refresh-token')
+  @Patch('refresh-token')
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
     const data = await this.authService.refreshToken(refreshTokenDto);
     return {
