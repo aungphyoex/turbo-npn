@@ -4,6 +4,7 @@ import { cn } from '@repo/shadcn/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();
@@ -13,7 +14,16 @@ export function ModeSwitcher() {
   const toggleTheme = React.useCallback(() => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   }, [resolvedTheme, setTheme]);
+  const [mounted, setMounted] = useState(false)
 
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
   return (
     <div
       className={cn(
