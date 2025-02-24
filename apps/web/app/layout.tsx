@@ -15,6 +15,7 @@ const GeistMono = localFont({
 });
 
 export const metadata = {
+  metadataBase: new URL('https://turbo-npn.onrender.com'),
   title: {
     default: 'Turbo NPN',
     template: '%s | Turbo NPN',
@@ -23,7 +24,7 @@ export const metadata = {
     type: 'website',
     title: 'Turbo NPN',
     description: 'Turbo NPN is the name of the website',
-    url: 'https://turbo-npn.com',
+    url: 'https://turbo-npn.onrender.com',
     images: [
       {
         url: '/og-bg.png',
