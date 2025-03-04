@@ -1,8 +1,8 @@
 'use client';
 
 import { Button } from '@repo/shadcn/button';
-import { RotateCw } from '@repo/shadcn/icon';
 import { cn } from '@repo/shadcn/lib/utils';
+import { RotateCw } from '@repo/shadcn/lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useTransition } from 'react';
 

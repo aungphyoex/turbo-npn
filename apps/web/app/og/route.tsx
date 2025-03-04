@@ -15,34 +15,109 @@ export async function GET(req: NextRequest) {
   return new ImageResponse(
     (
       <div
-        tw="flex h-full w-full bg-black text-white"
-        style={{ fontFamily: 'Geist Sans' }}
+        style={{
+          display: 'flex',
+          height: '100%',
+          width: '100%',
+          backgroundColor: 'black',
+          color: 'white',
+          fontFamily: 'Geist Sans',
+          position: 'relative',
+        }}
       >
-        <div tw="flex border absolute border-stone-700 border-dashed inset-y-0 left-16 w-[1px]" />
-        <div tw="flex border absolute border-stone-700 border-dashed inset-y-0 right-16 w-[1px]" />
-        <div tw="flex border absolute border-stone-700 inset-x-0 h-[1px] top-16" />
-        <div tw="flex border absolute border-stone-700 inset-x-0 h-[1px] bottom-16" />
-        <div tw="flex absolute flex-row bottom-24 right-24 text-white"></div>
-        <div tw="flex flex-col absolute w-[896px] justify-center inset-32">
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            borderLeft: '1px dashed #4b5563',
+            top: 0,
+            bottom: 0,
+            left: '4rem',
+            width: '1px',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            borderLeft: '1px dashed #4b5563',
+            top: 0,
+            bottom: 0,
+            right: '4rem',
+            width: '1px',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            borderTop: '1px solid #4b5563',
+            left: 0,
+            right: 0,
+            top: '4rem',
+            height: '1px',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            borderTop: '1px solid #4b5563',
+            left: 0,
+            right: 0,
+            bottom: '4rem',
+            height: '1px',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            position: 'absolute',
+            bottom: '6rem',
+            right: '6rem',
+            color: 'white',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'absolute',
+            width: '896px',
+            justifyContent: 'center',
+            top: '8rem',
+            bottom: '8rem',
+            left: '8rem',
+            right: '8rem',
+          }}
+        >
           <div
-            tw="tracking-tight flex-grow-1 flex flex-col justify-center leading-[1.1]"
             style={{
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              lineHeight: 1.1,
               textWrap: 'balance',
               fontWeight: 600,
-              fontSize: title && title.length > 20 ? 64 : 80,
+              fontSize: title && title.length > 20 ? '64px' : '80px',
               letterSpacing: '-0.04em',
             }}
           >
-            {title}
+            {title ?? ''}
           </div>
           <div
-            tw="text-[40px] leading-[1.5] flex-grow-1 text-stone-400"
             style={{
+              fontSize: '40px',
+              lineHeight: 1.5,
+              flexGrow: 1,
+              color: '#9ca3af',
               fontWeight: 500,
               textWrap: 'balance',
             }}
           >
-            {`${description?.slice(0, 100)}`}
+            {description ? description?.slice(0, 100) : ''}
           </div>
         </div>
       </div>
