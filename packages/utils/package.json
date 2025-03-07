@@ -1,0 +1,16 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "devDependencies": {
+    "@repo/ts-config": "workspace:*",
+    "dayjs": "^1.11.13"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
