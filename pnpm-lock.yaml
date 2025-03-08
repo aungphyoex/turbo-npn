@@ -23,9 +23,6 @@ importers:
       commitizen:
         specifier: ^4.3.1
         version: 4.3.1(@types/node@22.13.9)(typescript@5.8.2)
-      commitlint:
-        specifier: ^19.8.0
-        version: 19.8.0(@types/node@22.13.9)(typescript@5.8.2)
       cz-conventional-changelog:
         specifier: ^3.3.0
         version: 3.3.0(@types/node@22.13.9)(typescript@5.8.2)
@@ -2879,11 +2876,6 @@ packages:
   commitizen@4.3.1:
     resolution: {integrity: sha512-gwAPAVTy/j5YcOOebcCRIijn+mSjWJC+IYKivTu6aG8Ei/scoXgfsMRnuAk6b0GRste2J4NGxVdMN3ZpfNaVaw==}
     engines: {node: '>= 12'}
-    hasBin: true
-
-  commitlint@19.8.0:
-    resolution: {integrity: sha512-O5waRm0RsjH1g2sT4ifTV58sBYW3wPjfclsdicj1NWUyF91aF0fSqFgKC8EEOUi9RRLKBOhlJarS6V1jWIUx1Q==}
-    engines: {node: '>=v18'}
     hasBin: true
 
   compare-func@2.0.0:
@@ -9691,14 +9683,6 @@ snapshots:
       minimist: 1.2.7
       strip-bom: 4.0.0
       strip-json-comments: 3.1.1
-    transitivePeerDependencies:
-      - '@types/node'
-      - typescript
-
-  commitlint@19.8.0(@types/node@22.13.9)(typescript@5.8.2):
-    dependencies:
-      '@commitlint/cli': 19.8.0(@types/node@22.13.9)(typescript@5.8.2)
-      '@commitlint/types': 19.8.0
     transitivePeerDependencies:
       - '@types/node'
       - typescript
