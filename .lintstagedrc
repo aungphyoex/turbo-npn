@@ -1,3 +1,11 @@
 {
-  "*.{js,jsx,ts,tsx}": ["prettier . --write"]
+  // ...existing code, you can split the html,css,json if you add eslint to configuration
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      // If you have eslint configured, this is a great place to include it
+      "eslint --max-warnings=0",
+      "prettier --write"
+    ],
+    "**/*.{html,json,css,scss,md,mdx}": ["prettier -w"]
+  }
 }
