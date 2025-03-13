@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@repo/shadcn/lib/utils';
-import { motion } from 'framer-motion';
+import * as motion from 'motion/react-client';
 import React from 'react';
 
 export const BoxesCore = ({ className, ...rest }: { className?: string }) => {

@@ -75,5 +75,8 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20"
+  },
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/$1"
   }
 }
