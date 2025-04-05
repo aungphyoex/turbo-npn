@@ -10,11 +10,10 @@ import { LoggerModule as PinoModule } from 'nestjs-pino';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env>) => ({
         pinoHttp: {
-          quietReqLogger: true,
-          quietResLogger: true,
+          // quietReqLogger: true,
+          // quietResLogger: true,
           transport: {
-            target:
-              config.get('NODE_ENV') !== 'production' ? 'pino-pretty' : '',
+            target: 'pino-pretty',
           },
         },
       }),

@@ -1,4 +1,6 @@
+import { MailService } from '@/features/mail/mail.service';
 import { User } from '@/features/users/entities/user.entity';
+import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -16,9 +18,16 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         AuthService,
+        MailService,
         {
           provide: getRepositoryToken(User),
           useClass: Repository,
+        },
+        {
+          provide: MailerService,
+          useValue: {
+            sendMail: jest.fn(), // mock any methods you use
+          },
         },
       ],
     }).compile();

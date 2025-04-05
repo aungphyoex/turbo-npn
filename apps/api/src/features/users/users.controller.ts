@@ -1,3 +1,4 @@
+import { Public } from '@/common/decorators';
 import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
 
@@ -5,9 +6,13 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Get()
   async findAll() {
-    const data = await this.usersService.findAll();
+    const users = await this.usersService.findAll();
+    const data = users.map(({ password, ...user }) => ({
+      ...user,
+    }));
     return { message: 'Users fetched successfully', data };
   }
 }
