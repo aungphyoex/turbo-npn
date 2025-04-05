@@ -1,4 +1,4 @@
-<img src="assets/preview.png" width="100%" alt="hello">
+<img src="assets/preview.png" width="851" alt="hello">
 
 ## NestJS & NextJS Boilerplate with Turborepo
 
@@ -67,10 +67,12 @@ turborepo
 ├── apps
 │   ├── api              # NestJS application
 │   └── web              # NextJS application
+├── assets               # Assets folder for media assets
 ├── packages
-│   ├── shadcn               # shadcn/UI component library
+│   ├── shadcn           # shadcn/UI component library
 │   ├── ts-config        # Shared typescript configuration files
 │   ├── eslint-config    # Shared eslint configuration files
+│   ├── utils            # Shared utils functions
 └── turbo.json           # Turborepo configuration
 ```
 

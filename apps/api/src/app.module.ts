@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { AuthModule } from './features/auth/auth.module';
+import { HealthModule } from './features/health/health.module';
 import { MailModule } from './features/mail/mail.module';
 
 @Module({
@@ -45,6 +46,7 @@ import { MailModule } from './features/mail/mail.module';
     UsersModule,
     AuthModule,
     MailModule,
+    HealthModule,
   ],
 })
 export class AppModule {}
