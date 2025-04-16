@@ -8,7 +8,16 @@ import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
+import { SignOutAllDeviceUserDto } from '@/features/auth/dto/signOutAllDevice-user.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -16,13 +25,11 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post('register')
+  @Post('sign-up')
   async register(@Body() createUserDto: CreateUserDto) {
-    const data = await this.authService.register(createUserDto);
+    await this.authService.register(createUserDto);
     return {
       message: 'User registered successfully',
-      data: data.data,
-      tokens: data.tokens,
     };
   }
 
@@ -30,9 +37,19 @@ export class AuthController {
   @Post('sign-in')
   async signIn(@Body() signInUserDto: SignInUserDto) {
     const data = await this.authService.signIn(signInUserDto);
+    const { id, name, username, email, isEmailVerified, createdAt, updatedAt } =
+      data.data;
     return {
       message: 'User signed in successfully',
-      data: data.data,
+      data: {
+        id,
+        name,
+        username,
+        email,
+        isEmailVerified,
+        createdAt,
+        updatedAt,
+      },
       tokens: data.tokens,
     };
   }
@@ -43,18 +60,44 @@ export class AuthController {
     return { message: 'User signed out successfully' };
   }
 
+  @Post('sign-out-allDevices')
+  async signOutAllDevices(
+    @Body() signOutAllDeviceDto: SignOutAllDeviceUserDto,
+  ) {
+    await this.authService.signOutAllDevices(signOutAllDeviceDto);
+    return { message: 'User signed out from all devices successfully' };
+  }
+
+  @Get('sessions/:userId')
+  async sessions(@Param('userId') userId: string) {
+    const data = await this.authService.getSessions(userId);
+    return {
+      data,
+    };
+  }
+
+  @Get('session/:id')
+  async session(@Param('id') id: string) {
+    const data = await this.authService.getSession(id);
+    return {
+      data,
+    };
+  }
+
   @Patch('confirm-email')
   async confirmEmail(@Body() confirmEmailDto: ConfirmEmailDto) {
     await this.authService.confirmEmail(confirmEmailDto);
     return { message: 'Email confirmed successfully' };
   }
 
-  @Post('forgot-password')
+  @Public()
+  @Patch('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     await this.authService.forgotPassword(forgotPasswordDto);
     return { message: 'Password reset link sent to your email' };
   }
 
+  @Public()
   @Patch('reset-password')
   async resetPassword(@Body() changePasswordDto: ResetPasswordDto) {
     await this.authService.resetPassword(changePasswordDto);
@@ -74,6 +117,7 @@ export class AuthController {
     return {
       message: 'Refresh token generated successfully',
       access_token: data.access_token,
+      refresh_token: data.refresh_token,
     };
   }
 }

@@ -20,6 +20,7 @@ export class CreateUserDto {
   username: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString({
     message: 'Name must be a string',
   })

@@ -1,0 +1,65 @@
+import { auth } from '@/auth';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/shadcn/avatar';
+import { Button } from '@repo/shadcn/button';
+import { Camera, Edit } from '@repo/shadcn/lucide-react';
+
+const ProfileHeader = async () => {
+  const session = await auth();
+
+  return (
+    <div className="relative pb-4">
+      {/* Cover Photo */}
+      <div className="h-48 sm:h-64 w-full relative rounded-b-lg overflow-hidden">
+        <img
+          src={'/placeholder.svg'}
+          alt="Cover"
+          className="w-full h-full object-cover"
+        />
+        <Button
+          size="sm"
+          variant="secondary"
+          className=" absolute bottom-4 right-4 hidden items-center gap-1"
+        >
+          <Camera className="h-4 w-4" />
+          <span>Edit Cover Photo</span>
+        </Button>
+      </div>
+
+      {/* Profile Photo and Name */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-16 sm:-mt-20 ml-0 sm:ml-8 relative z-10">
+        <div className="relative">
+          <Avatar className="h-32 w-32 border-4 border-white">
+            <AvatarImage src={'/placeholder.svg'} alt={'placeholder'} />
+            <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <Button
+            size="icon"
+            variant="secondary"
+            className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
+          >
+            <Camera className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-2 sm:mb-4">
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl font-bold">{session?.user.name}</h1>
+            <p className="text-sm text-muted-foreground">
+              {session?.user.email}
+            </p>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className=" hidden items-center gap-1"
+          >
+            <Edit className="h-4 w-4" />
+            <span>Edit Profile</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfileHeader;

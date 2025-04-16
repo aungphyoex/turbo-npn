@@ -13,7 +13,13 @@ export function ModeSwitcher() {
 
   const toggleTheme = React.useCallback(() => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    // if (!document.startViewTransition)
+    //   return setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    // document.startViewTransition(() =>
+    //   setTheme(resolvedTheme === 'dark' ? 'light' : 'dark'),
+    // );
   }, [resolvedTheme, setTheme]);
+
   const [mounted, setMounted] = useState(false);
 
   // useEffect only runs on the client, so now we can safely show the UI

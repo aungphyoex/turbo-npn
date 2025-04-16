@@ -34,6 +34,7 @@
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/swagger": "^11.0.0",
+    "@nestjs/terminus": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nestjs/throttler": "^6.3.0",
     "@nestjs/typeorm": "^11.0.0",

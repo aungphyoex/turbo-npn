@@ -1,5 +1,5 @@
 import { Env } from '@/common/utils';
-import { User } from '@/features/users/entities/user.entity';
+import { Session } from '@/features/auth/entities/session.entity';
 import {
   CanActivate,
   ExecutionContext,
@@ -17,7 +17,8 @@ export class JwtRefreshGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService<Env>,
-    @InjectRepository(User) private readonly UserRepository: Repository<User>,
+    @InjectRepository(Session)
+    private readonly SessionRepository: Repository<Session>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -31,16 +32,15 @@ export class JwtRefreshGuard implements CanActivate {
         secret: this.configService.get('REFRESH_TOKEN_SECRET'),
       });
     } catch {
-      const user = await this.UserRepository.findOne({
-        where: { refreshToken: token },
-      });
-      if (!user) {
-        throw new UnauthorizedException('Invalid Refresh Token');
-      }
-      user.refreshToken = null;
-      await this.UserRepository.save(user);
       throw new UnauthorizedException('Invalid Refresh Token');
     }
+    const session = await this.SessionRepository.findOne({
+      where: {
+        refresh_token: token,
+        user_id: request.user.id,
+      },
+    });
+    if (!session) throw new UnauthorizedException('Invalid Refresh Token');
     return true;
   }
 

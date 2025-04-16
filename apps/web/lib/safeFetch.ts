@@ -9,12 +9,9 @@ export const safeFetch = async <T extends ZodSchema<unknown>>(
   const response: Response = await fetch(`${env.API_URL}${url}`, init);
 
   const res = await response.json();
-
+  console.log(res);
   if (!response.ok) {
-    return [
-      `HTTP error! Status: ${response.status} - ${response.statusText}`,
-      null,
-    ];
+    return [res.message, null];
   }
 
   const validateFields = schema.safeParse(res);

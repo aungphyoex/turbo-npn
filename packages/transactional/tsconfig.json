@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/ts-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@repo/transactional/*": ["./*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}
