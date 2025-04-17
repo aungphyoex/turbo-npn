@@ -40,7 +40,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/ts-config": "workspace:*",
-    "@swc/cli": "^0.6.0",
+    "@swc/cli": "^0.7.0",
     "@swc/core": "^1.10.14",
     "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.0",
