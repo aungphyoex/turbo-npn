@@ -4,13 +4,13 @@ import { IsString } from 'class-validator';
 export class RefreshTokenDto {
   @ApiProperty()
   @IsString({
-    message: 'Refresh token must be a string',
+    message: 'User Id must be a string',
   })
-  refresh_token: string;
+  user_id: string;
 
   @ApiProperty()
   @IsString({
     message: 'User Id must be a string',
   })
-  user_id: string;
+  session_token: string;
 }

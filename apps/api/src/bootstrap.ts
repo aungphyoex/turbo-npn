@@ -70,7 +70,9 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
   );
 
   // Swagger setup to enable API documentation
-  await swagger(app);
+  if (configService.get('NODE_ENV') !== 'production') {
+    await swagger(app);
+  }
 
   // Start the application
   await app.listen(configService.get('PORT')!, () => {

@@ -1,81 +1,56 @@
 import { Base } from '@/common/entities';
 import { hashString } from '@/common/utils';
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { Session } from '@/features/auth/entities/session.entity';
+import { BeforeInsert, Column, Entity, OneToMany, Relation } from 'typeorm';
 
 @Entity()
 export class User extends Base {
-  @Column({
-    nullable: false,
-    type: 'varchar',
-    unique: true,
-  })
+  @Column({ type: 'varchar', unique: true, nullable: false })
   email: string;
 
-  @Column({
-    nullable: false,
-    type: 'varchar',
-  })
+  @Column({ type: 'varchar', nullable: true })
   password: string;
 
-  @Column({
-    type: 'varchar',
-    unique: true,
-    nullable: false,
-  })
+  @Column({ type: 'varchar', unique: true, nullable: false })
   username: string;
 
-  @Column({
-    nullable: false,
-    type: 'varchar',
-  })
+  @Column({ type: 'varchar', nullable: false })
   name: string;
 
-  @Column({
-    nullable: true,
-    type: 'varchar',
-  })
+  @Column({ type: 'varchar', nullable: true })
   emailVerificationToken: string | null;
 
-  @Column({
-    nullable: true,
-    type: 'timestamp',
-  })
+  @Column({ type: 'timestamp', nullable: true })
   emailVerificationTokenExpires: Date | null;
 
-  @Column({
-    nullable: true,
-    type: 'boolean',
-    default: false,
-  })
+  @Column({ type: 'boolean', nullable: true, default: false })
   isEmailVerified: boolean;
 
-  @Column({
-    nullable: true,
-    type: 'varchar',
-  })
-  refreshToken: string | null;
-
-  @Column({
-    nullable: true,
-    type: 'varchar',
-  })
+  @Column({ type: 'varchar', nullable: true })
   passwordResetToken: string | null;
 
-  @Column({
-    nullable: true,
-    type: 'timestamp',
-  })
+  @Column({ type: 'timestamp', nullable: true })
   passwordResetTokenExpires: Date | null;
 
+  @Column({ type: 'varchar', default: 'email' })
+  provider: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  providerId: string | null;
+
+  @OneToMany(() => Session, (session) => session.user)
+  sessions: Relation<Session[]>;
+
   @BeforeInsert()
-  async generateUsername() {
+  async generateUserInfo() {
+    if (!this.name) {
+      this.name = this.email.split('@')[0];
+    }
     if (!this.username) {
       this.username = this.email.split('@')[0];
     }
-  }
-
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await hashString(this.password);
+    if (this.password) {
+      this.password = await hashString(this.password);
+    }
   }
 }

@@ -7,11 +7,13 @@ import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
 import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { UpdateRefreshTokenDto } from '@/features/auth/dto/update-refresh-token.dto';
+import { SignOutAllDeviceUserDto } from '@/features/auth/dto/signOutAllDevice-user.dto';
 import { ValidateUserDto } from '@/features/auth/dto/validate-user.dto';
+import { Session } from '@/features/auth/entities/session.entity';
 import AuthTokensInterface from '@/features/auth/interfaces/auth-tokens.interface';
 import LoginUserInterface from '@/features/auth/interfaces/login-user.interface';
 import RefreshTokenInterface from '@/features/auth/interfaces/refresh-token.interface';
+import RegisterUserInterface from '@/features/auth/interfaces/register-user.interface';
 import { MailService } from '@/features/mail/mail.service';
 import ChangePasswordMail from '@/features/mail/templates/change-password.mail';
 import ConfirmEmailMail from '@/features/mail/templates/confirm-email.mail';
@@ -36,6 +38,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<Env>,
     @InjectRepository(User) private readonly UserRepository: Repository<User>,
+    @InjectRepository(Session)
+    private readonly SessionRepository: Repository<Session>,
     private readonly mailService: MailService,
   ) {}
 
@@ -107,14 +111,8 @@ export class AuthService {
     return user;
   }
 
-  //Update Refresh Token
-  async updateRefreshToken(dto: UpdateRefreshTokenDto): Promise<void> {
-    dto.user.refreshToken = dto.refresh_token;
-    await this.UserRepository.save(dto.user);
-  }
-
   //Register User Account
-  async register(createUserDto: CreateUserDto): Promise<LoginUserInterface> {
+  async register(createUserDto: CreateUserDto): Promise<RegisterUserInterface> {
     const emailVerificationToken = await this.generateOTP();
     const user = await this.create({
       ...createUserDto,
@@ -122,11 +120,6 @@ export class AuthService {
       emailVerificationTokenExpires: new Date(
         Date.now() + 1000 * 60 * 60 * 24, // 1 day
       ),
-    });
-    const tokens = await this.generateTokens(user);
-    await this.updateRefreshToken({
-      refresh_token: tokens.refresh_token,
-      user,
     });
     await this.mailService.sendEmail({
       to: [user.email],
@@ -136,25 +129,32 @@ export class AuthService {
         code: emailVerificationToken,
       }),
     });
-    return { data: user, tokens };
+    return { data: user };
   }
 
   //Sign In User Account
   async signIn(dto: SignInUserDto): Promise<LoginUserInterface> {
     const user = await this.validateUser(dto);
     const tokens = await this.generateTokens(user);
-    await this.updateRefreshToken({
+    const sessionData = this.SessionRepository.create({
+      user_id: user.id,
       refresh_token: tokens.refresh_token,
-      user,
+      ip: dto.ip,
+      device_name: dto.device_name,
+      device_os: dto.device_os,
+      browser: dto.browser,
+      location: dto.location,
+      userAgent: dto.userAgent,
     });
+    const session = await this.SessionRepository.save(sessionData);
     await this.mailService.sendEmail({
       to: [user.email],
-      subject: 'SignIn With Your Email',
+      subject: 'Login Detected',
       html: SignInMail({
         name: user.name,
       }),
     });
-    return { data: user, tokens };
+    return { data: user, tokens: { ...tokens, session_token: session.id } };
   }
 
   //Confirm User Email
@@ -238,23 +238,57 @@ export class AuthService {
 
   //Sign Out User Account
   async signOut(dto: SignOutUserDto): Promise<void> {
-    const user = await this.UserRepository.findOne({
-      where: { id: dto.user_id },
+    const session = await this.SessionRepository.findOne({
+      where: { id: dto.session_token },
     });
-    if (!user) throw new NotFoundException('User not found');
-    user.refreshToken = null;
-    await this.UserRepository.save(user);
+    if (!session) throw new NotFoundException('Session not found');
+    await this.SessionRepository.remove(session);
+  }
+
+  //Sign Out All Device By User ID
+  async signOutAllDevices(dto: SignOutAllDeviceUserDto): Promise<void> {
+    await this.SessionRepository.delete({ user_id: dto.userId });
   }
 
   //Refresh User Access Token
   async refreshToken(dto: RefreshTokenDto): Promise<RefreshTokenInterface> {
     const user = await this.UserRepository.findOne({
-      where: { id: dto.user_id, refreshToken: dto.refresh_token },
+      where: { id: dto.user_id },
     });
     if (!user) throw new NotFoundException('User not found');
-    const { access_token } = await this.generateTokens(user);
+    const { access_token, refresh_token } = await this.generateTokens(user);
+    const session = await this.SessionRepository.findOne({
+      where: {
+        id: dto.session_token,
+        user_id: dto.user_id,
+      },
+    });
+    if (!session) throw new NotFoundException('Session not found');
+    session.refresh_token = refresh_token;
+    await this.SessionRepository.save(session);
     return {
       access_token,
+      refresh_token,
     };
+  }
+
+  //Get Auth Sessions
+  async getSessions(userId: string): Promise<Session[]> {
+    return await this.SessionRepository.find({
+      where: {
+        user_id: userId,
+      },
+    });
+  }
+
+  //Get Auth Session By Session ID
+  async getSession(id: string): Promise<Session> {
+    const session = await this.SessionRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    if (!session) throw new NotFoundException('Session not found!');
+    return session;
   }
 }

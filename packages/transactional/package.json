@@ -1,0 +1,23 @@
+{
+  "name": "@repo/transactional",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "./*": "./emails/*.tsx"
+  },
+  "scripts": {
+    "dev": "email dev -p 3001"
+  },
+  "devDependencies": {
+    "@react-email/components": "^0.0.36",
+    "@repo/ts-config": "workspace:*",
+    "@types/react": "19.0.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-email": "^4.0.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

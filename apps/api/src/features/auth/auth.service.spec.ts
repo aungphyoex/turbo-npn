@@ -1,3 +1,4 @@
+import { Session } from '@/features/auth/entities/session.entity';
 import { MailService } from '@/features/mail/mail.service';
 import { User } from '@/features/users/entities/user.entity';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -20,6 +21,10 @@ describe('AuthService', () => {
         MailService,
         {
           provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
+        {
+          provide: getRepositoryToken(Session),
           useClass: Repository,
         },
         {

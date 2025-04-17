@@ -1,6 +1,6 @@
-import { User } from '@/features/users/entities/user.entity';
+import { Session } from '@/features/auth/entities/session.entity';
 
 export class UpdateRefreshTokenDto {
-  user: User;
+  session: Session;
   refresh_token: string;
 }
