@@ -1,6 +1,6 @@
 'use client';
 
-import { forgotPassword } from '@/server/auth.server';
+import { confirmEmail } from '@/server/auth.server';
 import {
   Card,
   CardContent,
@@ -12,74 +12,64 @@ import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
 import { cn } from '@repo/shadcn/lib/utils';
 import SubmitButton from '@repo/shadcn/submit-button';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useAction } from 'next-safe-action/hooks';
-import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 
-const ForgotPasswordForm = () => {
+const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
+  const { update } = useSession();
   const [formData, setFormData] = useState({
-    identifier: '',
+    email: session?.user.email ?? '',
+    token: '',
   });
+  const {
+    executeAsync,
+    isExecuting,
+    result: { validationErrors, serverError, bindArgsValidationErrors, data },
+  } = useAction(confirmEmail);
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
   };
-  const {
-    execute,
-    isExecuting,
-    result: { validationErrors, serverError },
-  } = useAction(forgotPassword);
+  console.log(serverError, validationErrors, bindArgsValidationErrors, data);
   return (
     <div className={cn('flex flex-col gap-6')}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription className={cn(serverError && 'text-red-500')}>
-            {serverError ?? 'Forgot your password'}
+            {serverError ?? 'Confirm your email'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             <form
-              onSubmit={(event) => {
+              onSubmit={async (event) => {
                 event.preventDefault();
-                execute(formData);
+                await executeAsync(formData);
               }}
             >
               <div className="grid gap-6">
-                <div className="grid gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="identifier">Email or Username</Label>
-                    <Input
-                      name="identifier"
-                      id="identifier"
-                      placeholder="acme@example.com or your username"
-                      onChange={handleChange}
-                      autoFocus
-                      required
-                    />
-                    {validationErrors?.identifier?._errors?.[0] && (
-                      <p className="text-xs text-red-500">
-                        {validationErrors.identifier._errors[0]}
-                      </p>
-                    )}
+                <div className="grid gap-2">
+                  <div className="flex items-center">
+                    <Label htmlFor="token">Enter your verification code</Label>
                   </div>
-                  <SubmitButton
-                    isLoading={isExecuting}
-                    name={'Send Rest Code'}
+                  <Input
+                    name="token"
+                    id="token"
+                    onChange={handleChange}
+                    required
                   />
+                  {validationErrors?.token?._errors?.[0] && (
+                    <p className="text-xs text-red-500">
+                      {validationErrors.token._errors[0]}
+                    </p>
+                  )}
                 </div>
-                <div className="text-center text-sm">
-                  Back to{' '}
-                  <Link
-                    href={'/auth/sign-in'}
-                    className="underline underline-offset-4"
-                  >
-                    Sign In
-                  </Link>
-                </div>
+                <SubmitButton isLoading={isExecuting} name={'Confirm email'} />
               </div>
             </form>
           </div>
@@ -93,4 +83,4 @@ const ForgotPasswordForm = () => {
   );
 };
 
-export default ForgotPasswordForm;
+export default ConfirmEmailForm;

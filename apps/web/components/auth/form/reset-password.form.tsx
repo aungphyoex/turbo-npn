@@ -89,7 +89,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center">
-                      <Label htmlFor="resetToken">Reset Token</Label>
+                      <Label htmlFor="resetToken">Enter your reset code</Label>
                     </div>
                     <Input
                       name="resetToken"
@@ -111,7 +111,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{' '}
                   <Link
-                    href={'/sign-up'}
+                    href={'/auth/sign-up'}
                     className="underline underline-offset-4"
                   >
                     Sign up

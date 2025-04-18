@@ -91,7 +91,7 @@ const SignUpForm = () => {
                 <div className="text-center text-sm">
                   Already have an account?{' '}
                   <Link
-                    href={'/sign-in'}
+                    href={'/auth/sign-in'}
                     className="underline underline-offset-4"
                   >
                     Sign in

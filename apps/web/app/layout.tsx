@@ -2,16 +2,14 @@ import Providers from '@/components/providers';
 import { cn } from '@repo/shadcn/lib/utils';
 import '@repo/shadcn/shadcn.css';
 import { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Inter } from 'next/font/google';
 import { ReactNode } from 'react';
 
-const GeistSans = localFont({
-  src: './fonts/GeistVF.woff',
-  variable: '--font-geist-sans',
-});
-const GeistMono = localFont({
-  src: './fonts/GeistMonoVF.woff',
-  variable: '--font-geist-mono',
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'auto',
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata = {
@@ -36,19 +34,21 @@ export const metadata = {
   },
 } satisfies Metadata;
 
-const RootLayout = ({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: ReactNode;
-}>) => (
-  <html lang="en" suppressHydrationWarning>
-    <body
-      className={cn(GeistMono.variable, GeistSans.variable, 'antialiased')}
-      suppressHydrationWarning
-    >
-      <Providers>{children}</Providers>
-    </body>
-  </html>
-);
+}>) => {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn('antialiased', inter.variable)}
+        suppressHydrationWarning
+      >
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+};
 
 export default RootLayout;

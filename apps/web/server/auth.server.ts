@@ -1,15 +1,17 @@
 'use server';
 
-import { auth, signIn, signOut } from '@/auth';
+import { auth, signIn, signOut, update } from '@/auth';
 import { safeAction, safeFetch } from '@/lib';
 import { getDeviceInfo } from '@/lib/device';
 import {
   ChangePasswordSchema,
+  ConfirmEmailSchema,
   ForgotPasswordSchema,
   GetSessionSchema,
   GetSessionsSchema,
   ResetPasswordSchema,
   Session,
+  SignIn,
   SignInDataSchema,
   SignInSchema,
   SignOutSchema,
@@ -20,20 +22,11 @@ import { AuthError, User } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-// ----------------------------
-// Types
-// ----------------------------
-
-type SignInCredentials = {
-  identifier: string;
-  password: string;
-};
-
 /**
  * Parses and sends credential-based login with device info to backend.
  */
 export const authorizeSignIn = async (
-  credentials: SignInCredentials,
+  credentials: SignIn,
 ): Promise<null | User> => {
   const deviceInfo = await getDeviceInfo();
 
@@ -110,13 +103,9 @@ export const signUpWithCredentials = safeAction
       identifier: parsedInput.email,
       password: parsedInput.password,
       redirect: true,
-      redirectTo: '/confirm-email',
+      redirectTo: '/auth/confirm-email',
     });
   });
-
-// ----------------------------
-// Sign Out
-// ----------------------------
 
 /**
  * Sign out a device by session token.
@@ -188,10 +177,6 @@ export const signOutAllDevice = safeAction.action(async () => {
   }
 });
 
-// ----------------------------
-// Password Management
-// ----------------------------
-
 /**
  * Change password for the current user.
  */
@@ -243,7 +228,7 @@ export const forgotPassword = safeAction
       },
     );
     if (error) throw error;
-    redirect('/reset-password');
+    redirect('/auth/reset-password');
   });
 
 /**
@@ -266,12 +251,8 @@ export const resetPassword = safeAction
       },
     );
     if (error) throw error;
-    redirect('/sign-in');
+    redirect('/auth/sign-in');
   });
-
-// ----------------------------
-// Session Management
-// ----------------------------
 
 /**
  * Get current session by token.
@@ -316,3 +297,33 @@ export const getAuthSessions = async (): Promise<Session[]> => {
   if (error) return [];
   return data.data;
 };
+
+/**
+ * Confirm email with token
+ */
+export const confirmEmail = safeAction
+  .schema(ConfirmEmailSchema)
+  .action(async ({ parsedInput }) => {
+    const session = await auth();
+    const [error] = await safeFetch(
+      DefaultReturnSchema,
+      '/auth/confirm-email',
+      {
+        method: 'PATCH',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${session?.user?.auth.access_token}`,
+        },
+        body: JSON.stringify(parsedInput),
+      },
+    );
+    if (error) throw new Error(error);
+    await update({
+      user: {
+        isEmailVerified: true,
+      },
+    });
+    redirect('/profile');
+  });

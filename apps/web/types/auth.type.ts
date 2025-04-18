@@ -21,6 +21,7 @@ export const SignInSchema = z.object({
   }),
 });
 
+export type SignIn = z.infer<typeof SignInSchema>;
 /**
  * Schema for sign-in response data, including user info and tokens
  */
@@ -101,4 +102,12 @@ export const ResetPasswordSchema = z.object({
   identifier: z.string(), // Email or username
   resetToken: z.string().min(6).max(6), // 6-character reset token
   newPassword: z.string(), // New password
+});
+
+/**
+ * Schema for confirm email using a token
+ */
+export const ConfirmEmailSchema = z.object({
+  email: z.string().email(),
+  token: z.string().min(6).max(6),
 });
