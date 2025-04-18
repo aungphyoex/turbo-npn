@@ -163,8 +163,13 @@ export class AuthService {
       where: { email: dto.email },
     });
     if (!user) throw new NotFoundException('User not found');
-    if (user.emailVerificationToken !== dto.code)
+    if (user.emailVerificationToken !== dto.token)
       throw new BadRequestException('Invalid confirmation code');
+    if (
+      user.emailVerificationTokenExpires &&
+      new Date(user.emailVerificationTokenExpires) < new Date()
+    )
+      throw new BadRequestException('Email confirm token expired');
     user.isEmailVerified = true;
     user.emailVerificationToken = null;
     user.emailVerificationTokenExpires = null;

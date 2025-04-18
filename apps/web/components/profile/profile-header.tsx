@@ -1,7 +1,9 @@
 import { auth } from '@/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/shadcn/avatar';
 import { Button } from '@repo/shadcn/button';
-import { Camera, Edit } from '@repo/shadcn/lucide-react';
+import { BadgeCheck, Camera, Edit } from '@repo/shadcn/lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const ProfileHeader = async () => {
   const session = await auth();
@@ -10,9 +12,10 @@ const ProfileHeader = async () => {
     <div className="relative pb-4">
       {/* Cover Photo */}
       <div className="h-48 sm:h-64 w-full relative rounded-b-lg overflow-hidden">
-        <img
+        <Image
           src={'/placeholder.svg'}
           alt="Cover"
+          fill
           className="w-full h-full object-cover"
         />
         <Button
@@ -43,7 +46,20 @@ const ProfileHeader = async () => {
 
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-2 sm:mb-4">
           <div className="text-center sm:text-left">
-            <h1 className="text-2xl font-bold">{session?.user.name}</h1>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              {session?.user.name}
+              {session?.user.isEmailVerified && (
+                <BadgeCheck className="size-4 text-blue-500" />
+              )}
+              {!session?.user.isEmailVerified && (
+                <Link
+                  href={'/auth/confirm-email'}
+                  className="text-sm underline font-normal"
+                >
+                  verified
+                </Link>
+              )}
+            </h1>
             <p className="text-sm text-muted-foreground">
               {session?.user.email}
             </p>

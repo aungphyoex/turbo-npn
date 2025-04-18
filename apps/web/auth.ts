@@ -2,7 +2,16 @@ import { env } from '@/lib';
 import { authorizeSignIn } from '@/server/auth.server';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth({
+  pages: {
+    signIn: '/auth/sign-in',
+  },
   providers: [
     Credentials({
       name: 'Credentials',
@@ -19,24 +28,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === 'update') {
         return {
           ...token,
           user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            username: user.username,
-            isEmailVerified: user.isEmailVerified,
-            auth: {
-              access_token: user.auth.access_token,
-              refresh_token: user.auth.refresh_token,
-              session_token: user.auth.session_token,
-            },
+            ...token.user,
+            ...session.user,
           },
         };
+      }
+      if (trigger === 'signIn') {
+        if (user) {
+          return {
+            ...token,
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              username: user.username,
+              isEmailVerified: user.isEmailVerified,
+              auth: {
+                access_token: user.auth.access_token,
+                refresh_token: user.auth.refresh_token,
+                session_token: user.auth.session_token,
+              },
+            },
+          };
+        }
       }
       return token;
     },
@@ -63,13 +83,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async authorized({ request, auth }) {
       const isAuth = !!auth?.user;
+      const isVerifiedUser = !!auth?.user.isEmailVerified;
+      console.log(isVerifiedUser);
       const { nextUrl } = request;
       const { pathname } = nextUrl;
-      if (!isAuth && pathname.startsWith('/profile')) {
-        return Response.redirect(new URL('/', nextUrl));
+      if (!isAuth) {
+        if (pathname.startsWith('/profile')) {
+          return Response.redirect(new URL('/', nextUrl));
+        }
       }
-      if (isAuth && pathname.startsWith('/sign')) {
-        return Response.redirect(new URL('/profile', nextUrl));
+      if (isAuth) {
+        if (pathname.startsWith('/auth/sign')) {
+          return Response.redirect(new URL('/profile', nextUrl));
+        }
+        if (pathname.startsWith('/auth/confirm-email') && isVerifiedUser) {
+          return Response.redirect(new URL('/profile', nextUrl));
+        }
       }
       return true;
     },

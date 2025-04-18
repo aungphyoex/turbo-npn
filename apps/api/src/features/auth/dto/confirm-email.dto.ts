@@ -6,7 +6,7 @@ export class ConfirmEmailDto {
   @IsString()
   @MaxLength(6)
   @MinLength(6)
-  code: string;
+  token: string;
 
   @ApiProperty()
   @IsEmail()
