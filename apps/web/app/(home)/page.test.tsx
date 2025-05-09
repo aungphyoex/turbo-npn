@@ -1,20 +1,36 @@
-import Page from '@/app/(home)/page';
-import * as utils from '@repo/utils';
+import Page from '@/app/(home)/page'; // Path to your Page component
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+// Mock the imported components
+vi.mock('@repo/shadcn/mode-switcher', () => ({
+  ModeSwitcher: () => <div>ModeSwitcher</div>,
+}));
+
+vi.mock('@repo/shadcn/video/player', () => ({
+  VideoPlayer: ({
+    poster,
+    src,
+    className,
+  }: {
+    poster: string;
+    src: string;
+    className: string;
+  }) => (
+    <div data-testid="video-player" className={className}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={poster} alt="poster" />
+      <video src={src} />
+    </div>
+  ),
+}));
+
 describe('Page Component', () => {
-  it('renders "Hello world"', () => {
+  it('renders ModeSwitcher and VideoPlayer components', () => {
     render(<Page />);
-    expect(screen.getByText(/hello world/i)).toBeDefined();
-  });
 
-  it('renders formatted date from utils', () => {
-    // Mock formatDate to control output
-    const mockDate = 'Mocked Date';
-    vi.spyOn(utils, 'formatDate').mockReturnValue(mockDate);
-
-    render(<Page />);
-    expect(screen.getByText(mockDate)).toBeDefined();
+    // Check if ModeSwitcher is rendered
+    expect(screen.getByText('ModeSwitcher')).toBeDefined();
+    expect(screen.getByTestId('video-player')).toBeDefined();
   });
 });

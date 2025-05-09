@@ -7,6 +7,8 @@
     "add:api": "pnpm add --filter=api",
     "add:web": "pnpm add --filter=web",
     "build": "turbo build",
+    "build:api": "pnpm build --filter=api",
+    "build:web": "pnpm build --filter=web",
     "changeset": "changeset",
     "clear:modules": "npx npkill",
     "commit": "cz",
@@ -16,9 +18,13 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "turbo lint",
+    "lint:api": "pnpm lint --filter=api",
+    "lint:web": "pnpm lint --filter=web",
     "prepare": "husky",
     "start": "turbo start",
-    "test": "turbo test"
+    "test": "turbo test",
+    "test:api": "pnpm test --filter=api",
+    "test:web": "pnpm test --filter=web"
   },
   "config": {
     "commitizen": {
