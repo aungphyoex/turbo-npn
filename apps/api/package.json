@@ -1,6 +1,7 @@
 {
   "name": "api",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nest build",
     "dev": "nest start -b swc -w",

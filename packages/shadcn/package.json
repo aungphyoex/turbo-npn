@@ -8,16 +8,17 @@
     "./postcss.config": "./postcss.config.mjs",
     "./tailwind.config": "./tailwind.config.ts",
     "./lib/*": "./src/lib/*.ts",
-    "./hooks/*": [
-      "./src/hooks/*.ts",
-      "./src/hooks/*.tsx"
-    ],
+    "./hooks/*": "./src/hooks/*.tsx",
     "./*": "./src/components/ui/*.tsx",
+    "./video": [
+      "./src/components/ui/video/*.tsx",
+      "./src/components/ui/video/*.ts"
+    ],
     "./lucide-react": "./src/components/icon/lucide-react/index.tsx",
     "./tabler-icons": "./src/components/icon/tabler-icons/index.tsx"
   },
   "scripts": {
-    "add:ui": "npx shadcn@canary add"
+    "add:ui": "npx shadcn@latest add"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
