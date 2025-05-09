@@ -1,5 +1,4 @@
 'use client';
-import { useMobile } from '@repo/shadcn/hooks/use-mobile';
 import { cn, formatTime, getVideoStyles } from '@repo/shadcn/lib/utils';
 import { KeyboardControls } from '@repo/shadcn/video/keyboard-controls';
 import ScreenOrientation from '@repo/shadcn/video/screen-orientation';
@@ -149,8 +148,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     null,
   );
   const [sizeMode, setSizeMode] = useState<VideoSizeMode>('stretch');
-
-  const isMobile = useMobile();
 
   // Function to toggle between play and pause
   const togglePlay = () => {
@@ -385,45 +382,43 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Effect hook for handling the auto-hide of video controls
   useEffect(() => {
-    if (!isMobile) {
-      const handleMouseMove = () => {
-        setShowControls(true);
+    const handleMouseMove = () => {
+      setShowControls(true);
 
-        if (controlsTimeout) {
-          clearTimeout(controlsTimeout);
-        }
-
-        const timeout = setTimeout(() => {
-          if (isPlaying) {
-            setShowControls(false);
-          }
-        }, 10000000);
-
-        setControlsTimeout(timeout);
-      };
-
-      const container = containerRef.current;
-      if (container) {
-        container.addEventListener('mousemove', handleMouseMove);
-        container.addEventListener('mouseleave', () => {
-          if (isPlaying) {
-            // setShowControls(false);
-          }
-        });
+      if (controlsTimeout) {
+        clearTimeout(controlsTimeout);
       }
 
-      return () => {
-        if (container) {
-          container.removeEventListener('mousemove', handleMouseMove);
-          container.removeEventListener('mouseleave', () => {});
+      const timeout = setTimeout(() => {
+        if (isPlaying) {
+          setShowControls(false);
         }
+      }, 500);
 
-        if (controlsTimeout) {
-          clearTimeout(controlsTimeout);
+      setControlsTimeout(timeout);
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('mousemove', handleMouseMove);
+      container.addEventListener('mouseleave', () => {
+        if (isPlaying) {
+          setShowControls(false);
         }
-      };
+      });
     }
-  }, [isPlaying, controlsTimeout, isMobile]);
+
+    return () => {
+      if (container) {
+        container.removeEventListener('mousemove', handleMouseMove);
+        container.removeEventListener('mouseleave', () => {});
+      }
+
+      if (controlsTimeout) {
+        clearTimeout(controlsTimeout);
+      }
+    };
+  }, [isPlaying, controlsTimeout]);
 
   return (
     <div
