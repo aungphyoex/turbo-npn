@@ -84,7 +84,6 @@ export const {
     async authorized({ request, auth }) {
       const isAuth = !!auth?.user;
       const isVerifiedUser = !!auth?.user.isEmailVerified;
-      console.log(isVerifiedUser);
       const { nextUrl } = request;
       const { pathname } = nextUrl;
       if (!isAuth) {
