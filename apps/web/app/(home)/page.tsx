@@ -13,8 +13,8 @@ const Page = () => {
           poster={
             'https://images.unsplash.com/photo-1745282480794-10427e218c76'
           }
-          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-          className="w-full lg:w-[600px] h-[400px] lg:h-[600px]"
+          src="/test.mp4"
+          className="w-full lg:w-[600px] h-[250px] lg:h-[300px]"
         />
       </div>
     </section>

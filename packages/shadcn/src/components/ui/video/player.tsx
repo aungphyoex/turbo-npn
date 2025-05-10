@@ -4,6 +4,8 @@ import { KeyboardControls } from '@repo/shadcn/video/keyboard-controls';
 import ScreenOrientation from '@repo/shadcn/video/screen-orientation';
 import { VideoControls } from '@repo/shadcn/video/video-controls';
 import { VideoTimeline } from '@repo/shadcn/video/video-timeline';
+import { delay } from 'motion';
+import * as motion from 'motion/react-client';
 import React, { JSX, useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Represents the available video size modes for controlling how the video fits in its container
@@ -112,6 +114,14 @@ export interface KeyboardControlsProps {
   isMuted: boolean;
   /** Whether video is in fullscreen mode */
   isFullscreen: boolean;
+}
+
+function useDebouncedState<T>(value: T, duration: number = 0.2): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    return delay(() => setDebouncedValue(value), duration);
+  }, [value, duration]);
+  return debouncedValue;
 }
 
 /**
@@ -393,7 +403,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         if (isPlaying) {
           setShowControls(false);
         }
-      }, 500);
+      }, 3000);
 
       setControlsTimeout(timeout);
     };
@@ -419,6 +429,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
   }, [isPlaying, controlsTimeout]);
+  const debouncedSizeMode = useDebouncedState(sizeMode);
 
   return (
     <div
@@ -429,7 +440,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       )}
     >
       <>
-        <video
+        <motion.video
           ref={videoRef}
           src={src}
           poster={poster}
@@ -440,7 +451,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
           preload="metadata"
           className="size-full block"
           onClick={togglePlay}
-          style={getVideoStyles(sizeMode)}
+          transition={{ duration: 0.5 }}
+          style={getVideoStyles(debouncedSizeMode)}
         />
 
         {/* Large play button in the middle */}
@@ -479,7 +491,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         {showDefaultControls && (
           <div
             className={cn(
-              'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-2 transition-opacity duration-300',
+              'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-2 px-3 transition-opacity duration-300',
               showControls ? 'opacity-100' : 'opacity-0',
             )}
           >

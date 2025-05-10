@@ -34,11 +34,9 @@ const VideoResizer = ({
   return (
     <>
       <Button
-        variant="ghost"
+        variant="default"
         size="icon"
-        className={cn(
-          'size-6 text-neutral-300 hover:bg-neutral-800 hover:text-neutral-300/80 focus:outline-none focus-visible:ring-0',
-        )}
+        className={cn('size-6  focus:outline-none focus-visible:ring-0')}
         onClick={() => {
           setSizeMode(modeButtons[nextIndex]!.mode);
           setShowKeyHint(true);

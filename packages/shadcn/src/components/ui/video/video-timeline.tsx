@@ -1,7 +1,9 @@
 'use client';
 
+import { formatTime } from '@repo/shadcn/lib/utils';
+import { DualRangeSlider } from '@repo/shadcn/range-slider';
 import type React from 'react';
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 interface VideoTimelineProps {
   currentTime: number;
@@ -14,114 +16,33 @@ export const VideoTimeline: React.FC<VideoTimelineProps> = ({
   duration,
   onSeek,
 }) => {
-  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [widthPercentage, setWidthPercentage] = useState(0);
 
-  // Calculate progress percentage
-  const progressPercentage = duration > 0 ? (currentTime / duration) * 100 : 0;
-
-  // Handle click on progress bar
-  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!progressBarRef.current) return;
-
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const clickPosition = (e.clientX - rect.left) / rect.width;
-    const seekTime = clickPosition * duration;
-
-    onSeek(seekTime);
-  };
-
-  // Handle mouse down on progress bar
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Also update position immediately on click
-    if (progressBarRef.current) {
-      const rect = progressBarRef.current.getBoundingClientRect();
-      const clickPosition = (e.clientX - rect.left) / rect.width;
-      const seekTime = clickPosition * duration;
-      onSeek(seekTime);
+  // Update slider when video time changes (e.g., via play)
+  useEffect(() => {
+    if (duration > 0) {
+      const newPercentage = (currentTime / duration) * 100;
+      setWidthPercentage(newPercentage);
     }
+  }, [currentTime, duration]);
 
-    const handleMouseUp = () => {
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-    };
-
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (!progressBarRef.current) return;
-
-      const rect = progressBarRef.current.getBoundingClientRect();
-      const hoverPos = Math.max(
-        0,
-        Math.min(1, (e.clientX - rect.left) / rect.width),
-      );
-      const seekTime = hoverPos * duration;
-      onSeek(seekTime);
-    };
-
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('mousemove', handleGlobalMouseMove);
-  };
-
-  // Handle touch events for mobile
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!progressBarRef.current) return;
-    const touchClientX = e.touches?.[0]?.clientX ?? 0;
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const touchPosition = (touchClientX - rect.left) / rect.width;
-    const seekTime = touchPosition * duration;
-    onSeek(seekTime);
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!progressBarRef.current) return;
-
-      const rect = progressBarRef.current.getBoundingClientRect();
-      const touchPos = Math.max(
-        0,
-        Math.min(1, (touchClientX - rect.left) / rect.width),
-      );
-      const seekTime = touchPos * duration;
-      onSeek(seekTime);
-    };
-
-    const handleTouchEnd = () => {
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleTouchEnd);
+  const handleSliderChange = ([newPercentage]: number[]) => {
+    if (newPercentage != null) {
+      setWidthPercentage(newPercentage);
+      onSeek((newPercentage / 100) * duration);
+    }
   };
 
   return (
-    <div className="relative w-full mb-2">
-      {/* Progress bar */}
-      <div
-        ref={progressBarRef}
-        className="w-full h-1.5 bg-gray-700 cursor-pointer group"
-        onClick={handleProgressBarClick}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleTouchStart}
-      >
-        {/* Buffered progress */}
-        <div
-          className="h-full bg-gray-500"
-          style={{ width: `${Math.min((currentTime / duration) * 110, 100)}%` }}
-        />
-
-        {/* Progress indicator */}
-        <div
-          className="h-full bg-primary absolute top-0 left-0"
-          style={{ width: `${progressPercentage}%` }}
-        />
-
-        {/* Progress handle */}
-        <div
-          className="absolute top-1/2 rounded-full -translate-y-1/2 size-3 bg-primary border-2 border-white opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{
-            left: `${progressPercentage}%`,
-            transform: 'translate(-50%, 0%)',
-          }}
-        />
-      </div>
+    <div className="w-full mb-2">
+      <DualRangeSlider
+        label={(value) => <span>{formatTime(value ?? 0)}</span>}
+        value={[widthPercentage]}
+        onValueChange={handleSliderChange}
+        min={0}
+        max={100}
+        step={1}
+      />
     </div>
   );
 };
