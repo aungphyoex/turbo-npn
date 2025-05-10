@@ -1,6 +1,6 @@
 'use client';
 
-import { useMediaQuery } from '@repo/shadcn/hooks/v/use-media-querry';
+import { useMobile } from '@repo/shadcn/hooks/use-mobile';
 import { ScrollArea, ScrollBar } from '@repo/shadcn/scroll-area';
 import { Separator } from '@repo/shadcn/separator';
 import { AlignmentToolbar } from '@repo/shadcn/tiptap/toolbars/alignment';
@@ -20,7 +20,7 @@ import { BubbleMenu, type Editor } from '@tiptap/react';
 import { useEffect } from 'react';
 
 export function FloatingToolbar({ editor }: { editor: Editor | null }) {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobile = useMobile();
 
   // Prevent default context menu on mobile
   useEffect(() => {
@@ -44,7 +44,7 @@ export function FloatingToolbar({ editor }: { editor: Editor | null }) {
         <BubbleMenu
           tippyOptions={{
             duration: 100,
-            placement: 'bottom',
+            placement: 'bottom-start',
             offset: [0, 10],
           }}
           shouldShow={() => {
@@ -55,8 +55,8 @@ export function FloatingToolbar({ editor }: { editor: Editor | null }) {
           className="w-full min-w-full mx-0 shadow-sm border rounded-sm bg-background"
         >
           <ToolbarProvider editor={editor}>
-            <ScrollArea className="h-fit py-0.5 w-full">
-              <div className="flex items-center px-2 gap-0.5">
+            <ScrollArea className="h-fit py-0.5 max-w-[300px]">
+              <div className="w-full flex items-center px-2 gap-0.5">
                 <div className="flex items-center gap-0.5 p-1">
                   {/* Primary formatting */}
                   <BoldToolbar />
