@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@repo/shadcn/lib/utils';
-import { KeyboardControlsProps } from '@repo/shadcn/video/player';
+import { KeyboardControlsProps } from '@repo/shadcn/lib/video-type';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 

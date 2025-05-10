@@ -1,119 +1,35 @@
 'use client';
-import { useMobile } from '@repo/shadcn/hooks/use-mobile';
-import { cn, formatTime, getVideoStyles } from '@repo/shadcn/lib/utils';
+import { cn } from '@repo/shadcn/lib/utils';
+import { VideoPlayerProps, VideoSizeMode } from '@repo/shadcn/lib/video-type';
+import { formatTime, getVideoStyles } from '@repo/shadcn/lib/video-utils';
 import { KeyboardControls } from '@repo/shadcn/video/keyboard-controls';
 import ScreenOrientation from '@repo/shadcn/video/screen-orientation';
 import { VideoControls } from '@repo/shadcn/video/video-controls';
 import { VideoTimeline } from '@repo/shadcn/video/video-timeline';
+import { delay } from 'motion';
+import { AnimatePresence } from 'motion/react';
+import * as motion from 'motion/react-client';
 import React, { JSX, useCallback, useEffect, useRef, useState } from 'react';
-/**
- * Represents the available video size modes for controlling how the video fits in its container
- * - 'stretch': Stretches the video to fill the container (may distort aspect ratio)
- * - 'fit': Maintains aspect ratio while fitting within container
- * - 'crop': Fills container while maintaining aspect ratio (may crop edges)
- * - 'original': Displays video at its original size
- */
-export type VideoSizeMode = 'stretch' | 'fit' | 'crop' | 'original';
 
 /**
- * Props for the main VideoPlayer component
+ * Use debounce hook
+ * @param value - The value to debounce
+ * @param duration - The duration in seconds to debounce the value
+ * @returns The debounced value
  */
-export interface VideoPlayerProps {
-  /** URL of the video to play */
-  src: string;
-  /** URL of the poster image to show before video plays */
-  poster?: string;
-  /** Additional CSS classes to apply to the container */
-  className?: string;
-  /** Whether to start playing automatically */
-  autoPlay?: boolean;
-  /** Whether to start muted */
-  muted?: boolean;
-  /** Whether to loop the video */
-  loop?: boolean;
-  /** Whether to show video controls */
-  controls?: boolean;
-  /** Callback fired when video starts playing */
-  onPlay?: () => void;
-  /** Callback fired when video is paused */
-  onPause?: () => void;
-  /** Callback fired when video ends */
-  onEnded?: () => void;
-  /** Callback fired when playback position changes */
-  onTimeUpdate?: (currentTime: number) => void;
-  /** Callback fired when video duration is loaded */
-  onDurationChange?: (duration: number) => void;
+function useDebouncedState<T>(value: T, duration: number = 0.2): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    return delay(() => setDebouncedValue(value), duration);
+  }, [value, duration]);
+  return debouncedValue;
 }
 
-/**
- * Props for the VideoControls component
- */
-export interface VideoControlsProps {
-  /** Whether video is currently playing */
-  isPlaying: boolean;
-  /** Whether video is currently muted */
-  isMuted: boolean;
-  /** Current playback position in seconds */
-  currentTime: number;
-  /** Total video duration in seconds */
-  duration: number;
-  /** Whether video is in fullscreen mode */
-  isFullscreen: boolean;
-  /** Current playback speed multiplier */
-  playbackRate: number;
-  /** Current video size mode */
-  sizeMode: VideoSizeMode;
-  /** Function to toggle play/pause */
-  onPlayPause: () => void;
-  /** Function to toggle mute */
-  onMute: () => void;
-  /** Function to seek to specific time */
-  onSeek: (time: number) => void;
-  /** Function to skip backward */
-  onSkipBackward: () => void;
-  /** Function to skip forward */
-  onSkipForward: () => void;
-  /** Function to toggle fullscreen */
-  onFullscreen: () => void;
-  /** Function to change playback speed */
-  onPlaybackRateChange: (rate: number) => void;
-  /** Function to change size mode */
-  setSizeMode: React.Dispatch<React.SetStateAction<VideoSizeMode>>;
-}
-
-/**
- * Props for the VideoTimeline component
- */
-export interface VideoTimelineProps {
-  /** Current playback position in seconds */
-  currentTime: number;
-  /** Total video duration in seconds */
-  duration: number;
-  /** Function to seek to specific time */
-  onSeek: (time: number) => void;
-}
-
-/**
- * Props for the VideoResizer component
- */
-export interface VideoResizerProps {
-  /** Current video size mode */
-  sizeMode: VideoSizeMode;
-  /** Function to change size mode */
-  setSizeMode: React.Dispatch<React.SetStateAction<VideoSizeMode>>;
-}
-
-/**
- * Props for the KeyboardControls component
- */
-export interface KeyboardControlsProps {
-  /** Whether video is currently playing */
-  isPlaying: boolean;
-  /** Whether video is currently muted */
-  isMuted: boolean;
-  /** Whether video is in fullscreen mode */
-  isFullscreen: boolean;
-}
+const iconVariants = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.8 },
+};
 
 /**
  * Index component renders a customizable video player with controls like play/pause, mute, fullscreen, and playback speed.
@@ -128,6 +44,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   muted = false,
   loop = false,
   controls: showDefaultControls = true,
+  keyboardControls,
   onPlay,
   onPause,
   onEnded,
@@ -150,8 +67,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   );
   const [sizeMode, setSizeMode] = useState<VideoSizeMode>('stretch');
 
-  const isMobile = useMobile();
-
   // Function to toggle between play and pause
   const togglePlay = () => {
     const video = videoRef.current;
@@ -161,7 +76,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (!duration) {
       setDuration(video.duration);
     }
-
     // Play or pause the video based on its current state
     if (video.paused) {
       video.play().then(() => {
@@ -264,12 +178,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     // Remove the default controls attribute
     video.removeAttribute('controls');
 
+    // Set show controls initial state is false
+    setShowControls(false);
+
     // Set the mute state
     video.muted = muted;
 
     // Handle time update and update the current time
     const handleTimeUpdate = () => {
-      console.log(`Video time is updated to ${formatTime(video.currentTime)}`);
       setCurrentTime(video.currentTime);
       if (onTimeUpdate) onTimeUpdate(video.currentTime);
     };
@@ -296,7 +212,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     // Prevent right-click and double-click on video
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     const handleDoubleClick = (e: MouseEvent) => e.preventDefault();
-
     // Add event listeners
     video.addEventListener('contextmenu', handleContextMenu);
     video.addEventListener('dblclick', handleDoubleClick);
@@ -318,6 +233,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // Effect hook to add keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!keyboardControls) return;
       // Ignore if user is typing in an input field or if control/alt/meta keys are pressed
       if (
         document.activeElement instanceof HTMLInputElement ||
@@ -383,141 +299,159 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     skipForward,
   ]);
 
-  // Effect hook for handling the auto-hide of video controls
-  useEffect(() => {
-    if (!isMobile) {
-      const handleMouseMove = () => {
-        setShowControls(true);
-
-        if (controlsTimeout) {
-          clearTimeout(controlsTimeout);
-        }
-
-        const timeout = setTimeout(() => {
-          if (isPlaying) {
-            setShowControls(false);
-          }
-        }, 10000000);
-
-        setControlsTimeout(timeout);
-      };
-
-      const container = containerRef.current;
-      if (container) {
-        container.addEventListener('mousemove', handleMouseMove);
-        container.addEventListener('mouseleave', () => {
-          if (isPlaying) {
-            // setShowControls(false);
-          }
-        });
-      }
-
-      return () => {
-        if (container) {
-          container.removeEventListener('mousemove', handleMouseMove);
-          container.removeEventListener('mouseleave', () => {});
-        }
-
-        if (controlsTimeout) {
-          clearTimeout(controlsTimeout);
-        }
-      };
-    }
-  }, [isPlaying, controlsTimeout, isMobile]);
+  const debouncedSizeMode = useDebouncedState(sizeMode);
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        'relative overflow-hidden grid place-items-center bg-black/10 backdrop-blur-sm',
-        className,
-      )}
-    >
-      <>
-        <video
-          ref={videoRef}
-          src={src}
-          poster={poster}
-          autoPlay={autoPlay}
-          muted={muted}
-          loop={loop}
-          playsInline
-          preload="metadata"
-          className="size-full block"
-          onClick={togglePlay}
-          style={getVideoStyles(sizeMode)}
-        />
+    <AnimatePresence>
+      <div
+        ref={containerRef}
+        className={cn(
+          'relative overflow-hidden grid place-items-center bg-black/10 backdrop-blur-sm',
+          className,
+        )}
+      >
+        <>
+          <motion.video
+            ref={videoRef}
+            src={src}
+            poster={poster}
+            autoPlay={autoPlay}
+            muted={muted}
+            loop={loop}
+            playsInline
+            preload="metadata"
+            className="size-full block"
+            onClick={() => setShowControls((prevState) => !prevState)}
+            transition={{ duration: 0.5 }}
+            style={getVideoStyles(debouncedSizeMode)}
+          />
 
-        {/* Large play button in the middle */}
-        <div
-          className={cn(
-            'absolute inset-0 flex items-center justify-center cursor-pointer transition-opacity duration-300',
-            isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100',
-          )}
-          onClick={togglePlay}
-        >
-          <div className="bg-primary/50 hover:bg-primary rounded-full transform duration-500 transition-transform hover:scale-110 grid place-items-center">
-            <div className="size-14">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="60"
-                height="60"
-                fill="none"
-              >
-                <circle cx="30" cy="30" r="30" fill="#fff"></circle>
-                <path fill="#000" d="M22.5 40.5v-21L42 30z"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        {showControls && (
+          {/* Large play button in the middle */}
           <div
+            onClick={() => {
+              if (showControls) setShowControls((prevState) => !prevState);
+            }}
             className={cn(
-              'absolute inset-x-0 top-4 flex lg:hidden items-center justify-end pr-5 cursor-pointer transition-opacity duration-300',
+              'absolute inset-0 flex items-center justify-center  transition-opacity duration-300',
               isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100',
+              showControls && 'opacity-100 pointer-events-auto',
             )}
           >
-            <ScreenOrientation />
+            <motion.div
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePlay();
+              }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-primary/50 hover:bg-primary rounded-full text-white p-3 grid place-items-center cursor-pointer"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isPlaying ? (
+                  <motion.svg
+                    key="pause"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-pause-icon lucide-pause"
+                    variants={iconVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                  >
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                  </motion.svg>
+                ) : (
+                  <motion.svg
+                    key="play"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-play-icon lucide-play"
+                    variants={iconVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={{ duration: 0.2 }}
+                  >
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                  </motion.svg>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
-        )}
-        {/* Controls overlay */}
-        {showDefaultControls && (
-          <div
-            className={cn(
-              'absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-black/0 p-2 transition-opacity duration-300',
-              showControls ? 'opacity-100' : 'opacity-0',
+          {showDefaultControls && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{
+                opacity: showControls ? 1 : 0,
+                x: showControls ? 0 : 20,
+              }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-x-0 px-6 flex justify-end py-3 items-center top-0"
+            >
+              <ScreenOrientation />
+            </motion.div>
+          )}
+          <>
+            {showDefaultControls && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{
+                  opacity: showControls ? 1 : 0,
+                  y: showControls ? 0 : 20,
+                }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+                className="absolute bottom-0 left-0 right-0 p-2 px-6 group"
+              >
+                <VideoTimeline
+                  currentTime={currentTime}
+                  duration={duration}
+                  onSeek={handleSeek}
+                />
+                <VideoControls
+                  isPlaying={isPlaying}
+                  isMuted={isMuted}
+                  currentTime={currentTime}
+                  duration={duration}
+                  isFullscreen={isFullscreen}
+                  playbackRate={playbackRate}
+                  onPlayPause={togglePlay}
+                  onMute={toggleMute}
+                  sizeMode={sizeMode}
+                  setSizeMode={setSizeMode}
+                  onSeek={handleSeek}
+                  onSkipBackward={skipBackward}
+                  onSkipForward={skipForward}
+                  onFullscreen={toggleFullscreen}
+                  onPlaybackRateChange={handlePlaybackRateChange}
+                />
+              </motion.div>
             )}
-          >
-            <VideoTimeline
-              currentTime={currentTime}
-              duration={duration}
-              onSeek={handleSeek}
-            />
-            <VideoControls
-              isPlaying={isPlaying}
-              isMuted={isMuted}
-              currentTime={currentTime}
-              duration={duration}
-              isFullscreen={isFullscreen}
-              playbackRate={playbackRate}
-              onPlayPause={togglePlay}
-              onMute={toggleMute}
-              sizeMode={sizeMode}
-              setSizeMode={setSizeMode}
-              onSeek={handleSeek}
-              onSkipBackward={skipBackward}
-              onSkipForward={skipForward}
-              onFullscreen={toggleFullscreen}
-              onPlaybackRateChange={handlePlaybackRateChange}
-            />
-          </div>
-        )}
-      </>
-      <KeyboardControls
-        isPlaying={isPlaying}
-        isMuted={isMuted}
-        isFullscreen={isFullscreen}
-      />
-    </div>
+          </>
+        </>
+        <KeyboardControls
+          isPlaying={isPlaying}
+          isMuted={isMuted}
+          isFullscreen={isFullscreen}
+        />
+      </div>
+    </AnimatePresence>
   );
 };
