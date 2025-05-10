@@ -13,12 +13,10 @@ import { Label } from '@repo/shadcn/label';
 import { cn } from '@repo/shadcn/lib/utils';
 import SubmitButton from '@repo/shadcn/submit-button';
 import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
 import { useAction } from 'next-safe-action/hooks';
 import { ChangeEvent, useState } from 'react';
 
 const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
-  const { update } = useSession();
   const [formData, setFormData] = useState({
     email: session?.user.email ?? '',
     token: '',
