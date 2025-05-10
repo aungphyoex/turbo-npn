@@ -9,7 +9,7 @@ const Page = () => {
         <h1 className="font-semibold">Turborepo</h1>
         <ModeSwitcher />
       </nav>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mb-14">
         <VideoPlayer
           keyboardControls={false}
           poster={

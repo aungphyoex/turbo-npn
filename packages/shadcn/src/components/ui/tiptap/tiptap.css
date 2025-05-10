@@ -102,6 +102,7 @@
   margin: 0 auto;
   outline: none;
   /*padding: var(--editor-spacing-16) var(--editor-spacing-8);*/
+  padding: 0 var(--editor-spacing-8);
   /* background-color: var(--editor-bg-default); */
   color: var(--editor-text-default);
   caret-color: var(--editor-text-default);
@@ -384,9 +385,10 @@
 
 /* Mobile Optimizations */
 @media (max-width: 640px) {
-  /*.ProseMirror {*/
-  /*  padding: var(--editor-spacing-8) var(--editor-spacing-4);*/
-  /*}*/
+  .ProseMirror {
+    /*padding: var(--editor-spacing-8) var(--editor-spacing-4);*/
+    padding: 0 var(--editor-spacing-1);
+  }
 
   .ProseMirror h1 {
     font-size: 2rem;

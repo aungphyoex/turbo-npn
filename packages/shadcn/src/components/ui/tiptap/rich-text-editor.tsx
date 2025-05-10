@@ -32,10 +32,7 @@ export function RichTextEditor({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn(
-        'relative max-h-[calc(100dvh-6rem)]  w-full overflow-hidden overflow-y-scroll border bg-card pb-[60px] sm:pb-0',
-        className,
-      )}
+      className={cn('relative w-full bg-card border-primary border', className)}
     >
       <TableMenu editor={editor} />
       <CodeLanguage editor={editor} />
@@ -44,7 +41,7 @@ export function RichTextEditor({ className }: { className?: string }) {
       <TipTapFloatingMenu editor={editor} />
       <EditorContent
         editor={editor}
-        className=" min-h-[600px] w-full min-w-full cursor-text sm:p-6"
+        className="min-h-[600px] w-full min-w-full cursor-text p-3 md:p-6 no-scrollbar"
       />
     </div>
   );

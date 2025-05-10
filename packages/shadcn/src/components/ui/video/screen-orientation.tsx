@@ -38,9 +38,11 @@ const ScreenOrientation = () => {
         setOrientation(newOrientation);
       } else {
         console.warn('Orientation lock not supported.');
+        return;
       }
     } catch (err) {
       console.error('Orientation toggle failed:', err);
+      return;
     }
   };
 
