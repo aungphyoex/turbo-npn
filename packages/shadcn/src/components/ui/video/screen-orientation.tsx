@@ -35,7 +35,7 @@ const ScreenOrientation = () => {
   return (
     <Button
       onClick={toggleOrientation}
-      variant="ghost"
+      variant="default"
       size="icon"
       className="size-6 text-neutral-300 hover:bg-neutral-800 hover:text-neutral-300/80 focus:outline-none focus-visible:ring-0"
       title={`Switch to ${orientation === 'landscape' ? 'portrait' : 'landscape'}`}

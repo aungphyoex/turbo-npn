@@ -96,9 +96,9 @@ const IconButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
   ...props
 }) => (
   <Button
-    variant="ghost"
+    variant="default"
     size="icon"
-    className="size-6 text-neutral-300 hover:bg-neutral-800 hover:text-neutral-300/80 focus:outline-none focus-visible:ring-0"
+    className="size-6 focus:outline-none focus-visible:ring-0 text-secondary"
     {...props}
   >
     {children}
@@ -135,7 +135,7 @@ const PlaybackRateMenu: React.FC<PlaybackRateMenuProps> = ({
     <div className="relative" ref={menuRef}>
       <Button
         size="icon"
-        className="flex items-center bg-primary/80 rounded size-5 w-8 hover:bg-primary transition-colors focus:outline-none focus-visible:ring-0"
+        className="flex items-center bg-primary/80 rounded size-6 hover:bg-primary transition-colors focus:outline-none focus-visible:ring-0"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-xs">{playbackRate}x</span>
