@@ -1,6 +1,6 @@
 'use client';
 
-import { formatTime } from '@repo/shadcn/lib/utils';
+import { formatTime } from '@repo/shadcn/lib/video-utils';
 import { DualRangeSlider } from '@repo/shadcn/range-slider';
 import type React from 'react';
 import { useEffect, useState } from 'react';

@@ -1,6 +1,6 @@
 import { Button } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
-import { VideoSizeMode } from '@repo/shadcn/video/player';
+import { VideoSizeMode } from '@repo/shadcn/lib/video-type';
 import {
   MoveDiagonal,
   ScanSearch,

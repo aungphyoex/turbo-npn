@@ -2,8 +2,9 @@
 
 import { Button } from '@repo/shadcn/button';
 import { useMobile } from '@repo/shadcn/hooks/use-mobile';
-import { cn, formatTime } from '@repo/shadcn/lib/utils';
-import { VideoControlsProps } from '@repo/shadcn/video/player';
+import { cn } from '@repo/shadcn/lib/utils';
+import { VideoControlsProps } from '@repo/shadcn/lib/video-type';
+import { formatTime } from '@repo/shadcn/lib/video-utils';
 import VideoResizer from '@repo/shadcn/video/video-resizer';
 import {
   FastForward,
