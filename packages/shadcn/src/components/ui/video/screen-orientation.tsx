@@ -1,24 +1,36 @@
 import { Button } from '@repo/shadcn/button';
 import { RotateCcw, RotateCw } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type OrientationLockType = 'portrait' | 'landscape';
 
 const ScreenOrientation = () => {
   const [orientation, setOrientation] =
     useState<OrientationLockType>('portrait');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Listen for fullscreen change
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   const toggleOrientation = async () => {
     try {
       const newOrientation: OrientationLockType =
         orientation === 'landscape' ? 'portrait' : 'landscape';
 
-      // Enter fullscreen if needed
       if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen();
+        console.warn('Not in fullscreen, orientation change skipped.');
+        return;
       }
 
-      // Call orientation.lock dynamically
       const orientationAPI = screen.orientation;
       const lockFn = (orientationAPI as any).lock;
       if (typeof lockFn === 'function') {
@@ -32,18 +44,20 @@ const ScreenOrientation = () => {
     }
   };
 
+  if (!isFullscreen) return null; // Hide button if not fullscreen
+
   return (
     <Button
       onClick={toggleOrientation}
-      variant="default"
+      variant="ghost"
       size="icon"
-      className="size-6 text-neutral-300 hover:bg-neutral-800 hover:text-neutral-300/80 focus:outline-none focus-visible:ring-0"
+      className="size-7 hover:bg-transparent focus:outline-none focus-visible:ring-0 text-secondary dark:text-secondary-foreground"
       title={`Switch to ${orientation === 'landscape' ? 'portrait' : 'landscape'}`}
     >
       {orientation === 'landscape' ? (
-        <RotateCcw size={24} />
+        <RotateCcw className="size-4" />
       ) : (
-        <RotateCw size={24} />
+        <RotateCw className="size-4" />
       )}
     </Button>
   );
