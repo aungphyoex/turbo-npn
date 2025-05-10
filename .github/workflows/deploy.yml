@@ -29,16 +29,14 @@ jobs:
           node-version: lts/*
 
       - name: Install step
-        run: "pnpm i"
+        run: 'pnpm i'
 
       - name: Build step
-        run: "pnpm build --filter=web"
+        run: 'pnpm build --filter=web'
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "aungpyaephy-turbo-npn-53"
-          entrypoint: "."
-          root: "apps/web"
-          
-          
+          project: 'aungpyaephy-turbo-npn-53'
+          entrypoint: '.'
+          root: 'apps/web'
