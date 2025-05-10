@@ -2,8 +2,9 @@
 
 import { Button } from '@repo/shadcn/button';
 import { useMobile } from '@repo/shadcn/hooks/use-mobile';
-import { cn, formatTime } from '@repo/shadcn/lib/utils';
-import { VideoControlsProps } from '@repo/shadcn/video/player';
+import { cn } from '@repo/shadcn/lib/utils';
+import { VideoControlsProps } from '@repo/shadcn/lib/video-type';
+import { formatTime } from '@repo/shadcn/lib/video-utils';
 import VideoResizer from '@repo/shadcn/video/video-resizer';
 import {
   FastForward,
@@ -42,7 +43,7 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
   }, [isMuted]);
 
   return (
-    <div className="flex items-center justify-between w-full py-1 text-neutral-300 text-sm">
+    <div className="flex items-center justify-between w-full py-1 text-neutral-300 text-sm ">
       {/* Left Controls */}
       <div className="flex items-center space-x-2">
         <IconButton onClick={onPlayPause} aria-label="Play/Pause">
@@ -98,7 +99,7 @@ const IconButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
   <Button
     variant="ghost"
     size="icon"
-    className="size-6 text-neutral-300 hover:bg-neutral-800 hover:text-neutral-300/80 focus:outline-none focus-visible:ring-0"
+    className="size-6 focus:outline-none focus-visible:ring-0 text-secondary dark:text-secondary-foreground"
     {...props}
   >
     {children}
@@ -135,7 +136,8 @@ const PlaybackRateMenu: React.FC<PlaybackRateMenuProps> = ({
     <div className="relative" ref={menuRef}>
       <Button
         size="icon"
-        className="flex items-center bg-primary/80 rounded size-5 w-8 hover:bg-primary transition-colors focus:outline-none focus-visible:ring-0"
+        variant="ghost"
+        className="flex items-center bg-primary/80 rounded size-6 hover:bg-primary transition-colors focus:outline-none focus-visible:ring-0"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="text-xs">{playbackRate}x</span>

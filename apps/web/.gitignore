@@ -1,5 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+public/test.mp4
 # dependencies
 /node_modules
 /.pnp
