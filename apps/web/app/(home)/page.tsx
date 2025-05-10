@@ -14,7 +14,7 @@ const Page = () => {
             'https://images.unsplash.com/photo-1745282480794-10427e218c76'
           }
           src="/test.mp4"
-          className="w-full lg:w-[600px] h-[250px] lg:h-[300px]"
+          className="w-full lg:w-[600px] h-[300px]"
         />
       </div>
     </section>

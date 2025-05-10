@@ -34,7 +34,7 @@ const VideoResizer = ({
   return (
     <>
       <Button
-        variant="default"
+        variant="ghost"
         size="icon"
         className={cn('size-6  focus:outline-none focus-visible:ring-0')}
         onClick={() => {

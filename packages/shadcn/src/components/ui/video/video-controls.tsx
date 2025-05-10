@@ -42,7 +42,7 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
   }, [isMuted]);
 
   return (
-    <div className="flex items-center justify-between w-full py-1 text-neutral-300 text-sm">
+    <div className="flex items-center justify-between w-full py-1 text-neutral-300 text-sm ">
       {/* Left Controls */}
       <div className="flex items-center space-x-2">
         <IconButton onClick={onPlayPause} aria-label="Play/Pause">
@@ -96,9 +96,9 @@ const IconButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
   ...props
 }) => (
   <Button
-    variant="default"
+    variant="ghost"
     size="icon"
-    className="size-6 focus:outline-none focus-visible:ring-0 text-secondary"
+    className="size-6 focus:outline-none focus-visible:ring-0 text-secondary dark:text-secondary-foreground"
     {...props}
   >
     {children}
@@ -135,6 +135,7 @@ const PlaybackRateMenu: React.FC<PlaybackRateMenuProps> = ({
     <div className="relative" ref={menuRef}>
       <Button
         size="icon"
+        variant="ghost"
         className="flex items-center bg-primary/80 rounded size-6 hover:bg-primary transition-colors focus:outline-none focus-visible:ring-0"
         onClick={() => setIsOpen(!isOpen)}
       >
