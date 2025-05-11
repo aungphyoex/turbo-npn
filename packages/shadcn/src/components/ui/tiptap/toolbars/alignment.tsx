@@ -1,16 +1,10 @@
 'use client';
 
-import { useMediaQuery } from '@repo/shadcn/hooks/v/use-media-querry';
-import {
-  MobileToolbarGroup,
-  MobileToolbarItem,
-} from '@repo/shadcn/tiptap/toolbars/mobile-toolbar-group';
 import {
   AlignCenter,
   AlignJustify,
   AlignLeft,
   AlignRight,
-  Check,
   ChevronDown,
 } from 'lucide-react';
 
@@ -22,12 +16,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/shadcn/dropdown-menu';
+import { cn } from '@repo/shadcn/lib/utils';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/shadcn/tooltip';
 
 export const AlignmentToolbar = () => {
   const { editor } = useToolbar();
-  const isMobile = useMediaQuery('(max-width: 640px)');
   const handleAlign = (value: string) => {
     editor?.chain().focus().setTextAlign(value).run();
   };
@@ -79,61 +72,38 @@ export const AlignmentToolbar = () => {
     return alignmentOptions.findIndex((option) => option.value === value);
   };
 
-  if (isMobile) {
-    return (
-      <MobileToolbarGroup
-        label={alignmentOptions[findIndex(currentTextAlign())]?.name ?? 'Left'}
-      >
-        {alignmentOptions.map((option, index) => (
-          <MobileToolbarItem
-            key={index}
-            onClick={() => handleAlign(option.value)}
-            active={currentTextAlign() === option.value}
-          >
-            <span className="mr-2">{option.icon}</span>
-            {option.name}
-          </MobileToolbarItem>
-        ))}
-      </MobileToolbarGroup>
-    );
-  }
-
   return (
     <DropdownMenu>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DropdownMenuTrigger disabled={isDisabled} asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-max font-normal">
-              <span className="mr-2">
-                {alignmentOptions[findIndex(currentTextAlign())]?.icon}
-              </span>
-              {alignmentOptions[findIndex(currentTextAlign())]?.name}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-        </TooltipTrigger>
-        <TooltipContent>Text Alignment</TooltipContent>
-      </Tooltip>
+      <DropdownMenuTrigger disabled={isDisabled} asChild>
+        <Button variant="ghost" size="sm" className="h-8 w-max font-normal">
+          <span className="mr-2">
+            {alignmentOptions[findIndex(currentTextAlign())]?.icon}
+          </span>
+          {/*{alignmentOptions[findIndex(currentTextAlign())]?.name}*/}
+          <ChevronDown className="ml-2 h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent
         loop
         onCloseAutoFocus={(e) => {
           e.preventDefault();
         }}
+        className="w-max"
       >
-        <DropdownMenuGroup className=" w-40">
+        <DropdownMenuGroup className=" w-full">
           {alignmentOptions.map((option, index) => (
             <DropdownMenuItem
               onSelect={() => {
                 handleAlign(option.value);
               }}
               key={index}
+              className={cn(
+                option.value === currentTextAlign() && 'bg-accent',
+                'w-full',
+              )}
             >
               <span className="mr-2">{option.icon}</span>
               {option.name}
-
-              {option.value === currentTextAlign() && (
-                <Check className="ml-auto h-4 w-4" />
-              )}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>

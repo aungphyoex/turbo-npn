@@ -30,7 +30,7 @@ export const TableMenu = ({ editor }: { editor: Editor | null }) => {
         appendTo: 'parent',
         duration: 100,
         zIndex: 0,
-        offset: [0, 8],
+        offset: [0, -15],
         getReferenceClientRect: () => {
           const { ranges } = editor.state.selection;
           const from = Math.min(...ranges.map((range) => range.$from.pos));
@@ -69,7 +69,7 @@ export const TableMenu = ({ editor }: { editor: Editor | null }) => {
                   variant="outline"
                   size="icon"
                 >
-                  <Columns className="size-5" />
+                  <Columns className="size-4" />
                 </Button>
               </TooltipTrigger>
             </PopoverTrigger>
@@ -120,7 +120,7 @@ export const TableMenu = ({ editor }: { editor: Editor | null }) => {
                   variant="outline"
                   size="icon"
                 >
-                  <Rows className="size-5" />
+                  <Rows className="size-4" />
                 </Button>
               </TooltipTrigger>
             </PopoverTrigger>
@@ -171,7 +171,7 @@ export const TableMenu = ({ editor }: { editor: Editor | null }) => {
                   variant="outline"
                   size="icon"
                 >
-                  <RectangleHorizontal className="size-5" />
+                  <RectangleHorizontal className="size-4" />
                 </Button>
               </TooltipTrigger>
             </PopoverTrigger>
@@ -222,7 +222,7 @@ export const TableMenu = ({ editor }: { editor: Editor | null }) => {
                   variant="outline"
                   size="icon"
                 >
-                  <MoreHorizontal className="size-5" />
+                  <MoreHorizontal className="size-4" />
                 </Button>
               </TooltipTrigger>
             </PopoverTrigger>

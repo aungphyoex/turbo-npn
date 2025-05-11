@@ -2,17 +2,11 @@
 /* eslint-disable */
 // @ts-nocheck
 import { Button } from '@repo/shadcn/button';
-import { useMediaQuery } from '@repo/shadcn/hooks/v/use-media-querry';
 import { cn } from '@repo/shadcn/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
 import { Separator } from '@repo/shadcn/separator';
-import {
-  MobileToolbarGroup,
-  MobileToolbarItem,
-} from '@repo/shadcn/tiptap/toolbars/mobile-toolbar-group';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/shadcn/tooltip';
 import type { Extension } from '@tiptap/core';
 import type { ColorOptions } from '@tiptap/extension-color';
 import type { HighlightOptions } from '@tiptap/extension-highlight';
@@ -83,7 +77,6 @@ const ColorHighlightButton = ({
 
 export const ColorHighlightToolbar = () => {
   const { editor } = useToolbar();
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const currentColor = editor?.getAttributes('textStyle').color;
   const currentHighlight = editor?.getAttributes('highlight').color;
@@ -108,71 +101,22 @@ export const ColorHighlightToolbar = () => {
     !editor?.can().chain()?.setHighlight().run() ||
     !editor?.can().chain()?.setColor('').run();
 
-  if (isMobile) {
-    return (
-      <div className="flex gap-1">
-        <MobileToolbarGroup label="Color">
-          {TEXT_COLORS.map(({ name, color }) => (
-            <MobileToolbarItem
-              key={name}
-              onClick={() => handleSetColor(color)}
-              active={currentColor === color}
-            >
-              <div className="flex items-center gap-2">
-                <div className="rounded-sm border px-2" style={{ color }}>
-                  A
-                </div>
-                <span>{name}</span>
-              </div>
-            </MobileToolbarItem>
-          ))}
-        </MobileToolbarGroup>
-
-        <MobileToolbarGroup label="Highlight">
-          {HIGHLIGHT_COLORS.map(({ name, color }) => (
-            <MobileToolbarItem
-              key={name}
-              onClick={() => handleSetHighlight(color)}
-              active={currentHighlight === color}
-            >
-              <div className="flex items-center gap-2">
-                <div
-                  className="rounded-sm border px-2"
-                  style={{ backgroundColor: color }}
-                >
-                  A
-                </div>
-                <span>{name}</span>
-              </div>
-            </MobileToolbarItem>
-          ))}
-        </MobileToolbarGroup>
-      </div>
-    );
-  }
-
   return (
     <Popover>
       <div className="relative h-full">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <PopoverTrigger disabled={isDisabled} asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                style={{
-                  color: currentColor,
-                }}
-                className={cn('h-8 w-14 p-0 font-normal')}
-              >
-                <span className="text-md">A</span>
-                <ChevronDownIcon className="ml-2 h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-          </TooltipTrigger>
-          <TooltipContent>Text Color & Highlight</TooltipContent>
-        </Tooltip>
-
+        <PopoverTrigger disabled={isDisabled} asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            style={{
+              color: currentColor,
+            }}
+            className={cn('h-8 w-14 p-0 font-normal')}
+          >
+            <span className="text-md">A</span>
+            <ChevronDownIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1 dark:bg-gray-2">
           <ScrollArea className="max-h-80 overflow-y-auto pr-2">
             <div className="mb-2.5 mt-2 px-2 text-xs text-gray-11">Color</div>

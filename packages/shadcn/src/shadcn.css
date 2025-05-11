@@ -1,12 +1,14 @@
-@import 'tailwindcss';
+@import 'tailwindcss'; /* Import Tailwind CSS core */
 
-@source './components/ui';
+@source './components/ui'; /* Import custom UI components */
 
-@plugin "tailwindcss-animate";
-@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animate"; /* Add Tailwind CSS animation plugin */
+@plugin "@tailwindcss/typography"; /* Add Tailwind CSS typography plugin */
 
+/* Custom Dark Mode Variant */
 @custom-variant dark (&:is(.dark *));
 
+/* Root CSS Variables for Color Palette */
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(240 10% 3.9%);
@@ -28,11 +30,15 @@
   --input: hsl(240 5.9% 90%);
   --ring: hsl(142.1 76.2% 36.3%);
   --radius: 0.5rem;
+
+  /* Chart Colors */
   --chart-1: hsl(12 76% 61%);
   --chart-2: hsl(173 58% 39%);
   --chart-3: hsl(197 37% 24%);
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
+
+  /* Sidebar Colors */
   --sidebar-background: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
   --sidebar-primary: hsl(240 5.9% 10%);
@@ -41,8 +47,33 @@
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+
+  /* Editor Text Colors */
+  --editor-text-default: hsl(222.2 47.4% 11.2%);
+  --editor-text-gray: hsl(215 20.2% 65.1%);
+  --editor-text-brown: hsl(24 10.5% 40%);
+  --editor-text-orange: hsl(24 100% 50%);
+  --editor-text-yellow: hsl(47.9 95.8% 53.1%);
+  --editor-text-green: hsl(142.1 70.6% 45.3%);
+  --editor-text-blue: hsl(221.2 83.2% 53.3%);
+  --editor-text-purple: hsl(292.7 84.1% 60.6%);
+  --editor-text-pink: hsl(327.9 100% 67.8%);
+  --editor-text-red: hsl(0 84.2% 60.2%);
+
+  /* Editor Highlight Colors */
+  --editor-highlight-default: hsl(30 30% 50%);
+  --editor-highlight-gray: hsl(0 0% 70%);
+  --editor-highlight-brown: hsl(24 14% 50%);
+  --editor-highlight-orange: hsl(24 100% 65%);
+  --editor-highlight-yellow: hsl(50 100% 60%);
+  --editor-highlight-green: hsl(142 70% 60%);
+  --editor-highlight-blue: hsl(221 60% 60%);
+  --editor-highlight-purple: hsl(292 70% 60%);
+  --editor-highlight-pink: hsl(327 100% 70%);
+  --editor-highlight-red: hsl(0 100% 60%);
 }
 
+/* Dark Mode Custom Colors */
 .dark {
   --background: hsl(20 14.3% 4.1%);
   --foreground: hsl(0 0% 95%);
@@ -76,10 +107,30 @@
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
 
-@utility container {
-  @apply mx-auto;
+  /* Dark Mode Editor Text Colors */
+  --editor-text-default: hsl(210 20% 98%);
+  --editor-text-gray: hsl(215 16.3% 56.9%);
+  --editor-text-brown: hsl(24 15% 75%);
+  --editor-text-orange: hsl(24 100% 85%);
+  --editor-text-yellow: hsl(47.9 95.8% 85%);
+  --editor-text-green: hsl(142.1 70.6% 75%);
+  --editor-text-blue: hsl(221.2 83.2% 75%);
+  --editor-text-purple: hsl(292.7 84.1% 80%);
+  --editor-text-pink: hsl(327.9 100% 85%);
+  --editor-text-red: hsl(0 84.2% 75%);
+
+  /* Dark Mode Editor Highlight Colors */
+  --editor-highlight-default: hsl(30 30% 30%);
+  --editor-highlight-gray: hsl(0 0% 30%);
+  --editor-highlight-brown: hsl(24 10% 40%);
+  --editor-highlight-orange: hsl(24 100% 50%);
+  --editor-highlight-yellow: hsl(50 100% 50%);
+  --editor-highlight-green: hsl(142 70% 40%);
+  --editor-highlight-blue: hsl(221 60% 40%);
+  --editor-highlight-purple: hsl(292 70% 50%);
+  --editor-highlight-pink: hsl(327 100% 60%);
+  --editor-highlight-red: hsl(0 100% 50%);
 }
 
 @theme inline {
@@ -139,26 +190,42 @@
       height: 0;
     }
   }
+
+  @keyframes reveal-dark {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes reveal-light {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+}
+
+/* Utility for Container */
+@utility container {
+  @apply mx-auto px-3 md:px-6 lg:px-8; /* Center the container and add responsive padding */
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+  /* Base Layer for Global Styles */
   body {
     @apply bg-background text-foreground overscroll-none;
-    /* font-feature-settings: "rlig" 1, "calt" 1; */
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
   }
-
-  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-    [data-wrapper] {
-      @apply min-[1800px]:border-t;
-    }
-  }
-
-  /* Custom scrollbar styling. Thanks @pranathiperii. */
+  /* Custom Scrollbar Styling */
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -169,83 +236,40 @@
     border-radius: 5px;
     background: hsl(var(--border));
   }
-  * {
-    scrollbar-color: hsl(var(--border)) transparent;
-    scrollbar-width: thin;
+
+  /* No Scrollbar Utility */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  /* View Transition Animations */
+  ::view-transition-group(root) {
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+
+  ::view-transition-new(root) {
+    animation-name: reveal-light;
+  }
+
+  ::view-transition-old(root),
+  .dark::view-transition-old(root) {
+    z-index: -1;
+    animation: none;
+  }
+
+  .dark::view-transition-new(root) {
+    animation-name: reveal-dark;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+@layer components {
+  .prose-article {
+    @apply prose dark:prose-invert prose-sm sm:prose-base focus:outline-none max-w-full;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
-  button {
-    @apply cursor-pointer;
-  }
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  overflow-y: auto;
-}
-
-.dark ::selection {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--foreground));
-}
-
-::view-transition-group(root) {
-  animation-duration: 0.7s;
-  animation-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
-}
-
-::view-transition-new(root) {
-  animation-name: reveal-light;
-}
-
-::view-transition-old(root),
-.dark::view-transition-old(root) {
-  z-index: -1;
-  animation: none;
-}
-.dark::view-transition-new(root) {
-  animation-name: reveal-dark;
-}
-
-@keyframes reveal-dark {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes reveal-light {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-* {
-  user-select: none;
-}
-
-@utility container {
-  @apply mx-auto px-3 md:px-6 lg:px-8;
 }
