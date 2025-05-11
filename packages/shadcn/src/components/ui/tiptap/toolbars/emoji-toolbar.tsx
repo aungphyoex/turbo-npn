@@ -13,7 +13,7 @@ import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 import { SmilePlus } from 'lucide-react';
 import { useState } from 'react';
 
-const EmojiEditor = () => {
+const EmojiToolbar = () => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const { editor } = useToolbar();
   return (
@@ -44,4 +44,4 @@ const EmojiEditor = () => {
   );
 };
 
-export default EmojiEditor;
+export default EmojiToolbar;

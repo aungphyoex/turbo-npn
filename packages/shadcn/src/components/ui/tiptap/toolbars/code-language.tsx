@@ -18,15 +18,10 @@ export const CodeLanguage = ({ editor }: { editor: Editor | null }) => {
       getLanguage: instance.editor?.getAttributes('codeBlock').language,
     }),
   });
-
   const languages = useMemo(() => {
-    const list: string[] = [];
-    for (const l in common) {
-      list.push(l);
-    }
-    return list;
+    return Object.keys(common);
   }, []);
-
+  console.log(languages);
   if (!editor || !editorState) {
     return null;
   }

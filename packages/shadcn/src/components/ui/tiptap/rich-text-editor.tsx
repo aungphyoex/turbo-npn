@@ -2,7 +2,6 @@
 import { cn } from '@repo/shadcn/lib/utils';
 import { defaultExtensions } from '@repo/shadcn/tiptap/extensions/extension';
 import { TipTapFloatingMenu } from '@repo/shadcn/tiptap/extensions/floating-menu';
-import { FloatingToolbar } from '@repo/shadcn/tiptap/extensions/floating-toolbar';
 import { CodeLanguage } from '@repo/shadcn/tiptap/toolbars/code-language';
 import { EditorToolbar } from '@repo/shadcn/tiptap/toolbars/editor-toolbar';
 import { TableMenu } from '@repo/shadcn/tiptap/toolbars/table-menu';
@@ -16,7 +15,7 @@ export function RichTextEditor({ className }: { className?: string }) {
     content: '',
     editorProps: {
       attributes: {
-        class: 'max-w-full focus:outline-none',
+        class: 'prose-article',
       },
     },
     onUpdate: ({ editor }) => {
@@ -31,17 +30,14 @@ export function RichTextEditor({ className }: { className?: string }) {
   if (!editor) return null;
 
   return (
-    <div
-      className={cn('relative w-full bg-card border-primary border', className)}
-    >
+    <div className={cn('relative w-full bg-card', className)}>
       <TableMenu editor={editor} />
       <CodeLanguage editor={editor} />
       <EditorToolbar editor={editor} />
-      <FloatingToolbar editor={editor} />
       <TipTapFloatingMenu editor={editor} />
       <EditorContent
         editor={editor}
-        className="min-h-[600px] w-full min-w-full cursor-text p-3 md:p-6 no-scrollbar"
+        className="min-h-[400px] min-w-full cursor-text p-3 md:p-6 no-scrollbar"
       />
     </div>
   );

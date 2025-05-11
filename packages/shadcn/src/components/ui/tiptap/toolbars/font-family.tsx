@@ -2,16 +2,10 @@
 /* eslint-disable */
 // @ts-nocheck
 import { Button } from '@repo/shadcn/button';
-import { useMediaQuery } from '@repo/shadcn/hooks/v/use-media-querry';
 import { cn } from '@repo/shadcn/lib/utils';
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
+import { Popover, PopoverContent } from '@repo/shadcn/popover';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
-import {
-  MobileToolbarGroup,
-  MobileToolbarItem,
-} from '@repo/shadcn/tiptap/toolbars/mobile-toolbar-group';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/shadcn/tooltip';
 import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 const FONT_FAMILIES = [
@@ -45,7 +39,6 @@ const FontFamilyItem = ({ font, isActive, onClick }: FontFamilyItemProps) => (
 
 export const FontFamilyToolbar = () => {
   const { editor } = useToolbar();
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const currentFont = editor?.getAttributes('textStyle').fontFamily;
 
@@ -55,42 +48,19 @@ export const FontFamilyToolbar = () => {
 
   if (!editor) return null;
 
-  if (isMobile) {
-    return (
-      <MobileToolbarGroup label="Font">
-        {FONT_FAMILIES.map((font) => (
-          <MobileToolbarItem
-            key={font}
-            onClick={() => handleFontChange(font)}
-            active={currentFont === font}
-          >
-            <span style={{ fontFamily: font }}>{font}</span>
-          </MobileToolbarItem>
-        ))}
-      </MobileToolbarGroup>
-    );
-  }
-
   return (
     <Popover>
       <div className="relative h-full">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={cn('h-8 w-32 p-0 font-normal text-left')}
-              >
-                <span className="truncate" style={{ fontFamily: currentFont }}>
-                  {currentFont || 'Font'}
-                </span>
-                <ChevronDownIcon className="ml-2 h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-          </TooltipTrigger>
-          <TooltipContent>Font Family</TooltipContent>
-        </Tooltip>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn('h-8 w-32 p-0 font-normal text-left')}
+        >
+          <span className="truncate" style={{ fontFamily: currentFont }}>
+            {currentFont || 'Font'}
+          </span>
+          <ChevronDownIcon className="ml-2 h-4 w-4" />
+        </Button>
 
         <PopoverContent align="start" className="w-56 p-1 dark:bg-gray-2">
           <ScrollArea className="max-h-80 overflow-y-auto pr-2">

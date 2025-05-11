@@ -13,7 +13,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import { Separator } from '@repo/shadcn/separator';
 import { type SearchAndReplaceStorage } from '@repo/shadcn/tiptap/extensions/search-and-replace';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/shadcn/tooltip';
 
 export function SearchAndReplaceToolbar() {
   const { editor } = useToolbar();
@@ -56,27 +55,19 @@ export function SearchAndReplaceToolbar() {
 
   return (
     <Popover open={open}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <PopoverTrigger disabled={!editor} asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setOpen(!open);
-              }}
-              className={cn('h-8 w-max px-3 font-normal')}
-            >
-              <Repeat className="mr-2 h-4 w-4" />
-              <p>Search & Replace</p>
-            </Button>
-          </PopoverTrigger>
-        </TooltipTrigger>
-        <TooltipContent>
-          <span>Search & Replace</span>
-        </TooltipContent>
-      </Tooltip>
-
+      <PopoverTrigger disabled={!editor} asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setOpen(!open);
+          }}
+          className={cn('h-8 w-max px-3 font-normal')}
+        >
+          <Repeat className="mr-2 h-4 w-4" />
+          <p>Refactor</p>
+        </Button>
+      </PopoverTrigger>
       <PopoverContent
         align="end"
         onCloseAutoFocus={(e) => {
@@ -85,59 +76,63 @@ export function SearchAndReplaceToolbar() {
         onEscapeKeyDown={() => {
           setOpen(false);
         }}
-        className="relative flex w-[400px] px-3 py-2.5"
+        className="relative flex w-full md:w-[400px] px-3 py-2.5"
       >
         {!replacing ? (
-          <div className={cn('relative flex gap-1.5 items-center')}>
+          <div className={cn('w-full relative grid gap-1.5 items-center')}>
             <Input
               value={searchText}
-              className=" w-48"
+              className=" w-full focus:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-0 border-primary"
               onChange={(e) => {
                 setSearchText(e.target.value);
               }}
               placeholder="Search..."
             />
-            <span>
-              {results?.length === 0 ? selectedResult : selectedResult + 1}/
-              {results?.length}
-            </span>
-            <Button
-              onClick={selectPrevious}
-              size="icon"
-              variant="ghost"
-              className="size-7"
-            >
-              <ArrowLeftIcon className="size-4" />
-            </Button>
-            <Button
-              onClick={selectNext}
-              size="icon"
-              className="size-7"
-              variant="ghost"
-            >
-              <ArrowRightIcon className="h-4 w-4" />
-            </Button>
-            <Separator orientation="vertical" className="h-7 mx-0.5" />
-            <Button
-              onClick={() => {
-                setReplacing(true);
-              }}
-              size="icon"
-              className="size-7"
-              variant="ghost"
-            >
-              <Repeat className="h-4 w-4" />
-            </Button>
-            <Button
-              onClick={() => {
-                setOpen(false);
-              }}
-              size="icon"
-              className="size-7"
-              variant="ghost"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center justify-between">
+              <span className="text-sm">
+                {results?.length === 0 ? selectedResult : selectedResult + 1}/
+                {results?.length}
+              </span>
+              <div className="flex items-center gap-1">
+                <Button
+                  onClick={selectPrevious}
+                  size="icon"
+                  variant="ghost"
+                  className="size-7"
+                >
+                  <ArrowLeftIcon className="size-4" />
+                </Button>
+                <Button
+                  onClick={selectNext}
+                  size="icon"
+                  className="size-7"
+                  variant="ghost"
+                >
+                  <ArrowRightIcon className="h-4 w-4" />
+                </Button>
+                <Separator orientation="vertical" className="h-7 mx-0.5" />
+                <Button
+                  onClick={() => {
+                    setReplacing(true);
+                  }}
+                  size="icon"
+                  className="size-7"
+                  variant="ghost"
+                >
+                  <Repeat className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                  size="icon"
+                  className="size-7"
+                  variant="ghost"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
         ) : (
           <div className={cn('relative w-full')}>
@@ -171,8 +166,10 @@ export function SearchAndReplaceToolbar() {
                   }}
                   placeholder="Search..."
                 />
-                {results?.length === 0 ? selectedResult : selectedResult + 1}/
-                {results?.length}
+                <span className="text-xs">
+                  {results?.length === 0 ? selectedResult : selectedResult + 1}/
+                  {results?.length}
+                </span>
               </div>
               <div className="mb-2">
                 <Label className="mb-1 text-xs text-gray-11">

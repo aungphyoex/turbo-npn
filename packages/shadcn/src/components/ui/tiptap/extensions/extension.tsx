@@ -179,9 +179,13 @@ const TiptapYoutube = Youtube.configure({
 
 const TiptapCharacterCount = CharacterCount;
 
-const TiptapHighLight = Highlight.configure({});
+const TiptapHighLight = Highlight.configure({
+  multicolor: true,
+});
 
-const TiptapColor = Color.configure();
+const TiptapColor = Color.configure({
+  types: ['textStyle'],
+});
 
 const TiptapFontFamily = FontFamily.configure({
   types: ['textStyle'],
