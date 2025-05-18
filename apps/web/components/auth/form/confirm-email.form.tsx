@@ -1,5 +1,6 @@
 'use client';
 
+import SignOut from '@/components/auth/sign-out';
 import LogoIcon from '@/components/logo-icon';
 import { confirmEmail } from '@/server/auth.server';
 import {
@@ -17,13 +18,16 @@ import {
 } from '@repo/shadcn/input-otp';
 import { cn } from '@repo/shadcn/lib/utils';
 import SubmitButton from '@repo/shadcn/submit-button';
-import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
 
-const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
+const ConfirmEmailForm = () => {
+  const session = useSession({
+    required: true,
+  });
   const [formData, setFormData] = useState({
-    email: session?.user.email ?? '',
+    email: session?.data?.user.email!,
     token: '',
   });
   const {
@@ -99,7 +103,13 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
                     </p>
                   )}
                 </div>
-                <SubmitButton isLoading={isExecuting} name={'Confirm email'} />
+                <div className="grid grid-cols-2 gap-5">
+                  <SignOut />
+                  <SubmitButton
+                    isLoading={isExecuting}
+                    name={'Confirm email'}
+                  />
+                </div>
               </div>
             </form>
           </div>

@@ -23,6 +23,7 @@ const SignOut = () => {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button
+          type="button"
           className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-destructive dark:hover:text-white"
           variant="ghost"
         >
@@ -39,9 +40,12 @@ const SignOut = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button type="button" variant="ghost">
+              Cancel
+            </Button>
           </AlertDialogCancel>
           <Button
+            type="button"
             disabled={isExecuting}
             variant="destructive"
             onClick={async () => {

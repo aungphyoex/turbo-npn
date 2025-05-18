@@ -8,6 +8,10 @@ import {
   User,
 } from '@/types/user.type';
 
+/**
+ * @description Get all users
+ * @returns GetAllUsers
+ */
 export const getAllUsers = async (): Promise<GetAllUsers> => {
   const [isError, data] = await safeFetch(GetAllUsersSchema, '/users', {
     cache: 'no-store',

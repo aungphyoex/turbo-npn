@@ -22,7 +22,7 @@ const SubmitButton = ({
       type="submit"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-      disabled={isLoading}
+      disabled={props.disabled || isLoading}
     >
       {isLoading ? (
         <>
