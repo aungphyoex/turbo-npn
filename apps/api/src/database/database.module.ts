@@ -18,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         autoLoadEntities: true,
         synchronize: config.get('NODE_ENV') !== 'production',
         logging: config.get('NODE_ENV') !== 'production',
+        ssl: config.get('DB_SSL'),
       }),
     }),
   ],
