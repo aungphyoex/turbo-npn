@@ -2,7 +2,6 @@
 import { cn } from '@repo/shadcn/lib/utils';
 import { VideoPlayerProps, VideoSizeMode } from '@repo/shadcn/lib/video-type';
 import { formatTime, getVideoStyles } from '@repo/shadcn/lib/video-utils';
-import { KeyboardControls } from '@repo/shadcn/video/keyboard-controls';
 import ScreenOrientation from '@repo/shadcn/video/screen-orientation';
 import { VideoControls } from '@repo/shadcn/video/video-controls';
 import { VideoTimeline } from '@repo/shadcn/video/video-timeline';
@@ -62,9 +61,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showControls, setShowControls] = useState(true);
-  const [controlsTimeout, setControlsTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  );
   const [sizeMode, setSizeMode] = useState<VideoSizeMode>('stretch');
 
   // Function to toggle between play and pause
@@ -219,7 +215,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
     video.addEventListener('ended', handleEnded);
-
+    video.addEventListener('load', () => {
+      console.log('video is loading');
+    });
+    video.addEventListener('canplay', () => {
+      console.log('video is ready to play');
+    });
     return () => {
       video.removeEventListener('contextmenu', handleContextMenu);
       video.removeEventListener('dblclick', handleDoubleClick);
@@ -230,14 +231,32 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     };
   }, [muted, onDurationChange, onTimeUpdate, onPlay, onPause, onEnded]);
 
-  // Effect hook to add keyboard controls
   useEffect(() => {
+    if (!keyboardControls) return;
+
+    const isTyping = (el: Element | null): boolean =>
+      el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement;
+
+    const handleNumberKey = (key: string) => {
+      const num = Number.parseInt(key);
+      if (!isNaN(num) && num >= 0 && num <= 9) {
+        const seekTime = (duration * num) / 10;
+        handleSeek(seekTime);
+      }
+    };
+
+    const keyActions: Record<string, () => void> = {
+      ' ': togglePlay,
+      k: togglePlay,
+      m: toggleMute,
+      f: toggleFullscreen,
+      ArrowLeft: skipBackward,
+      ArrowRight: skipForward,
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!keyboardControls) return;
-      // Ignore if user is typing in an input field or if control/alt/meta keys are pressed
       if (
-        document.activeElement instanceof HTMLInputElement ||
-        document.activeElement instanceof HTMLTextAreaElement ||
+        isTyping(document.activeElement) ||
         e.ctrlKey ||
         e.altKey ||
         e.metaKey
@@ -245,52 +264,20 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         return;
       }
 
-      // Handle keyboard shortcuts
-      switch (e.key) {
-        case ' ': // Space for play/pause
-          e.preventDefault();
-          togglePlay();
-          break;
-        case 'k': // K for play/pause alternative
-          e.preventDefault();
-          togglePlay();
-          break;
-        case 'm': // M for mute/unmute
-          e.preventDefault();
-          toggleMute();
-          break;
-        case 'f': // F for fullscreen toggle
-          e.preventDefault();
-          toggleFullscreen();
-          break;
-        case 'ArrowLeft': // Left arrow for seeking backward
-          e.preventDefault();
-          skipBackward();
-          break;
-        case 'ArrowRight': // Right arrow for seeking forward
-          e.preventDefault();
-          skipForward();
-          break;
-        default:
-          // Number keys (0-9) for jumping to a percentage of the video
-          const num = Number.parseInt(e.key);
-          if (!isNaN(num) && num >= 0 && num <= 9) {
-            e.preventDefault();
-            const seekTime = (duration * num) / 10;
-            handleSeek(seekTime);
-          }
-          break;
+      if (keyActions[e.key]) {
+        e.preventDefault();
+        console.log(e.key);
+        keyActions[e.key]!();
+      } else {
+        handleNumberKey(e.key);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    window.addEventListener('keyup', handleKeyDown);
+    return () => window.removeEventListener('keyup', handleKeyDown);
   }, [
-    currentTime,
+    keyboardControls,
     duration,
-    isFullscreen,
     togglePlay,
     toggleMute,
     toggleFullscreen,
@@ -344,7 +331,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-primary/50 hover:bg-primary rounded-full text-white p-3 grid place-items-center cursor-pointer"
+              className="bg-primary/50 hover:bg-primary rounded-full text-white p-3 grid place-items-center cursor-pointer focus-visible:outline-0 focus-visible:border-0"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isPlaying ? (
@@ -446,11 +433,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             )}
           </>
         </>
-        <KeyboardControls
-          isPlaying={isPlaying}
-          isMuted={isMuted}
-          isFullscreen={isFullscreen}
-        />
       </div>
     </AnimatePresence>
   );

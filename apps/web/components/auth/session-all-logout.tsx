@@ -1,28 +1,63 @@
 'use client';
 
 import { signOutAllDevice } from '@/server/auth.server';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@repo/shadcn/alert-dialog';
 import { Button } from '@repo/shadcn/button';
 import { Loader2, LogOut } from '@repo/shadcn/lucide-react';
 import { useAction } from 'next-safe-action/hooks';
+import { useState } from 'react';
 
 const SessionAllLogout = () => {
-  const { execute, isExecuting } = useAction(signOutAllDevice);
+  const { executeAsync, isExecuting } = useAction(signOutAllDevice);
+  const [open, setOpen] = useState(false);
   return (
-    <Button
-      variant="outline"
-      className="flex items-center gap-1"
-      disabled={isExecuting}
-      onClick={() => {
-        execute();
-      }}
-    >
-      {isExecuting ? (
-        <Loader2 className="size-4 mr-1 animate-spin" />
-      ) : (
-        <LogOut className="h-4 w-4 mr-1" />
-      )}
-      Sign Out All Device
-    </Button>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-destructive dark:hover:text-white"
+        >
+          <LogOut className="h-4 w-4 mr-1" />
+          Sign Out All Devices
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Sign out all devices?</AlertDialogTitle>
+          <AlertDialogDescription>
+            All devices will be signed out and will require sign-in again.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel asChild>
+            <Button variant="ghost">Cancel</Button>
+          </AlertDialogCancel>
+          <Button
+            disabled={isExecuting}
+            variant="destructive"
+            onClick={async () => {
+              const result = await executeAsync();
+              if (result?.data) {
+                setOpen(false);
+              }
+            }}
+          >
+            {isExecuting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Sign Out
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

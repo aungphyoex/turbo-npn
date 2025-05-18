@@ -3,7 +3,7 @@ import { User } from 'next-auth';
 
 declare module 'next-auth' {
   /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
+   * The shape of the user object returned in the OAuth providers' `[username]` callback,
    * or the second parameter of the `session` callback, when using a database.
    */
   interface User {
@@ -16,6 +16,7 @@ declare module 'next-auth' {
       access_token: string;
       refresh_token: string;
       session_token: string;
+      session_refresh_time: Date;
     };
   }
 

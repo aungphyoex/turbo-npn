@@ -183,8 +183,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
           </div>
         ) : (
           <div className="rounded-lg border bg-card p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Add Image</h3>
+            <div className="mb-4 flex items-center justify-end">
               <Button
                 variant="ghost"
                 size="icon"

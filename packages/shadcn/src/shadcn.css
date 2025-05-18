@@ -1,9 +1,9 @@
 @import 'tailwindcss'; /* Import Tailwind CSS core */
+@import 'tw-animate-css'; /* Import Tailwind CSS Animate CSS plugin */
+
+@plugin "@tailwindcss/typography"; /* Add Tailwind CSS typography plugin */
 
 @source './components/ui'; /* Import custom UI components */
-
-@plugin "tailwindcss-animate"; /* Add Tailwind CSS animation plugin */
-@plugin "@tailwindcss/typography"; /* Add Tailwind CSS typography plugin */
 
 /* Custom Dark Mode Variant */
 @custom-variant dark (&:is(.dark *));
@@ -29,7 +29,7 @@
   --border: hsl(240 5.9% 90%);
   --input: hsl(240 5.9% 90%);
   --ring: hsl(142.1 76.2% 36.3%);
-  --radius: 0.5rem;
+  --radius: 0.4rem;
 
   /* Chart Colors */
   --chart-1: hsl(12 76% 61%);
@@ -61,7 +61,7 @@
   --editor-text-red: hsl(0 84.2% 60.2%);
 
   /* Editor Highlight Colors */
-  --editor-highlight-default: hsl(30 30% 50%);
+  --editor-highlight-default: transparent;
   --editor-highlight-gray: hsl(0 0% 70%);
   --editor-highlight-brown: hsl(24 14% 50%);
   --editor-highlight-orange: hsl(24 100% 65%);
@@ -121,7 +121,7 @@
   --editor-text-red: hsl(0 84.2% 75%);
 
   /* Dark Mode Editor Highlight Colors */
-  --editor-highlight-default: hsl(30 30% 30%);
+  --editor-highlight-default: transparent;
   --editor-highlight-gray: hsl(0 0% 30%);
   --editor-highlight-brown: hsl(24 10% 40%);
   --editor-highlight-orange: hsl(24 100% 50%);

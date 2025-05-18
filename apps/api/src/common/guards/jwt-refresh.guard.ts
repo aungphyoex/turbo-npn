@@ -23,23 +23,29 @@ export class JwtRefreshGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log(request);
     const token = this.extractTokenFromHeader(request);
+    console.log('token', token);
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid Refresh Token');
     }
     try {
       request.user = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get('REFRESH_TOKEN_SECRET'),
       });
-    } catch {
+      console.log(request.user);
+    } catch (error) {
       throw new UnauthorizedException('Invalid Refresh Token');
     }
+    console.log('request.body', request.body);
+    console.log('request.user', request.user);
     const session = await this.SessionRepository.findOne({
       where: {
         refresh_token: token,
         user_id: request.user.id,
       },
     });
+    console.log('session', session);
     if (!session) throw new UnauthorizedException('Invalid Refresh Token');
     return true;
   }

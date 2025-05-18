@@ -9,9 +9,6 @@ export const {
   auth,
   unstable_update: update,
 } = NextAuth({
-  pages: {
-    signIn: '/auth/sign-in',
-  },
   providers: [
     Credentials({
       name: 'Credentials',
@@ -53,6 +50,7 @@ export const {
                 access_token: user.auth.access_token,
                 refresh_token: user.auth.refresh_token,
                 session_token: user.auth.session_token,
+                session_refresh_time: user.auth.session_refresh_time,
               },
             },
           };
@@ -62,19 +60,21 @@ export const {
     },
     async session({ session, token }) {
       if (token) {
+        const { user } = token;
         return {
           ...session,
           user: {
-            id: token.user.id,
-            name: token.user.name,
-            email: token.user.email,
-            image: token.user.image,
-            username: token.user.username,
-            isEmailVerified: token.user.isEmailVerified,
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            username: user.username,
+            isEmailVerified: user.isEmailVerified,
             auth: {
-              access_token: token.user.auth.access_token,
-              refresh_token: token.user.auth.refresh_token,
-              session_token: token.user.auth.session_token,
+              access_token: user.auth.access_token,
+              refresh_token: user.auth.refresh_token,
+              session_token: user.auth.session_token,
+              session_refresh_time: user.auth.session_refresh_time,
             },
           },
         };
@@ -86,19 +86,34 @@ export const {
       const isVerifiedUser = !!auth?.user.isEmailVerified;
       const { nextUrl } = request;
       const { pathname } = nextUrl;
+
       if (!isAuth) {
-        if (pathname.startsWith('/profile')) {
+        if (
+          pathname === '/' ||
+          pathname.startsWith('/p') ||
+          pathname.startsWith('/auth/confirm-email')
+        ) {
+          return Response.redirect(new URL('/auth/sign-in', nextUrl));
+        }
+      }
+
+      if (isAuth) {
+        if (!isVerifiedUser) {
+          const isAlreadyOnConfirmPage = pathname.startsWith(
+            '/auth/confirm-email',
+          );
+          if (!isAlreadyOnConfirmPage) {
+            return Response.redirect(new URL('/auth/confirm-email', nextUrl));
+          }
+        }
+        if (
+          pathname.startsWith('/auth/sign') ||
+          (pathname.startsWith('/auth/confirm-email') && isVerifiedUser)
+        ) {
           return Response.redirect(new URL('/', nextUrl));
         }
       }
-      if (isAuth) {
-        if (pathname.startsWith('/auth/sign')) {
-          return Response.redirect(new URL('/profile', nextUrl));
-        }
-        if (pathname.startsWith('/auth/confirm-email') && isVerifiedUser) {
-          return Response.redirect(new URL('/profile', nextUrl));
-        }
-      }
+
       return true;
     },
   },
@@ -108,4 +123,13 @@ export const {
     updateAge: 86400 * 5, //5 days,
   },
   secret: env.AUTH_SECRET,
+  useSecureCookies: env.NODE_ENV === 'production',
+  redirectProxyUrl: env.AUTH_URL,
+  pages: {
+    signIn: '/auth/sign-in',
+    signOut: '/auth/sign-out',
+    error: '/auth/sign-in',
+    verifyRequest: '/auth/confirm-email',
+    newUser: '/auth/sign-up',
+  },
 });

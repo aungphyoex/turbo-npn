@@ -3,24 +3,41 @@
 import SignOut from '@/components/auth/sign-out';
 import { Button } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
-import { Shield, Smartphone, User } from '@repo/shadcn/lucide-react';
+import {
+  Shield,
+  Smartphone,
+  User as UserIcon,
+  UserPenIcon,
+} from '@repo/shadcn/lucide-react';
+import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const ProfileSidebar = () => {
+const ProfileSidebar = ({ user }: { user: User }) => {
   const menuItems = [
-    { id: 'general', label: 'General', icon: User, href: '/profile' },
+    {
+      id: 'profile',
+      label: 'Profile',
+      icon: UserIcon,
+      href: `/p/${user.username}`,
+    },
+    {
+      id: 'general',
+      label: 'General',
+      icon: UserPenIcon,
+      href: `/p/${user.username}/general`,
+    },
     {
       id: 'security',
       label: 'Security and Login',
       icon: Shield,
-      href: '/profile/security',
+      href: `/p/${user.username}/security`,
     },
     {
       id: 'sessions',
       label: 'Active Sessions',
       icon: Smartphone,
-      href: '/profile/sessions',
+      href: `/p/${user.username}/sessions`,
     },
   ];
   const pathname = usePathname();

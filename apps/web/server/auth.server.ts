@@ -7,8 +7,11 @@ import {
   ChangePasswordSchema,
   ConfirmEmailSchema,
   ForgotPasswordSchema,
+  GetSession,
   GetSessionSchema,
   GetSessionsSchema,
+  RefreshToken,
+  RefreshTokenSchema,
   ResetPasswordSchema,
   Session,
   SignIn,
@@ -20,16 +23,17 @@ import {
 import { DefaultReturnSchema } from '@/types/default.type';
 import { AuthError, User } from 'next-auth';
 import { revalidateTag } from 'next/cache';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { redirect } from 'next/navigation';
 
 /**
- * Parses and sends credential-based login with device info to backend.
+ * @description Parses and sends credential-based login with device info to backend.
+ * @param credentials
  */
 export const authorizeSignIn = async (
   credentials: SignIn,
 ): Promise<null | User> => {
   const deviceInfo = await getDeviceInfo();
-
   const [error, data] = await safeFetch(SignInDataSchema, '/auth/sign-in', {
     method: 'POST',
     headers: {
@@ -55,22 +59,20 @@ export const authorizeSignIn = async (
       access_token: data.tokens.access_token,
       refresh_token: data.tokens.refresh_token,
       session_token: data.tokens.session_token,
+      session_refresh_time: data.tokens.session_refresh_time,
     },
   };
 };
 
 /**
- * UI Sign-in action using credentials.
+ * @description UI Sign-in action using credentials.
+ * @schema SignInSchema
  */
 export const signInWithCredentials = safeAction
   .schema(SignInSchema)
   .action(async ({ parsedInput }) => {
     try {
-      await signIn('credentials', {
-        ...parsedInput,
-        redirect: true,
-        redirectTo: '/profile',
-      });
+      await signIn('credentials', parsedInput);
     } catch (error) {
       if (error instanceof AuthError) {
         if (error.type === 'CredentialsSignin') {
@@ -78,11 +80,16 @@ export const signInWithCredentials = safeAction
         }
         throw new Error('Something went wrong.');
       }
+      if (isRedirectError(error)) {
+        revalidateTag('/auth/sign-in');
+        redirect('/');
+      }
     }
   });
 
 /**
- * UI Sign-up action with auto login.
+ * @description UI Sign-up action with auto login.
+ * @schema SignUpSchema
  */
 export const signUpWithCredentials = safeAction
   .schema(SignUpSchema)
@@ -108,7 +115,8 @@ export const signUpWithCredentials = safeAction
   });
 
 /**
- * Sign out a device by session token.
+ * @description Sign out a device by session token.
+ * @param token
  */
 const signOutBySessionToken = async (token: string) => {
   const session = await auth();
@@ -129,7 +137,7 @@ const signOutBySessionToken = async (token: string) => {
 };
 
 /**
- * Sign out from current device.
+ * @description Sign out from current device.
  */
 export const signOutCurrentDevice = safeAction.action(async () => {
   const session = await auth();
@@ -142,7 +150,8 @@ export const signOutCurrentDevice = safeAction.action(async () => {
 });
 
 /**
- * Sign out from a different device by session token.
+ * @description Sign out from a different device by session token.
+ * @schema SignOutSchema
  */
 export const signOutOtherDevice = safeAction
   .schema(SignOutSchema)
@@ -152,7 +161,7 @@ export const signOutOtherDevice = safeAction
   });
 
 /**
- * Sign out from all devices.
+ * @description Sign out from all devices.
  */
 export const signOutAllDevice = safeAction.action(async () => {
   const session = await auth();
@@ -178,7 +187,8 @@ export const signOutAllDevice = safeAction.action(async () => {
 });
 
 /**
- * Change password for the current user.
+ * @description Change password for the current user.
+ * @schema ChangePasswordSchema
  */
 export const changePassword = safeAction
   .schema(ChangePasswordSchema)
@@ -209,12 +219,13 @@ export const changePassword = safeAction
   });
 
 /**
- * Send forgot password email.
+ * @description Send forgot password email.
+ * @schema ForgotPasswordSchema
  */
 export const forgotPassword = safeAction
   .schema(ForgotPasswordSchema)
   .action(async ({ parsedInput }) => {
-    const [error] = await safeFetch(
+    const [error, data] = await safeFetch(
       DefaultReturnSchema,
       '/auth/forgot-password',
       {
@@ -228,11 +239,14 @@ export const forgotPassword = safeAction
       },
     );
     if (error) throw error;
-    redirect('/auth/reset-password');
+    redirect(
+      `/auth/reset-password?email=${parsedInput.identifier}&message=${data.message}`,
+    );
   });
 
 /**
- * Reset password using token.
+ * @description Reset password using token.
+ * @schema ResetPasswordSchema
  */
 export const resetPassword = safeAction
   .schema(ResetPasswordSchema)
@@ -255,7 +269,8 @@ export const resetPassword = safeAction
   });
 
 /**
- * Get current session by token.
+ * @description Get current session by token.
+ * @schema GetSessionSchema
  */
 export const getSessionById = async () => {
   const session = await auth();
@@ -275,7 +290,7 @@ export const getSessionById = async () => {
 };
 
 /**
- * Get all active sessions for the user.
+ * @description Get all active sessions for the user.
  */
 export const getAuthSessions = async (): Promise<Session[]> => {
   const session = await auth();
@@ -299,7 +314,8 @@ export const getAuthSessions = async (): Promise<Session[]> => {
 };
 
 /**
- * Confirm email with token
+ * @description Confirm email with token
+ * @schema ConfirmEmailSchema
  */
 export const confirmEmail = safeAction
   .schema(ConfirmEmailSchema)
@@ -325,5 +341,67 @@ export const confirmEmail = safeAction
         isEmailVerified: true,
       },
     });
-    redirect('/profile');
+    redirect(`/${session?.user?.username}`);
   });
+
+/**
+ * @description Update tokens in auth session
+ * @param data
+ */
+const updateTokens = async (data: RefreshToken) => {
+  await update({
+    user: {
+      auth: {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        session_token: data.session_token,
+        session_refresh_time: data.access_token_refresh_time,
+      },
+    },
+  });
+};
+
+/**
+ * @description Refresh access token with refresh token
+ * @param user
+ */
+export const refreshAccessToken = async (user: User): Promise<unknown> => {
+  console.log(user.auth.refresh_token);
+  const [error, data] = await safeFetch(
+    RefreshTokenSchema,
+    '/auth/refresh-token',
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.auth.refresh_token}`,
+        Accept: 'application/json',
+      },
+      cache: 'no-store',
+      body: JSON.stringify({
+        session_token: user.auth.session_token,
+        user_id: user.id,
+      }),
+    },
+  );
+  if (error) {
+    console.log('Refresh access token error', error);
+    return;
+  }
+  await updateTokens(data);
+};
+
+/**
+ * @description Validate session if exist from server session
+ */
+export const validateSessionIfExist = async (): Promise<GetSession> => {
+  const [error, data] = await getSessionById();
+  if (error) {
+    console.log('Validate session error', error);
+    await signOut({
+      redirect: false,
+    });
+  }
+  console.log('Validate session success');
+  return data;
+};

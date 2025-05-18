@@ -1,5 +1,12 @@
+/**
+ * @description Group array by key
+ * @param list
+ * @param getKey
+ * @return K;
+ */
+
 export const groupBy = <T, K extends keyof never>(
-  list: Array<T> | T[],
+  list: Array<T>,
   getKey: (item: T) => K,
 ) =>
   list.reduce(

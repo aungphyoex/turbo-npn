@@ -1,8 +1,8 @@
 import { cn } from '@repo/shadcn/lib/utils';
+import { CodeBlock } from '@repo/shadcn/tiptap/extensions/code-block';
 import { ImageExtension } from '@repo/shadcn/tiptap/extensions/image';
 import { ImagePlaceholder } from '@repo/shadcn/tiptap/extensions/image-placeholder';
 import SearchAndReplace from '@repo/shadcn/tiptap/extensions/search-and-replace';
-import { CodeBlock } from '@repo/shadcn/tiptap/toolbars/code-block';
 import { mergeAttributes } from '@tiptap/core';
 import CharacterCount from '@tiptap/extension-character-count';
 import { Color } from '@tiptap/extension-color';
@@ -15,6 +15,8 @@ import { createColGroup, Table } from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
+import { TaskItem } from '@tiptap/extension-task-item';
+import { TaskList } from '@tiptap/extension-task-list';
 import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
 import { Typography } from '@tiptap/extension-typography';
@@ -140,6 +142,14 @@ const TiptapTable = Table.extend({
   allowTableNodeSelection: true,
 });
 
+const TiptapTaskList = TaskList.configure({
+  itemTypeName: 'taskItem',
+});
+
+const TiptapTaskItem = TaskItem.configure({
+  nested: true,
+});
+
 const TiptapTableHeader = TableHeader.configure({
   HTMLAttributes: {
     class: cn(
@@ -237,4 +247,6 @@ export const defaultExtensions = [
   TiptapSearch,
   TiptapTypography,
   TiptapImagePlaceholder,
+  TiptapTaskList,
+  TiptapTaskItem,
 ];

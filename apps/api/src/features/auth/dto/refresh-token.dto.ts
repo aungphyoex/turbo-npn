@@ -10,7 +10,7 @@ export class RefreshTokenDto {
 
   @ApiProperty()
   @IsString({
-    message: 'User Id must be a string',
+    message: 'Session token must be a string',
   })
   session_token: string;
 }

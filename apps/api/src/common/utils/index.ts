@@ -12,5 +12,5 @@ export const getRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (maxFloored - minCelled) + minCelled); // The maximum is exclusive and the minimum is inclusive
 };
 
-export * from './bcrypt';
+export * from './hashString';
 export * from './validateEnv';

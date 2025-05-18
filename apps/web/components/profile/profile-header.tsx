@@ -1,11 +1,12 @@
 import { auth } from '@/auth';
+import { User } from '@/types/user.type';
 import { Avatar, AvatarFallback, AvatarImage } from '@repo/shadcn/avatar';
 import { Button } from '@repo/shadcn/button';
-import { BadgeCheck, Camera, Edit } from '@repo/shadcn/lucide-react';
+import { Camera, Edit } from '@repo/shadcn/lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const ProfileHeader = async () => {
+const ProfileHeader = async ({ user }: { user: User }) => {
   const session = await auth();
 
   return (
@@ -13,7 +14,7 @@ const ProfileHeader = async () => {
       {/* Cover Photo */}
       <div className="h-48 sm:h-64 w-full relative rounded-b-lg overflow-hidden">
         <Image
-          src={'/placeholder.svg'}
+          src={'/assets/placeholder.svg'}
           alt="Cover"
           fill
           className="w-full h-full object-cover"
@@ -32,8 +33,10 @@ const ProfileHeader = async () => {
       <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-16 sm:-mt-20 ml-0 sm:ml-8 relative z-10">
         <div className="relative">
           <Avatar className="h-32 w-32 border-4 border-white">
-            <AvatarImage src={'/placeholder.svg'} alt={'placeholder'} />
-            <AvatarFallback>{session?.user.name?.charAt(0)}</AvatarFallback>
+            <AvatarImage src={'/assets/placeholder.svg'} alt={'placeholder'} />
+            <AvatarFallback>
+              {user.name ?? session?.user.name?.charAt(0)}
+            </AvatarFallback>
           </Avatar>
           <Button
             size="icon"
@@ -47,21 +50,19 @@ const ProfileHeader = async () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-2 sm:mb-4">
           <div className="text-center sm:text-left">
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              {session?.user.name}
-              {session?.user.isEmailVerified && (
-                <BadgeCheck className="size-4 text-blue-500" />
-              )}
-              {!session?.user.isEmailVerified && (
-                <Link
-                  href={'/auth/confirm-email'}
-                  className="text-sm underline font-normal"
-                >
-                  verified
-                </Link>
-              )}
+              {user.name ?? session?.user.name}
+              {user.username === session?.user?.username &&
+                !session?.user.isEmailVerified && (
+                  <Link
+                    href={'/auth/confirm-email'}
+                    className="text-sm underline font-normal"
+                  >
+                    verified
+                  </Link>
+                )}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {session?.user.email}
+              {user.username ?? session?.user?.username}
             </p>
           </div>
           <Button
