@@ -49,7 +49,7 @@ const ChangeEmailForm = () => {
       }}
       className="space-y-6"
     >
-      <Card>
+      <Card className="rounded-none">
         <CardHeader>
           <CardTitle>Change Email</CardTitle>
           <CardDescription>

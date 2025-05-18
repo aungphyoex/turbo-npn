@@ -48,7 +48,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
   } = useAction(resetPassword);
   return (
     <div className={cn('w-full flex flex-col gap-6')}>
-      <Card className="max-w-xl w-full mx-auto">
+      <Card className="max-w-xl w-full mx-auto rounded-none">
         <CardHeader className="text-center mb-7">
           <LogoIcon className="mb-3" />
           <CardTitle className="text-xl text-start">Reset Password</CardTitle>

@@ -7,7 +7,7 @@
     "dev": "nest start -b swc -w",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "start": "node dist/main",
+    "start": "node dist/main.js",
     "start:debug": "nest start --debug --watch",
     "start:dev": "nest start",
     "test": "jest",

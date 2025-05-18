@@ -29,7 +29,7 @@
   --border: hsl(240 5.9% 90%);
   --input: hsl(240 5.9% 90%);
   --ring: hsl(142.1 76.2% 36.3%);
-  --radius: 0.4rem;
+  --radius: 0rem;
 
   /* Chart Colors */
   --chart-1: hsl(12 76% 61%);
