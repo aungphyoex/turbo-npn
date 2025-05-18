@@ -15,7 +15,7 @@ const Ai = ({ editor }: { editor: Editor }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const google = createGoogleGenerativeAI({
-    apiKey: 'AIzaSyAMRpE2ic_BnvlmnLP5mSyx-x_gNTK9RJc',
+    apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
   });
 
   const generateAIContent = async () => {
