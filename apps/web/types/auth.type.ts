@@ -2,11 +2,26 @@ import { UserSchema } from '@/types/user.type';
 import { z } from 'zod';
 
 /**
+ * Password schema for validation
+ */
+const passWordSchema = z
+  .string()
+  .min(8, 'Password must be at least 8 characters long')
+  .refine((val) => /[A-Z]/.test(val), {
+    message: 'Password must contain at least one uppercase letter',
+  })
+  .refine((val) => /\d/.test(val), {
+    message: 'Password must contain at least one number',
+  })
+  .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), {
+    message: 'Password must contain at least one special character',
+  });
+/**
  * Schema for user sign-up
  */
 export const SignUpSchema = z.object({
   email: z.string().email(), // Validates a proper email format
-  password: z.string(), // Validates non-empty string for password
+  password: passWordSchema, // Validates non-empty string for password
 });
 
 /**
@@ -31,6 +46,7 @@ export const SignInDataSchema = z.object({
     refresh_token: z.string(), // Token for refreshing access
     access_token: z.string(), // Access token for authentication
     session_token: z.string(), // Token for identifying user session
+    session_refresh_time: z.coerce.date(),
   }),
 });
 
@@ -60,6 +76,7 @@ export const GetSessionSchema = z.object({
   data: SessionSchema,
 });
 
+export type GetSession = z.infer<typeof GetSessionSchema>;
 /**
  * Schema for getting multiple sessions
  */
@@ -80,8 +97,8 @@ export const SignOutSchema = z.object({
 export const ChangePasswordSchema = z
   .object({
     password: z.string(), // Current password
-    newPassword: z.string(), // New password
-    confirmNewPassword: z.string(), // Confirmation of new password
+    newPassword: passWordSchema, // New password
+    confirmNewPassword: passWordSchema, // Confirmation of new password
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: "Passwords don't match",
@@ -111,3 +128,15 @@ export const ConfirmEmailSchema = z.object({
   email: z.string().email(),
   token: z.string().min(6).max(6),
 });
+
+/**
+ * Refresh access token with refresh token
+ */
+export const RefreshTokenSchema = z.object({
+  refresh_token: z.string(),
+  access_token: z.string(),
+  session_token: z.string(),
+  access_token_refresh_time: z.coerce.date(),
+});
+
+export type RefreshToken = z.infer<typeof RefreshTokenSchema>;

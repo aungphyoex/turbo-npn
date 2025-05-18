@@ -1,3 +1,8 @@
+/**
+ * @description Builds a search params string from an object
+ * @param params The object to build the search params from
+ * @returns The search params string
+ */
 export const buildSearchParams = <
   T extends Record<string, string | number | boolean | null | undefined>,
 >(

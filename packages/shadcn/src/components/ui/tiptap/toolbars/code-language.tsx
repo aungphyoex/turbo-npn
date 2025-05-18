@@ -21,7 +21,7 @@ export const CodeLanguage = ({ editor }: { editor: Editor | null }) => {
   const languages = useMemo(() => {
     return Object.keys(common);
   }, []);
-  console.log(languages);
+
   if (!editor || !editorState) {
     return null;
   }

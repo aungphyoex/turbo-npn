@@ -1,5 +1,6 @@
 'use client';
 
+import LogoIcon from '@/components/logo-icon';
 import { signInWithCredentials } from '@/server/auth.server';
 import {
   Card,
@@ -33,12 +34,15 @@ const SignInForm = () => {
     result: { validationErrors, serverError },
   } = useAction(signInWithCredentials);
   return (
-    <div className={cn('flex flex-col gap-6')}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription className={cn(serverError && 'text-red-500')}>
-            {serverError ?? 'Sign In with your account'}
+    <div className={cn('w-full flex flex-col gap-6')}>
+      <Card className="max-w-xl w-full mx-auto">
+        <CardHeader className="text-center mb-7">
+          <LogoIcon className="mb-3" />
+          <CardTitle className="text-xl text-start">SignIn</CardTitle>
+          <CardDescription
+            className={cn('text-start', serverError && 'text-red-500')}
+          >
+            {serverError ?? 'SignIn with your account'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -69,11 +73,13 @@ const SignInForm = () => {
               <div className="grid gap-6">
                 <div className="grid gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">Email or Username</Label>
+                    <Label isRequired htmlFor="email">
+                      Email
+                    </Label>
                     <Input
                       name="identifier"
                       id="email"
-                      placeholder="acme@example.com or your username"
+                      placeholder="acme@example.com"
                       onChange={handleChange}
                       autoFocus
                       autoComplete="email"
@@ -87,7 +93,9 @@ const SignInForm = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center">
-                      <Label htmlFor="password">Password</Label>
+                      <Label isRequired htmlFor="password">
+                        Password
+                      </Label>
                       <Link
                         href={'/auth/forgot-password'}
                         className="ml-auto text-sm underline-offset-4 hover:underline"
@@ -108,26 +116,22 @@ const SignInForm = () => {
                       </p>
                     )}
                   </div>
+                  <div className="text-sm">
+                    Don&apos;t have an account?{' '}
+                    <Link
+                      href={'/auth/sign-up'}
+                      className="underline underline-offset-4"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
                   <SubmitButton isLoading={isExecuting} name={'Sign In'} />
-                </div>
-                <div className="text-center text-sm">
-                  Don&apos;t have an account?{' '}
-                  <Link
-                    href={'/auth/sign-up'}
-                    className="underline underline-offset-4"
-                  >
-                    Sign up
-                  </Link>
                 </div>
               </div>
             </form>
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 };

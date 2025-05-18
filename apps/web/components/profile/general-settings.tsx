@@ -13,18 +13,17 @@ import {
 } from '@repo/shadcn/card';
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
-import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
-export default function GeneralSettings({
-  session,
-}: {
-  session: Session | null;
-}) {
+export default function GeneralSettings() {
+  const session = useSession({
+    required: true,
+  });
   const [userData, setUserData] = useState({
-    name: session?.user.name ?? '',
-    email: session?.user.email ?? '',
-    username: session?.user.username ?? '',
+    name: session?.data?.user.name ?? '',
+    email: session?.data?.user.email ?? '',
+    username: session?.data?.user.username ?? '',
   });
 
   const handleChange = (

@@ -48,8 +48,9 @@ export class AuthService {
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: user.id,
           username: user.username,
+          email: user.email,
+          id: user.id,
         },
         {
           secret: this.config.get('ACCESS_TOKEN_SECRET'),
@@ -58,8 +59,9 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          sub: user.id,
           username: user.username,
+          email: user.email,
+          id: user.id,
         },
         {
           secret: this.config.get('REFRESH_TOKEN_SECRET'),
@@ -72,6 +74,13 @@ export class AuthService {
       access_token,
       refresh_token,
     };
+  }
+
+  //Generate Session Refresh Time
+  async generateRefreshTime(): Promise<string> {
+    const threeDays = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+    const refreshTime = new Date(Date.now() + threeDays);
+    return refreshTime.toISOString();
   }
 
   //Generate OTP Code For Email Confirmation
@@ -154,7 +163,11 @@ export class AuthService {
         name: user.name,
       }),
     });
-    return { data: user, tokens: { ...tokens, session_token: session.id } };
+    const session_refresh_time = await this.generateRefreshTime();
+    return {
+      data: user,
+      tokens: { ...tokens, session_token: session.id, session_refresh_time },
+    };
   }
 
   //Confirm User Email
@@ -270,10 +283,13 @@ export class AuthService {
     });
     if (!session) throw new NotFoundException('Session not found');
     session.refresh_token = refresh_token;
+    const access_token_refresh_time = await this.generateRefreshTime();
     await this.SessionRepository.save(session);
     return {
       access_token,
       refresh_token,
+      session_token: dto.session_token,
+      access_token_refresh_time,
     };
   }
 

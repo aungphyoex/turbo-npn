@@ -30,14 +30,14 @@ export function RichTextEditor({ className }: { className?: string }) {
   if (!editor) return null;
 
   return (
-    <div className={cn('relative w-full bg-card', className)}>
+    <div className={cn('relative w-full bg-card overflow-hidden', className)}>
       <TableMenu editor={editor} />
       <CodeLanguage editor={editor} />
       <EditorToolbar editor={editor} />
       <TipTapFloatingMenu editor={editor} />
       <EditorContent
         editor={editor}
-        className="min-h-[400px] min-w-full cursor-text p-3 md:p-6 no-scrollbar"
+        className="min-h-[400px] min-w-full cursor-text p-3 md:p-6 no-scrollbar lg:p-12"
       />
     </div>
   );

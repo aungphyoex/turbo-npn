@@ -1,4 +1,5 @@
 'use client';
+import PasswordValidErrors from '@/components/auth/form/password-valid-errors';
 import { changePassword } from '@/server/auth.server';
 import { Button } from '@repo/shadcn/button';
 import {
@@ -11,7 +12,7 @@ import {
 } from '@repo/shadcn/card';
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
-import { AlertCircle, CheckCircle2, Loader2 } from '@repo/shadcn/lucide-react';
+import { Loader2 } from '@repo/shadcn/lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { ChangeEvent, useState } from 'react';
 
@@ -58,7 +59,9 @@ const ChangePasswordForm = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
+            <Label isRequired htmlFor="current-password">
+              Current Password
+            </Label>
             <Input
               onChange={handleChange}
               name="password"
@@ -71,43 +74,27 @@ const ChangePasswordForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
+            <Label isRequired htmlFor="new-password">
+              New Password
+            </Label>
             <Input
               onChange={handleChange}
               name="newPassword"
               id="new-password"
               type="password"
             />
+            <PasswordValidErrors password={formData.newPassword} />
             {validationErrors?.newPassword?._errors?.[0] && (
               <p className="text-xs text-red-500">
                 {validationErrors?.newPassword?._errors?.[0]}
               </p>
             )}
-            <div className="text-sm space-y-2 mt-2">
-              <p className="font-medium">Password requirements:</p>
-              <ul className="space-y-1">
-                <li className="flex items-center text-green-600">
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  <span>At least 8 characters</span>
-                </li>
-                <li className="flex items-center text-green-600">
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  <span>At least one uppercase letter</span>
-                </li>
-                <li className="flex items-center text-red-500">
-                  <AlertCircle className="h-4 w-4 mr-2" />
-                  <span>At least one number</span>
-                </li>
-                <li className="flex items-center text-red-500">
-                  <AlertCircle className="h-4 w-4 mr-2" />
-                  <span>At least one special character</span>
-                </li>
-              </ul>
-            </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
+            <Label isRequired htmlFor="confirm-password">
+              Confirm New Password
+            </Label>
             <Input
               onChange={handleChange}
               name="confirmNewPassword"

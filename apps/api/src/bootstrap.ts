@@ -22,7 +22,11 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
   const configService = app.get(ConfigService<Env>);
 
   // Set up security headers using helmet
-  app.use(helmet());
+  app.use(
+    helmet({
+      permittedCrossDomainPolicies: false,
+    }),
+  );
 
   // Global API prefix setup, excluding certain paths from the prefix
   app.setGlobalPrefix('api', {
@@ -50,8 +54,10 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
   // CORS setup allowing specific origins and methods
   app.enableCors({
     credentials: true,
-    origin: configService.get('ALLOW_CORS_URL'),
+    origin: configService.get('ALLOW_CORS_URL').split(','),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
   // Use custom logger for application logs

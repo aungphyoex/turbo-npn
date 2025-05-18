@@ -1,6 +1,12 @@
 'use client';
 
-import { OTPInput, OTPInputContext } from 'input-otp';
+import {
+  OTPInput,
+  OTPInputContext,
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from 'input-otp';
 import { MinusIcon } from 'lucide-react';
 import * as React from 'react';
 
@@ -17,7 +23,7 @@ function InputOTP({
     <OTPInput
       data-slot="input-otp"
       containerClassName={cn(
-        'flex items-center gap-2 has-disabled:opacity-50',
+        'flex items-center gap-2 has-disabled:opacity-50 w-full',
         containerClassName,
       )}
       className={cn('disabled:cursor-not-allowed', className)}
@@ -74,4 +80,12 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   );
 }
 export * from 'input-otp';
-export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };
+export {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+  REGEXP_ONLY_CHARS,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+};

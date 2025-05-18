@@ -5,10 +5,7 @@ export const EnvSchema = z.object({
   NODE_ENV: z
     .enum(['development', 'production', 'test', 'provision'])
     .default('development'),
-  PORT: z
-    .string()
-    .default('8000')
-    .transform((data) => +data),
+  PORT: z.coerce.number(),
   ALLOW_CORS_URL: z.string().url(),
   ACCESS_TOKEN_SECRET: z.string().min(10).max(128),
   ACCESS_TOKEN_EXPIRATION: z.string().min(1).max(60),

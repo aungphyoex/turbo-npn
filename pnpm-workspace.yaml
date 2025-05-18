@@ -1,12 +1,12 @@
 packages:
   - apps/*
   - packages/*
-
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@scarf/scarf'
   - '@swc/core'
   - '@tailwindcss/oxide'
+  - argon2
   - esbuild
   - nestjs-pino
   - sharp

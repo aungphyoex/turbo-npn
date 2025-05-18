@@ -1,5 +1,6 @@
 'use client';
 
+import LogoIcon from '@/components/logo-icon';
 import { forgotPassword } from '@/server/auth.server';
 import {
   Card,
@@ -32,12 +33,15 @@ const ForgotPasswordForm = () => {
     result: { validationErrors, serverError },
   } = useAction(forgotPassword);
   return (
-    <div className={cn('flex flex-col gap-6')}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription className={cn(serverError && 'text-red-500')}>
-            {serverError ?? 'Forgot your password'}
+    <div className={cn('w-full flex flex-col gap-6')}>
+      <Card className="max-w-xl w-full mx-auto">
+        <CardHeader className="text-center mb-7">
+          <LogoIcon className="mb-3" />
+          <CardTitle className="text-xl text-start">Forgot Password</CardTitle>
+          <CardDescription
+            className={cn('text-start', serverError && 'text-red-500')}
+          >
+            {serverError ?? 'Forgot your password with your email'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -51,11 +55,13 @@ const ForgotPasswordForm = () => {
               <div className="grid gap-6">
                 <div className="grid gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="identifier">Email or Username</Label>
+                    <Label isRequired htmlFor="identifier">
+                      Email
+                    </Label>
                     <Input
                       name="identifier"
                       id="identifier"
-                      placeholder="acme@example.com or your username"
+                      placeholder="acme@example.com"
                       onChange={handleChange}
                       autoFocus
                       required
@@ -66,29 +72,25 @@ const ForgotPasswordForm = () => {
                       </p>
                     )}
                   </div>
+                  <div className="text-sm">
+                    Back to{' '}
+                    <Link
+                      href={'/auth/sign-in'}
+                      className="underline underline-offset-4"
+                    >
+                      Sign In
+                    </Link>
+                  </div>
                   <SubmitButton
                     isLoading={isExecuting}
                     name={'Send Rest Code'}
                   />
-                </div>
-                <div className="text-center text-sm">
-                  Back to{' '}
-                  <Link
-                    href={'/auth/sign-in'}
-                    className="underline underline-offset-4"
-                  >
-                    Sign In
-                  </Link>
                 </div>
               </div>
             </form>
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 };

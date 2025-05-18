@@ -6,6 +6,7 @@ interface LoginUserInterface {
     session_token: string;
     access_token: string;
     refresh_token: string;
+    session_refresh_time: string;
   };
 }
 

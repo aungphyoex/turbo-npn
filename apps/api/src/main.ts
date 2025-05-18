@@ -6,6 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 const main = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
+    cors: true,
   });
   await bootstrap(app);
 };

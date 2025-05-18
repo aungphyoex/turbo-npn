@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  AlignCenter,
-  AlignJustify,
-  AlignLeft,
-  AlignRight,
-  ChevronDown,
-} from 'lucide-react';
+import { AlignCenter, AlignJustify, AlignLeft, AlignRight } from 'lucide-react';
 
 import { Button } from '@repo/shadcn/button';
 import {
@@ -75,12 +69,12 @@ export const AlignmentToolbar = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger disabled={isDisabled} asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-max font-normal">
-          <span className="mr-2">
-            {alignmentOptions[findIndex(currentTextAlign())]?.icon}
-          </span>
-          {/*{alignmentOptions[findIndex(currentTextAlign())]?.name}*/}
-          <ChevronDown className="ml-2 h-4 w-4" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0 sm:h-9 sm:w-9 font-normal"
+        >
+          {alignmentOptions[findIndex(currentTextAlign())]?.icon}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -89,6 +83,7 @@ export const AlignmentToolbar = () => {
           e.preventDefault();
         }}
         className="w-max"
+        align="end"
       >
         <DropdownMenuGroup className=" w-full">
           {alignmentOptions.map((option, index) => (

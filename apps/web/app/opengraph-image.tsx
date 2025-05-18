@@ -29,16 +29,7 @@ export default async function Image() {
           width: '100%',
         }}
       >
-        <img
-          src={`http://localhost:3000/og-logo.png`}
-          alt="opengraph logo"
-          style={{
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            objectFit: 'cover',
-          }}
-        />
+        Hello World
       </div>
     ),
     {

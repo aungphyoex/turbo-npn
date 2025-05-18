@@ -1,5 +1,7 @@
 'use client';
 
+import PasswordValidErrors from '@/components/auth/form/password-valid-errors';
+import LogoIcon from '@/components/logo-icon';
 import { signUpWithCredentials } from '@/server/auth.server';
 import {
   Card,
@@ -32,12 +34,16 @@ const SignUpForm = () => {
     isExecuting,
     result: { validationErrors, serverError },
   } = useAction(signUpWithCredentials);
+
   return (
-    <div className={cn('flex flex-col gap-6')}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription className={cn(serverError && 'text-red-500')}>
+    <div className={cn('w-full flex flex-col gap-6')}>
+      <Card className="max-w-xl w-full mx-auto">
+        <CardHeader className="text-center mb-7">
+          <LogoIcon className="mb-3" />
+          <CardTitle className="text-xl text-start">SignUp</CardTitle>
+          <CardDescription
+            className={cn('text-start', serverError && 'text-red-500')}
+          >
             {serverError ?? 'Sign Up your account'}
           </CardDescription>
         </CardHeader>
@@ -52,7 +58,9 @@ const SignUpForm = () => {
               <div className="grid gap-6">
                 <div className="grid gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label isRequired htmlFor="email">
+                      Email
+                    </Label>
                     <Input
                       name="email"
                       id="email"
@@ -71,7 +79,9 @@ const SignUpForm = () => {
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center">
-                      <Label htmlFor="password">Password</Label>
+                      <Label isRequired htmlFor="password">
+                        Password
+                      </Label>
                     </div>
                     <Input
                       name="password"
@@ -80,32 +90,29 @@ const SignUpForm = () => {
                       onChange={handleChange}
                       required
                     />
+                    <PasswordValidErrors password={formData.password} />
                     {validationErrors?.password?._errors?.[0] && (
                       <p className="text-xs text-red-500">
                         {validationErrors.password._errors[0]}
                       </p>
                     )}
                   </div>
+                  <div className="text-sm">
+                    Already have an account?{' '}
+                    <Link
+                      href={'/auth/sign-in'}
+                      className="underline underline-offset-4"
+                    >
+                      Sign in
+                    </Link>
+                  </div>
                   <SubmitButton isLoading={isExecuting} name={'Sign Up'} />
-                </div>
-                <div className="text-center text-sm">
-                  Already have an account?{' '}
-                  <Link
-                    href={'/auth/sign-in'}
-                    className="underline underline-offset-4"
-                  >
-                    Sign in
-                  </Link>
                 </div>
               </div>
             </form>
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 };

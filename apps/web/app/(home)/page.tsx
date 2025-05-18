@@ -1,6 +1,5 @@
+import Session from '@/components/session';
 import { ModeSwitcher } from '@repo/shadcn/mode-switcher';
-import { RichTextEditor } from '@repo/shadcn/tiptap/rich-text-editor';
-import { VideoPlayer } from '@repo/shadcn/video/player';
 
 const Page = () => {
   return (
@@ -8,18 +7,8 @@ const Page = () => {
       <nav className="flex justify-between items-center py-2">
         <h1 className="font-semibold">Turborepo</h1>
         <ModeSwitcher />
+        <Session />
       </nav>
-      <div className="flex justify-center items-center mb-14">
-        <VideoPlayer
-          keyboardControls={false}
-          poster={
-            'https://images.unsplash.com/photo-1745282480794-10427e218c76'
-          }
-          src="/test.mp4"
-          className="w-full lg:w-[600px] h-[300px]"
-        />
-      </div>
-      <RichTextEditor />
     </section>
   );
 };

@@ -1,10 +1,13 @@
 {
-  "name": "my-turborepo",
-  "version": "1.0.1",
+  "name": "turborepo",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
     "add:api": "pnpm add --filter=api",
+    "add:main": "pnpm add -w",
+    "add:shadcn": "pnpm add --filter=@repo/shadcn",
+    "add:utils": "pnpm add --filter=@repo/utils",
     "add:web": "pnpm add --filter=web",
     "build": "turbo build",
     "build:api": "pnpm build --filter=api",
@@ -35,6 +38,7 @@
     "@changesets/cli": "^2.27.10",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.6.0",
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/node": "^22.0.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
@@ -47,9 +51,9 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "turbo": "^2.4.4",
     "typescript": "5.8.3",
-    "zod": "^3.24.1"
+    "zod": "^3.24.4"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=20"
   }

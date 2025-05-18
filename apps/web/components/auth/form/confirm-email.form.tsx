@@ -1,5 +1,6 @@
 'use client';
 
+import LogoIcon from '@/components/logo-icon';
 import { confirmEmail } from '@/server/auth.server';
 import {
   Card,
@@ -8,13 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/shadcn/card';
-import { Input } from '@repo/shadcn/input';
-import { Label } from '@repo/shadcn/label';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  REGEXP_ONLY_DIGITS,
+} from '@repo/shadcn/input-otp';
 import { cn } from '@repo/shadcn/lib/utils';
 import SubmitButton from '@repo/shadcn/submit-button';
 import { Session } from 'next-auth';
 import { useAction } from 'next-safe-action/hooks';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
   const [formData, setFormData] = useState({
@@ -24,22 +29,18 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
   const {
     executeAsync,
     isExecuting,
-    result: { validationErrors, serverError, bindArgsValidationErrors, data },
+    result: { validationErrors, serverError },
   } = useAction(confirmEmail);
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
-  };
-  console.log(serverError, validationErrors, bindArgsValidationErrors, data);
   return (
-    <div className={cn('flex flex-col gap-6')}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription className={cn(serverError && 'text-red-500')}>
-            {serverError ?? 'Confirm your email'}
+    <div className={cn('w-full flex flex-col gap-6')}>
+      <Card className="max-w-xl w-full mx-auto">
+        <CardHeader className="text-center mb-7">
+          <LogoIcon className="mb-3" />
+          <CardTitle className="text-xl text-start">Confirm Email</CardTitle>
+          <CardDescription
+            className={cn('text-start', serverError && 'text-red-500')}
+          >
+            {serverError ?? 'Enter your verification code'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -51,16 +52,47 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
               }}
             >
               <div className="grid gap-6">
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="token">Enter your verification code</Label>
-                  </div>
-                  <Input
-                    name="token"
-                    id="token"
-                    onChange={handleChange}
-                    required
-                  />
+                <div className="grid gap-2 place-items-center">
+                  <InputOTP
+                    className="w-full"
+                    autoFocus
+                    onChange={(token) => {
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        token,
+                      }));
+                    }}
+                    maxLength={6}
+                    minLength={6}
+                    pattern={REGEXP_ONLY_DIGITS}
+                  >
+                    <InputOTPGroup className="w-full grid grid-cols-6 gap-5">
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={0}
+                      />
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={1}
+                      />
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={2}
+                      />
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={3}
+                      />
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={4}
+                      />
+                      <InputOTPSlot
+                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        index={5}
+                      />
+                    </InputOTPGroup>
+                  </InputOTP>
                   {validationErrors?.token?._errors?.[0] && (
                     <p className="text-xs text-red-500">
                       {validationErrors.token._errors[0]}
@@ -73,10 +105,6 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
           </div>
         </CardContent>
       </Card>
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 };

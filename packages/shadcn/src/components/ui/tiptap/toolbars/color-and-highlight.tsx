@@ -10,7 +10,7 @@ import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 import type { Extension } from '@tiptap/core';
 import type { ColorOptions } from '@tiptap/extension-color';
 import type { HighlightOptions } from '@tiptap/extension-highlight';
-import { CheckIcon, ChevronDownIcon } from 'lucide-react';
+import { CheckIcon } from 'lucide-react';
 
 type TextStylingExtensions =
   | Extension<ColorOptions, any>
@@ -107,14 +107,23 @@ export const ColorHighlightToolbar = () => {
         <PopoverTrigger disabled={isDisabled} asChild>
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             style={{
               color: currentColor,
             }}
-            className={cn('h-8 w-14 p-0 font-normal')}
+            className={cn('h-8 w-8 p-0 sm:h-9 sm:w-9')}
           >
-            <span className="text-md">A</span>
-            <ChevronDownIcon className="ml-2 h-4 w-4" />
+            <div className="flex items-center space-x-2">
+              <div
+                className="rounded-sm border px-1 py-px font-medium dark:border-neutral-600"
+                style={{
+                  backgroundColor: currentHighlight,
+                  color: currentColor,
+                }}
+              >
+                A
+              </div>
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1 dark:bg-gray-2">

@@ -58,7 +58,9 @@ const ChangeEmailForm = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="current-password">Current Password</Label>
+            <Label isRequired htmlFor="current-password">
+              Current Password
+            </Label>
             <Input
               onChange={handleChange}
               name="password"
@@ -71,7 +73,9 @@ const ChangeEmailForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="new-password">New Password</Label>
+            <Label isRequired htmlFor="new-password">
+              New Password
+            </Label>
             <Input
               onChange={handleChange}
               name="newPassword"
@@ -107,7 +111,9 @@ const ChangeEmailForm = () => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm New Password</Label>
+            <Label isRequired htmlFor="confirm-password">
+              Confirm New Password
+            </Label>
             <Input
               onChange={handleChange}
               name="confirmNewPassword"

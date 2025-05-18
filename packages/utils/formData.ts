@@ -1,3 +1,9 @@
+/**
+ * @description Convert object to form data
+ * @param data
+ * @returns FormData
+ */
+
 export const objectToFormData = (data: Record<string, unknown>): FormData => {
   const formData = new FormData();
 
