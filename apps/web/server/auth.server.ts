@@ -341,7 +341,7 @@ export const confirmEmail = safeAction
         isEmailVerified: true,
       },
     });
-    redirect(`/${session?.user?.username}`);
+    redirect(`/`);
   });
 
 /**

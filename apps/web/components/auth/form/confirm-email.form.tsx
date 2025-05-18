@@ -33,7 +33,7 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
   } = useAction(confirmEmail);
   return (
     <div className={cn('w-full flex flex-col gap-6')}>
-      <Card className="max-w-xl w-full mx-auto">
+      <Card className="max-w-xl w-full mx-auto rounded-none">
         <CardHeader className="text-center mb-7">
           <LogoIcon className="mb-3" />
           <CardTitle className="text-xl text-start">Confirm Email</CardTitle>
@@ -68,27 +68,27 @@ const ConfirmEmailForm = ({ session }: { session: Session | null }) => {
                   >
                     <InputOTPGroup className="w-full grid grid-cols-6 gap-5">
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={0}
                       />
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={1}
                       />
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={2}
                       />
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={3}
                       />
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={4}
                       />
                       <InputOTPSlot
-                        className="w-full h-10 sm:size-15 md:size-17 rounded-xl first:rounded-xl last:rounded-xl border"
+                        className="w-full h-10  rounded-xl first:rounded-xl last:rounded-xl border"
                         index={5}
                       />
                     </InputOTPGroup>
