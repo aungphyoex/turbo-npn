@@ -24,7 +24,6 @@ const SessionAllLogout = () => {
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
           className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-destructive dark:hover:text-white"
         >
           <LogOut className="h-4 w-4 mr-1" />

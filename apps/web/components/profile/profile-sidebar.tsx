@@ -1,7 +1,7 @@
 'use client';
 
 import SignOut from '@/components/auth/sign-out';
-import { Button } from '@repo/shadcn/button';
+import { buttonVariants } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
 import {
   Shield,
@@ -9,64 +9,57 @@ import {
   User as UserIcon,
   UserPenIcon,
 } from '@repo/shadcn/lucide-react';
-import { User } from 'next-auth';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { TabsList, TabsTrigger } from '@repo/shadcn/tabs';
 
-const ProfileSidebar = ({ user }: { user: User }) => {
+const ProfileSidebar = () => {
   const menuItems = [
     {
       id: 'profile',
       label: 'Profile',
       icon: UserIcon,
-      href: `/p/${user.username}`,
     },
     {
       id: 'general',
       label: 'General',
       icon: UserPenIcon,
-      href: `/p/${user.username}/general`,
     },
     {
       id: 'security',
       label: 'Security and Login',
       icon: Shield,
-      href: `/p/${user.username}/security`,
     },
     {
       id: 'sessions',
       label: 'Active Sessions',
       icon: Smartphone,
-      href: `/p/${user.username}/sessions`,
     },
   ];
-  const pathname = usePathname();
   return (
-    <div className="bg-card rounded-lg shadow p-4">
+    <div className="w-full bg-card rounded-lg shadow p-4">
       <h2 className="font-semibold text-lg mb-4">Settings</h2>
-      <nav className="space-y-1">
+      <TabsList className="grid gap-1 grid-cols-1 w-full px-0 h-auto bg-card p-0">
         {menuItems.map((item) => {
           const Icon = item.icon;
           return (
-            <Button
+            <TabsTrigger
               key={item.id}
-              variant={pathname === item.href ? 'secondary' : 'ghost'}
               className={cn(
-                `w-full justify-start`,
-                pathname === item.href && 'bg-secondary',
+                buttonVariants({
+                  variant: 'ghost',
+                  class:
+                    'min-w-full justify-start data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground data-[state=active]:shadow-xs data-[state=active]:hover:bg-secondary/80',
+                }),
               )}
-              asChild
+              value={item.id}
             >
-              <Link href={item.href}>
-                <Icon className="mr-2 h-4 w-4" />
-                {item.label}
-              </Link>
-            </Button>
+              <Icon className="mr-2 h-4 w-4" />
+              {item.label}
+            </TabsTrigger>
           );
         })}
 
         <SignOut />
-      </nav>
+      </TabsList>
     </div>
   );
 };

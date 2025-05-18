@@ -212,7 +212,7 @@
 
 /* Utility for Container */
 @utility container {
-  @apply mx-auto px-3 md:px-6 lg:px-8; /* Center the container and add responsive padding */
+  @apply mx-auto px-4 sm:px-6 lg:px-8; /* Center the container and add responsive padding */
 }
 
 @layer base {

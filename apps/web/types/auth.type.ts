@@ -96,7 +96,7 @@ export const SignOutSchema = z.object({
  */
 export const ChangePasswordSchema = z
   .object({
-    password: z.string(), // Current password
+    password: passWordSchema, // Current password
     newPassword: passWordSchema, // New password
     confirmNewPassword: passWordSchema, // Confirmation of new password
   })
