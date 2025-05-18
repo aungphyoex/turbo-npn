@@ -16,6 +16,7 @@ export const EnvSchema = z.object({
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
+  DB_SSL: z.string().transform((value) => value === 'true'),
   MAIL_HOST: z.string(),
   MAIL_USERNAME: z.string(),
   MAIL_PASSWORD: z.string(),
