@@ -234,7 +234,7 @@ export function TipTapFloatingMenu({ editor }: { editor: Editor }) {
 
         commandFn(editor);
       } catch (error) {
-        console.error('Error executing command:', error);
+        console.error('GlobalError executing command:', error);
       } finally {
         setIsOpen(false);
         setSearch('');

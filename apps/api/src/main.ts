@@ -11,7 +11,6 @@ const main = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   });
-  app.flushLogs();
   await bootstrap(app);
 };
 

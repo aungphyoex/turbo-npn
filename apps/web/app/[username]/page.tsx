@@ -1,6 +1,7 @@
 import NotFound from '@/app/not-found';
 import { auth } from '@/auth';
 import BackNavigation from '@/components/back-navigation';
+import AppearanceSettings from '@/components/profile/appearance-settings';
 import GeneralSettings from '@/components/profile/general-settings';
 import ProfileHeader from '@/components/profile/profile-header';
 import ProfileSidebar from '@/components/profile/profile-sidebar';
@@ -20,7 +21,6 @@ const Page = async ({
   const { username } = await params;
   const session = await auth();
   const user = await getUser(username);
-  console.log(user);
   if (!user) {
     return <NotFound />;
   }
@@ -65,6 +65,9 @@ const Page = async ({
           </TabsContent>
           <TabsContent value="sessions">
             <SessionsSettings />
+          </TabsContent>
+          <TabsContent value="appearance">
+            <AppearanceSettings />
           </TabsContent>
         </div>
       </Tabs>

@@ -21,9 +21,9 @@ const Page = async () => {
         <p>This is a monorepo for a Next.js app and a React library.</p>
         {session?.user && (
           <div className=" flex-col flex justify-center items-center gap-5">
-            <p>You are logged in as {session.user.email}</p>
+            <p>You are logged in as {session?.user.email}</p>
             <Button asChild>
-              <Link href={`/${session.user.username}`}>Your Profile</Link>
+              <Link href={`/${session?.user.username}`}>Your Profile</Link>
             </Button>
           </div>
         )}

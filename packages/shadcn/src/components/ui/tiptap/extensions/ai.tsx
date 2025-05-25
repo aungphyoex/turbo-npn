@@ -34,7 +34,7 @@ const Ai = ({ editor }: { editor: Editor }) => {
       setAiDialogOpen(false);
       console.log('Passed ai content', text, html);
     } catch (error) {
-      console.error('Error generating content:', error);
+      console.error('GlobalError generating content:', error);
     } finally {
       setIsGenerating(false);
     }
