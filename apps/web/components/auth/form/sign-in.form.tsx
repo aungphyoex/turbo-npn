@@ -35,7 +35,7 @@ const SignInForm = () => {
   } = useAction(signInWithCredentials);
   return (
     <div className={cn('w-full flex flex-col gap-6')}>
-      <Card className="max-w-xl w-full mx-auto rounded-none">
+      <Card className="max-w-xl w-full mx-auto">
         <CardHeader className="text-center mb-7">
           <LogoIcon className="mb-3" />
           <CardTitle className="text-xl text-start">SignIn</CardTitle>

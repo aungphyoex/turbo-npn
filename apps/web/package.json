@@ -25,6 +25,7 @@
     "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
+    "@repo/constants": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/ts-config": "workspace:*",
     "@repo/utils": "workspace:*",

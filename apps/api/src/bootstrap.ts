@@ -56,8 +56,6 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
     credentials: true,
     origin: configService.get('ALLOW_CORS_URL').split(','),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   });
 
   // Use custom logger for application logs

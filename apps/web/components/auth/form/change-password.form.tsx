@@ -50,7 +50,7 @@ const ChangePasswordForm = () => {
       }}
       className="space-y-6"
     >
-      <Card className="rounded-none">
+      <Card>
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
           <CardDescription>

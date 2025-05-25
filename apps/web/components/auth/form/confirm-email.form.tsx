@@ -1,6 +1,5 @@
 'use client';
 
-import SignOut from '@/components/auth/sign-out';
 import LogoIcon from '@/components/logo-icon';
 import { confirmEmail } from '@/server/auth.server';
 import {
@@ -27,7 +26,7 @@ const ConfirmEmailForm = () => {
     required: true,
   });
   const [formData, setFormData] = useState({
-    email: session?.data?.user.email!,
+    email: session?.data?.user.email ?? 'unknown',
     token: '',
   });
   const {
@@ -37,7 +36,7 @@ const ConfirmEmailForm = () => {
   } = useAction(confirmEmail);
   return (
     <div className={cn('w-full flex flex-col gap-6')}>
-      <Card className="max-w-xl w-full mx-auto rounded-none">
+      <Card className="max-w-xl w-full mx-auto">
         <CardHeader className="text-center mb-7">
           <LogoIcon className="mb-3" />
           <CardTitle className="text-xl text-start">Confirm Email</CardTitle>
@@ -104,7 +103,7 @@ const ConfirmEmailForm = () => {
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-5">
-                  <SignOut />
+                  <div />
                   <SubmitButton
                     isLoading={isExecuting}
                     name={'Confirm email'}

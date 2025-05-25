@@ -20,6 +20,7 @@ const Page = async ({
   const { username } = await params;
   const session = await auth();
   const user = await getUser(username);
+  console.log(user);
   if (!user) {
     return <NotFound />;
   }
@@ -48,7 +49,7 @@ const Page = async ({
               </CardHeader>
               <CardContent className="space-y-2">
                 <h2>
-                  {user.username} is a user on {user.name}
+                  {user.username} is a user on {user.profile.name}
                 </h2>
                 <hr />
                 <h3>Email: {user.email}</h3>

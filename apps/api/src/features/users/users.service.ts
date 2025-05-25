@@ -9,7 +9,9 @@ export class UsersService {
     @InjectRepository(User) private readonly UserRepository: Repository<User>,
   ) {}
   async findAll(): Promise<User[]> {
-    return await this.UserRepository.find();
+    return await this.UserRepository.find({
+      relations: ['profile'],
+    });
   }
 
   /**
@@ -20,6 +22,7 @@ export class UsersService {
   async findOne(identifier: string): Promise<User> {
     const user = await this.UserRepository.findOne({
       where: { username: identifier },
+      relations: ['profile'],
     });
     if (!user) {
       throw new NotFoundException('User not found.');

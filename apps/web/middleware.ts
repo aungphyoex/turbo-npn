@@ -14,7 +14,7 @@ export default auth(async (req) => {
   if (req.auth && req.auth.user) {
     const user = req.auth.user;
     const session_refresh_time = new Date(
-      user.auth.session_refresh_time,
+      user.tokens.session_refresh_time,
     ).getTime();
     const now = new Date().getTime();
     if (session_refresh_time <= now) {

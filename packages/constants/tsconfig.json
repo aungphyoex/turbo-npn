@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@repo/utils/*": ["./*"]
+      "@repo/constants/*": ["./*"]
     }
   },
   "exclude": ["node_modules"]
