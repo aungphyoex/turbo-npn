@@ -22,7 +22,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "argon2": "^0.43.0",
     "helmet": "^8.1.0",
-    "multer": "1.4.5-lts.2",
+    "multer": "2.0.0",
     "path-to-regexp": "^8.2.0",
     "pg": "^8.13.1",
     "pino": "^9.7.0",
