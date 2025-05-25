@@ -43,7 +43,7 @@
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.11",
+    "lint-staged": "^16.0.0",
     "prettier": "^3.5.0",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-organize-imports": "^4.1.0",
