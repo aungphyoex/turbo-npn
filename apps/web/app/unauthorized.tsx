@@ -1,39 +1,32 @@
 'use client';
-
 import { Button } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
 import { RotateCw } from '@repo/shadcn/lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useTransition } from 'react';
+import { useTransition } from 'react';
 
-const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
+const Unauthorized = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
-  }, [error]);
-
   return (
     <div className="h-svh">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
-        {/*<h1 className="text-[7rem] leading-tight font-bold">Error {error.message}</h1>*/}
-        <span className="font-medium">Something went wrong</span>
+        <h1 className="text-[7rem] leading-tight font-bold">401</h1>
+        <span className="font-medium">Unauthorized Access</span>
         <p className="text-muted-foreground text-center">
-          {'An unexpected error occurred.'}
-          ... may be refresh
+          {'You need to be logged in to access this page.'} <br />
+          Please sign in and try again.
         </p>
         <div className="mt-6 flex gap-4">
           <Button
             onClick={() => {
               startTransition(() => {
-                reset();
-                router.refresh();
+                router.push('/auth/sign-in'); // You can change this to your login route
               });
             }}
           >
             <RotateCw className={cn('size-4', isPending && 'animate-spin')} />
-            Back to Home
+            Go to Login
           </Button>
         </div>
       </div>
@@ -41,4 +34,4 @@ const Error = ({ error, reset }: { error: Error; reset: () => void }) => {
   );
 };
 
-export default Error;
+export default Unauthorized;

@@ -4,6 +4,7 @@ import SignOut from '@/components/auth/sign-out';
 import { buttonVariants } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
 import {
+  Palette,
   Shield,
   Smartphone,
   User as UserIcon,
@@ -32,6 +33,11 @@ const ProfileSidebar = () => {
       id: 'sessions',
       label: 'Active Sessions',
       icon: Smartphone,
+    },
+    {
+      id: 'appearance',
+      label: 'Appearance',
+      icon: Palette,
     },
   ];
   return (

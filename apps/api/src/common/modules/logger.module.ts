@@ -7,7 +7,10 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
     PinoLoggerModule.forRootAsync({
       useFactory: () => {
         return {
+          forRoutes: ['*'],
           pinoHttp: {
+            quietReqLogger: true,
+            quietResLogger: true,
             name: APP_NAME,
             autoLogging: true,
             transport: {
