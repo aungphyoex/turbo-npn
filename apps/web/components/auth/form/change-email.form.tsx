@@ -15,7 +15,7 @@ import SubmitButton from '@repo/shadcn/submit-button';
 const ChangeEmailForm = () => {
   return (
     <form className="space-y-6">
-      <Card className="rounded-none">
+      <Card>
         <CardHeader>
           <CardTitle>Change Email</CardTitle>
           <CardDescription>

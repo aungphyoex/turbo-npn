@@ -24,17 +24,14 @@ export const sessionCallback = ({
       ...session,
       user: {
         id: user.id,
-        name: user.name,
         email: user.email,
-        image: user.image,
         username: user.username,
         isEmailVerified: user.isEmailVerified,
-        auth: {
-          access_token: user.auth.access_token,
-          refresh_token: user.auth.refresh_token,
-          session_token: user.auth.session_token,
-          session_refresh_time: user.auth.session_refresh_time,
-        },
+        emailVerifiedAt: user.emailVerifiedAt,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        profile: user.profile,
+        tokens: user.tokens,
       },
     };
   }

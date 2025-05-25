@@ -1,15 +1,20 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule as PinoModule } from 'nestjs-pino';
+import { APP_NAME } from '@repo/constants/app';
+import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
-    PinoModule.forRoot({
-      pinoHttp: {
-        quietReqLogger: true,
-        quietResLogger: true,
-        transport: {
-          target: 'pino-pretty',
-        },
+    PinoLoggerModule.forRootAsync({
+      useFactory: () => {
+        return {
+          pinoHttp: {
+            name: APP_NAME,
+            autoLogging: true,
+            transport: {
+              target: 'pino-pretty',
+            },
+          },
+        };
       },
     }),
   ],

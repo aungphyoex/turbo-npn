@@ -8,11 +8,21 @@ declare module 'next-auth' {
    */
   interface User {
     id: string;
-    name: string;
     email: string;
     username: string;
     isEmailVerified: boolean;
-    auth: {
+    emailVerifiedAt?: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    profile: {
+      name: string;
+      gender: string;
+      phoneNumber?: string | null;
+      profilePicture?: string | null;
+      dateOfBirth?: Date | null;
+      address?: string | null;
+    };
+    tokens: {
       access_token: string;
       refresh_token: string;
       session_token: string;

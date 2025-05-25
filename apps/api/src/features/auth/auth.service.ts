@@ -1,25 +1,40 @@
-import { Env, hashString, validateString } from '@/common/utils';
-import { ChangePasswordDto } from '@/features/auth/dto/change-password.dto';
-import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
-import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
-import { ForgotPasswordDto } from '@/features/auth/dto/forgot-password.dto';
-import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
-import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
-import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
-import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { SignOutAllDeviceUserDto } from '@/features/auth/dto/signOutAllDevice-user.dto';
-import { ValidateUserDto } from '@/features/auth/dto/validate-user.dto';
+import {
+  Env,
+  extractName,
+  generateOTP,
+  generateRefreshTime,
+  hashString,
+  validateString,
+} from '@/common/utils';
+import {
+  AuthTokensInterface,
+  LoginUserInterface,
+  RefreshTokenInterface,
+  RegisterUserInterface,
+} from '@/features/auth/auth.interface';
+import {
+  ChangePasswordDto,
+  ConfirmEmailDto,
+  CreateUserDto,
+  ForgotPasswordDto,
+  RefreshTokenDto,
+  ResetPasswordDto,
+  SignInUserDto,
+  SignOutAllDeviceUserDto,
+  SignOutUserDto,
+  ValidateUserDto,
+} from '@/features/auth/dto';
+import { Otp } from '@/features/auth/entities/otp.entity';
 import { Session } from '@/features/auth/entities/session.entity';
-import AuthTokensInterface from '@/features/auth/interfaces/auth-tokens.interface';
-import LoginUserInterface from '@/features/auth/interfaces/login-user.interface';
-import RefreshTokenInterface from '@/features/auth/interfaces/refresh-token.interface';
-import RegisterUserInterface from '@/features/auth/interfaces/register-user.interface';
 import { MailService } from '@/features/mail/mail.service';
-import ChangePasswordMail from '@/features/mail/templates/change-password.mail';
-import ConfirmEmailMail from '@/features/mail/templates/confirm-email.mail';
-import ForgotPasswordMail from '@/features/mail/templates/forgot-password.mail';
-import RegisterMail from '@/features/mail/templates/register.mail';
-import SignInMail from '@/features/mail/templates/sign-in.mail';
+import {
+  ChangePasswordSuccessMail,
+  ConfirmEmailSuccessMail,
+  RegisterSuccessMail,
+  ResetPasswordMail,
+  SignInSuccessMail,
+} from '@/features/mail/templates';
+import { Profile } from '@/features/users/entities/profile.entity';
 import { User } from '@/features/users/entities/user.entity';
 import {
   BadRequestException,
@@ -30,20 +45,31 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import crypto from 'crypto';
+import { Logger } from 'nestjs-pino';
 import { Repository } from 'typeorm';
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<Env>,
-    @InjectRepository(User) private readonly UserRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly UserRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
     @InjectRepository(Session)
     private readonly SessionRepository: Repository<Session>,
+    @InjectRepository(Otp)
+    private readonly OtpRepository: Repository<Otp>,
     private readonly mailService: MailService,
+    private readonly logger: Logger,
   ) {}
 
-  //Generate Tokens
+  /**
+   * @description Generate Refresh Token and Access Token
+   * @param user
+   * @return Promise<AuthTokensInterface>
+   */
   async generateTokens(user: User): Promise<AuthTokensInterface> {
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(
@@ -76,72 +102,65 @@ export class AuthService {
     };
   }
 
-  //Generate Session Refresh Time
-  async generateRefreshTime(): Promise<string> {
-    const threeDays = 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
-    const refreshTime = new Date(Date.now() + threeDays);
-    return refreshTime.toISOString();
-  }
-
-  //Generate OTP Code For Email Confirmation
-  async generateOTP(length = 6): Promise<string> {
-    return crypto
-      .randomInt(0, 10 ** length)
-      .toString()
-      .padStart(length, '0');
-  }
-
-  //Create User
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const user = this.UserRepository.create(createUserDto);
-      await this.UserRepository.insert(user);
-      return user;
-    } catch {
-      throw new BadRequestException(
-        'Something went wrong while creating user.',
-      );
-    }
-  }
-
-  //Find User
-  async findUser(identifier: string): Promise<User | null> {
-    return await this.UserRepository.findOne({
-      where: [{ email: identifier }, { username: identifier }],
-    });
-  }
-
-  //Check User Is Already Exists
+  /**
+   * @description Validate User with identifier and password
+   * @param dto
+   * @return Promise<User>
+   */
   async validateUser(dto: ValidateUserDto): Promise<User> {
-    const user = await this.findUser(dto.identifier);
+    const user = await this.UserRepository.findOne({
+      where: [{ email: dto.identifier }, { username: dto.identifier }],
+      relations: ['profile'],
+    });
     if (!user) throw new NotFoundException('User not found');
     const isValid = await validateString(dto.password, user.password);
     if (!isValid) throw new UnauthorizedException('Invalid credentials');
     return user;
   }
 
-  //Register User Account
+  /**
+   * @description Register user account with email and password
+   * @param createUserDto
+   * @return Promise<RegisterUserInterface>
+   */
   async register(createUserDto: CreateUserDto): Promise<RegisterUserInterface> {
-    const emailVerificationToken = await this.generateOTP();
-    const user = await this.create({
-      ...createUserDto,
-      emailVerificationToken,
-      emailVerificationTokenExpires: new Date(
-        Date.now() + 1000 * 60 * 60 * 24, // 1 day
-      ),
-    });
-    await this.mailService.sendEmail({
-      to: [user.email],
-      subject: 'Confirm your email',
-      html: RegisterMail({
-        name: user.name,
-        code: emailVerificationToken,
-      }),
-    });
-    return { data: user };
+    const email_confirmation_otp = await generateOTP();
+    // Create and insert user
+    try {
+      const user = this.UserRepository.create(createUserDto);
+      await this.UserRepository.insert(user);
+      const profile = this.profileRepository.create({
+        user_id: user.id,
+        name: extractName(createUserDto.email),
+      });
+      await this.profileRepository.insert(profile);
+      const token = this.OtpRepository.create({
+        otp: email_confirmation_otp,
+        type: 'EMAIL_CONFIRMATION',
+        expires: new Date(
+          Date.now() + 1000 * 60 * 60 * 24, // 1 day
+        ),
+      });
+      await this.OtpRepository.save(token);
+      await this.mailService.sendEmail({
+        to: [user.email],
+        subject: 'Confirm your email',
+        html: RegisterSuccessMail({
+          name: profile.name,
+          otp: email_confirmation_otp,
+        }),
+      });
+      return { data: user };
+    } catch (e) {
+      throw new BadRequestException('Something went wrong!');
+    }
   }
 
-  //Sign In User Account
+  /**
+   * @description SignIn User Account
+   * @param dto
+   * @return Promise<LoginUserInterface>
+   */
   async signIn(dto: SignInUserDto): Promise<LoginUserInterface> {
     const user = await this.validateUser(dto);
     const tokens = await this.generateTokens(user);
@@ -158,89 +177,120 @@ export class AuthService {
     const session = await this.SessionRepository.save(sessionData);
     await this.mailService.sendEmail({
       to: [user.email],
-      subject: 'Login Detected',
-      html: SignInMail({
-        name: user.name,
+      subject: 'SignIn with your email',
+      html: SignInSuccessMail({
+        username: user.profile.name,
+        loginTime: sessionData.createdAt,
+        ipAddress: session.ip,
+        location: session.location,
+        device: session.device_name,
       }),
     });
-    const session_refresh_time = await this.generateRefreshTime();
+    const session_refresh_time = await generateRefreshTime(); //3 days default
     return {
       data: user,
       tokens: { ...tokens, session_token: session.id, session_refresh_time },
     };
   }
 
-  //Confirm User Email
+  /**
+   * @description Confirm Email Account
+   * @param dto
+   * @return Promise<void>
+   */
   async confirmEmail(dto: ConfirmEmailDto): Promise<void> {
     const user = await this.UserRepository.findOne({
       where: { email: dto.email },
+      relations: ['profile'],
     });
     if (!user) throw new NotFoundException('User not found');
-    if (user.emailVerificationToken !== dto.token)
+    const otp = await this.OtpRepository.findOne({
+      where: { otp: dto.token, type: 'EMAIL_CONFIRMATION' },
+    });
+    if (!otp) throw new NotFoundException('Invalid confirmation code');
+    if (otp.otp !== dto.token)
       throw new BadRequestException('Invalid confirmation code');
-    if (
-      user.emailVerificationTokenExpires &&
-      new Date(user.emailVerificationTokenExpires) < new Date()
-    )
+    if (otp.expires && new Date(otp.expires) < new Date())
       throw new BadRequestException('Email confirm token expired');
     user.isEmailVerified = true;
-    user.emailVerificationToken = null;
-    user.emailVerificationTokenExpires = null;
+    user.emailVerifiedAt = new Date();
     await this.UserRepository.save(user);
+    await this.OtpRepository.remove(otp);
     await this.mailService.sendEmail({
       to: [user.email],
       subject: 'Confirmation Successful',
-      html: ConfirmEmailMail({
-        name: user.name,
+      html: ConfirmEmailSuccessMail({
+        name: user.profile.name,
       }),
     });
   }
 
-  //Forgot Password
+  /**
+   * @description Forgot your password, to get your password reset token
+   * @param dto
+   * @return Promise<void>
+   */
   async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
-    const user = await this.findUser(dto.identifier);
+    const user = await this.UserRepository.findOne({
+      where: [{ email: dto.identifier }, { username: dto.identifier }],
+      relations: ['profile'],
+    });
     if (!user) throw new NotFoundException('User not found');
-    const passwordResetToken = await this.generateOTP();
-    user.passwordResetToken = passwordResetToken;
-    user.passwordResetTokenExpires = new Date(
-      Date.now() + 1000 * 60 * 60 * 24, // 1 day
-    );
-    await this.UserRepository.save(user);
+    const passwordResetToken = await generateOTP();
+    const otp = this.OtpRepository.create({
+      otp: passwordResetToken,
+      type: 'PASSWORD_RESET',
+      expires: new Date(
+        Date.now() + 1000 * 60 * 60 * 24, // 1 day
+      ),
+    });
+    await this.OtpRepository.save(otp);
     await this.mailService.sendEmail({
       to: [user.email],
-      subject: 'Reset Password',
-      html: ForgotPasswordMail({
-        name: user.name,
+      subject: 'Reset your password',
+      html: ResetPasswordMail({
+        name: user.profile.name,
         code: passwordResetToken,
       }),
     });
   }
 
-  //Reset Password
+  /**
+   * @description Reset your password with your password reset token
+   * @param dto
+   * @return Promise<void>
+   */
   async resetPassword(dto: ResetPasswordDto): Promise<void> {
-    const user = await this.findUser(dto.identifier);
+    const user = await this.UserRepository.findOne({
+      where: [{ email: dto.identifier }, { username: dto.identifier }],
+      relations: ['profile'],
+    });
     if (!user) throw new NotFoundException('User not found');
-    if (user.passwordResetToken !== dto.resetToken)
+    const otp = await this.OtpRepository.findOne({
+      where: { otp: dto.resetToken, type: 'PASSWORD_RESET' },
+    });
+    if (!otp) throw new NotFoundException('Invalid password reset token');
+    if (otp.otp !== dto.resetToken)
       throw new BadRequestException('Invalid password reset token');
-    if (
-      user.passwordResetTokenExpires &&
-      new Date() > user.passwordResetTokenExpires
-    )
+    if (otp.otp && new Date() > otp.expires)
       throw new BadRequestException('Password reset token expired');
     user.password = await hashString(dto.newPassword);
-    user.passwordResetToken = null;
-    user.passwordResetTokenExpires = null;
     await this.UserRepository.save(user);
+    await this.OtpRepository.remove(otp);
     await this.mailService.sendEmail({
       to: [user.email],
       subject: 'Password Reset Successful',
-      html: ChangePasswordMail({
-        name: user.name,
+      html: ChangePasswordSuccessMail({
+        name: user.profile.name,
       }),
     });
   }
 
-  //Change Password
+  /**
+   * @description Change your password
+   * @param dto
+   * @return Promise<void>
+   */
   async changePassword(dto: ChangePasswordDto): Promise<void> {
     const user = await this.validateUser(dto);
     user.password = await hashString(dto.newPassword);
@@ -248,13 +298,17 @@ export class AuthService {
     await this.mailService.sendEmail({
       to: [user.email],
       subject: 'Password Change Successful',
-      html: ChangePasswordMail({
-        name: user.name,
+      html: ChangePasswordSuccessMail({
+        name: user.profile.name,
       }),
     });
   }
 
-  //Sign Out User Account
+  /**
+   * @description Sign Out User Account
+   * @param dto
+   * @return Promise<void>
+   */
   async signOut(dto: SignOutUserDto): Promise<void> {
     const session = await this.SessionRepository.findOne({
       where: { id: dto.session_token },
@@ -263,12 +317,20 @@ export class AuthService {
     await this.SessionRepository.remove(session);
   }
 
-  //Sign Out All Device By User ID
+  /**
+   * @description Sign Out All Device By User ID
+   * @param dto
+   * @return Promise<void>
+   */
   async signOutAllDevices(dto: SignOutAllDeviceUserDto): Promise<void> {
     await this.SessionRepository.delete({ user_id: dto.userId });
   }
 
-  //Refresh User Access Token
+  /**
+   * @description Refresh User Access Token
+   * @param dto
+   * @return Promise<RefreshTokenInterface>
+   */
   async refreshToken(dto: RefreshTokenDto): Promise<RefreshTokenInterface> {
     const user = await this.UserRepository.findOne({
       where: { id: dto.user_id },
@@ -283,7 +345,7 @@ export class AuthService {
     });
     if (!session) throw new NotFoundException('Session not found');
     session.refresh_token = refresh_token;
-    const access_token_refresh_time = await this.generateRefreshTime();
+    const access_token_refresh_time = await generateRefreshTime();
     await this.SessionRepository.save(session);
     return {
       access_token,
@@ -293,7 +355,11 @@ export class AuthService {
     };
   }
 
-  //Get Auth Sessions
+  /**
+   * @description Get All Sessions By User ID
+   * @param userId
+   * @return Promise<Session[]>
+   */
   async getSessions(userId: string): Promise<Session[]> {
     return await this.SessionRepository.find({
       where: {
@@ -302,7 +368,11 @@ export class AuthService {
     });
   }
 
-  //Get Auth Session By Session ID
+  /**
+   * @description Get Session By ID
+   * @param id
+   * @return Promise<Session>
+   */
   async getSession(id: string): Promise<Session> {
     const session = await this.SessionRepository.findOne({
       where: {

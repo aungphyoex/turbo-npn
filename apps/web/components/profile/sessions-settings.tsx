@@ -58,7 +58,7 @@ const SessionsSettings = async () => {
                           {session.device_name} - {session.browser}
                         </h3>
                         {session.id ===
-                          authSession?.user.auth.session_token && (
+                          authSession?.user?.tokens.session_token && (
                           <Badge variant="secondary">Current Session</Badge>
                         )}
                       </div>
@@ -74,9 +74,9 @@ const SessionsSettings = async () => {
                     </div>
                   </div>
 
-                  {!(session.id === authSession?.user.auth?.session_token) && (
-                    <SessionOtherLogout session_token={session.id} />
-                  )}
+                  {!(
+                    session.id === authSession?.user?.tokens?.session_token
+                  ) && <SessionOtherLogout session_token={session.id} />}
                 </div>
               ))}
           </div>

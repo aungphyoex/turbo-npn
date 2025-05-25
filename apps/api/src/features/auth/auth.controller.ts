@@ -12,6 +12,13 @@ import { Public } from '@/common/decorators';
 import { JwtRefreshGuard } from '@/common/guards/jwt-refresh.guard';
 import { AuthService } from './auth.service';
 
+import {
+  MessageResponse,
+  RefreshTokenResponse,
+  SessionResponse,
+  SessionsResponse,
+  SignInResponse,
+} from '@/features/auth/auth.interface';
 import { ChangePasswordDto } from '@/features/auth/dto/change-password.dto';
 import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
 import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
@@ -22,22 +29,14 @@ import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
 import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
 import { SignOutAllDeviceUserDto } from '@/features/auth/dto/signOutAllDevice-user.dto';
 
-import {
-  MessageResponse,
-  RefreshTokenResponse,
-  SessionResponse,
-  SessionsResponse,
-  SignInResponse,
-} from '@/features/auth/interfaces/auth-responses.interface';
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   /**
-   * Registers a new user.
-   * @param {CreateUserDto} createUserDto
-   * @returns {Promise<MessageResponse>}
+   * @description Registers a new user.
+   * @param createUserDto
+   * @returns Promise<MessageResponse>
    */
   @Public()
   @Post('sign-up')
@@ -49,36 +48,27 @@ export class AuthController {
   }
 
   /**
-   * Signs in a user.
-   * @param {SignInUserDto} signInUserDto
-   * @returns {Promise<SignInResponse>}
+   * @description Signs in a user.
+   * @param signInUserDto
+   * @returns Promise<SignInResponse>
    */
   @Public()
   @Post('sign-in')
   async signIn(@Body() signInUserDto: SignInUserDto): Promise<SignInResponse> {
     const data = await this.authService.signIn(signInUserDto);
-    const { id, name, username, email, isEmailVerified, createdAt, updatedAt } =
-      data.data;
+    const { password, sessions, ...result } = data.data;
 
     return {
       message: 'User signed in successfully',
-      data: {
-        id,
-        name,
-        username,
-        email,
-        isEmailVerified,
-        createdAt,
-        updatedAt,
-      },
+      data: result,
       tokens: data.tokens,
     };
   }
 
   /**
-   * Signs out the user from the current session.
-   * @param {SignOutUserDto} signOutUserDto
-   * @returns {Promise<MessageResponse>}
+   * @description Signs out the user from the current session.
+   * @param signOutUserDto
+   * @returns Promise<MessageResponse>
    */
   @Post('sign-out')
   async signOut(
@@ -89,8 +79,8 @@ export class AuthController {
   }
 
   /**
-   * Signs out the user from all devices.
-   * @param {SignOutAllDeviceUserDto} dto
+   * @description Signs out the user from all devices.
+   * @param dto
    * @returns {Promise<MessageResponse>}
    */
   @Post('sign-out-allDevices')
@@ -102,9 +92,9 @@ export class AuthController {
   }
 
   /**
-   * Retrieves all sessions for a user.
-   * @param {string} userId
-   * @returns {Promise<SessionsResponse>}
+   * @description Retrieves all sessions for a user.
+   * @param userId
+   * @returns Promise<SessionsResponse>
    */
   @Get('sessions/:userId')
   async sessions(@Param('userId') userId: string): Promise<SessionsResponse> {
@@ -113,9 +103,9 @@ export class AuthController {
   }
 
   /**
-   * Retrieves a session by ID.
-   * @param {string} id
-   * @returns {Promise<SessionResponse>}
+   * @description Retrieves a session by ID.
+   * @param id
+   * @returns Promise<SessionResponse>
    */
   @Get('session/:id')
   async session(@Param('id') id: string): Promise<SessionResponse> {
@@ -124,9 +114,9 @@ export class AuthController {
   }
 
   /**
-   * Confirms the user's email.
-   * @param {ConfirmEmailDto} confirmEmailDto
-   * @returns {Promise<MessageResponse>}
+   * @description Confirms the user's email.
+   * @param confirmEmailDto
+   * @returns Promise<MessageResponse>
    */
   @Patch('confirm-email')
   async confirmEmail(
@@ -137,9 +127,9 @@ export class AuthController {
   }
 
   /**
-   * Sends a password reset email.
-   * @param {ForgotPasswordDto} forgotPasswordDto
-   * @returns {Promise<MessageResponse>}
+   * @description Sends a password reset email.
+   * @param forgotPasswordDto
+   * @returns Promise<MessageResponse>
    */
   @Public()
   @Patch('forgot-password')
@@ -151,9 +141,9 @@ export class AuthController {
   }
 
   /**
-   * Resets the user's password using a token.
-   * @param {ResetPasswordDto} dto
-   * @returns {Promise<MessageResponse>}
+   * @description Resets the user's password using a token.
+   * @param dto
+   * @returns Promise<MessageResponse>
    */
   @Public()
   @Patch('reset-password')
@@ -163,9 +153,9 @@ export class AuthController {
   }
 
   /**
-   * Changes the user's password.
-   * @param {ChangePasswordDto} dto
-   * @returns {Promise<MessageResponse>}
+   * @description Changes the user's password.
+   * @param dto
+   * @returns Promise<MessageResponse>
    */
   @Patch('change-password')
   async changePassword(
@@ -176,9 +166,9 @@ export class AuthController {
   }
 
   /**
-   * Refreshes the access token using a refresh token.
-   * @param {RefreshTokenDto} dto
-   * @returns {Promise<RefreshTokenResponse>}
+   * @description Refreshes the access token using a refresh token.
+   * @param  dto
+   * @returns Promise<RefreshTokenResponse>
    */
   @UseGuards(JwtRefreshGuard)
   @Patch('refresh-token')

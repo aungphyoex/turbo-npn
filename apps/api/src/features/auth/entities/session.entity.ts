@@ -1,6 +1,6 @@
 import { Base } from '@/common/entities';
 import { User } from '@/features/users/entities/user.entity';
-import { Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
 
 @Entity()
 export class Session extends Base {
@@ -29,8 +29,9 @@ export class Session extends Base {
   refresh_token: string;
 
   @ManyToOne(() => User, (user) => user.sessions, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: Relation<User>;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'uuid' })
   user_id: string;
 }

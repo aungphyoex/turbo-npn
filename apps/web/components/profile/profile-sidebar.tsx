@@ -35,7 +35,7 @@ const ProfileSidebar = () => {
     },
   ];
   return (
-    <div className="w-full bg-card rounded-lg shadow p-4">
+    <div className="w-full bg-card text-card-foreground rounded-xl border shadow-sm p-4">
       <h2 className="font-semibold text-lg mb-4">Settings</h2>
       <TabsList className="grid gap-1 grid-cols-1 w-full px-0 h-auto bg-card p-0">
         {menuItems.map((item) => {

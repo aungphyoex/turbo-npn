@@ -5,6 +5,9 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "outDir": "./dist",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "target": "ESNext",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]

@@ -21,7 +21,7 @@ export default function GeneralSettings() {
     required: true,
   });
   const [userData, setUserData] = useState({
-    name: session?.data?.user.name ?? '',
+    name: session?.data?.user?.profile?.name ?? '',
     email: session?.data?.user.email ?? '',
     username: session?.data?.user.username ?? '',
   });

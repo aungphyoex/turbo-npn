@@ -48,19 +48,17 @@ export const authorizeSignIn = async (
   });
 
   if (error) return null;
-
+  const { data: user, tokens } = data;
   return {
-    id: data.data.id,
-    name: data.data.name,
-    email: data.data.email,
-    username: data.data.username,
-    isEmailVerified: data.data.isEmailVerified,
-    auth: {
-      access_token: data.tokens.access_token,
-      refresh_token: data.tokens.refresh_token,
-      session_token: data.tokens.session_token,
-      session_refresh_time: data.tokens.session_refresh_time,
-    },
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    isEmailVerified: user.isEmailVerified,
+    emailVerifiedAt: user.emailVerifiedAt,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+    profile: user.profile,
+    tokens: tokens,
   };
 };
 
@@ -125,7 +123,7 @@ const signOutBySessionToken = async (token: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${session?.user.auth.access_token}`,
+      Authorization: `Bearer ${session?.user.tokens.access_token}`,
       Accept: 'application/json',
     },
     body: JSON.stringify({ session_token: token }),
@@ -143,7 +141,7 @@ export const signOutCurrentDevice = safeAction.action(async () => {
   const session = await auth();
   if (!session) return;
 
-  await signOutBySessionToken(session.user.auth.session_token);
+  await signOutBySessionToken(session.user.tokens.session_token);
   await signOut({ redirect: true, redirectTo: '/' });
 
   return 'success';
@@ -173,7 +171,7 @@ export const signOutAllDevice = safeAction.action(async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session?.user.auth.access_token}`,
+        Authorization: `Bearer ${session?.user?.tokens.access_token}`,
         Accept: 'application/json',
       },
       body: JSON.stringify({ userId: session?.user.id }),
@@ -204,7 +202,7 @@ export const changePassword = safeAction
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session?.user.auth.access_token}`,
+          Authorization: `Bearer ${session?.user?.tokens.access_token}`,
           Accept: 'application/json',
         },
         body: JSON.stringify({
@@ -276,14 +274,14 @@ export const getSessionById = async () => {
   const session = await auth();
   return await safeFetch(
     GetSessionSchema,
-    `/auth/session/${session?.user.auth.session_token}`,
+    `/auth/session/${session?.user?.tokens.session_token}`,
     {
       next: {
         tags: ['next-auth-session'],
         revalidate: 86400, // 24 hours
       },
       headers: {
-        Authorization: `Bearer ${session?.user.auth.access_token}`,
+        Authorization: `Bearer ${session?.user?.tokens.access_token}`,
       },
     },
   );
@@ -304,7 +302,7 @@ export const getAuthSessions = async (): Promise<Session[]> => {
         revalidate: 3600, // 1 hour
       },
       headers: {
-        Authorization: `Bearer ${session?.user?.auth.access_token}`,
+        Authorization: `Bearer ${session?.user?.tokens.access_token}`,
       },
     },
   );
@@ -330,7 +328,7 @@ export const confirmEmail = safeAction
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
-          Authorization: `Bearer ${session?.user?.auth.access_token}`,
+          Authorization: `Bearer ${session?.user?.tokens.access_token}`,
         },
         body: JSON.stringify(parsedInput),
       },
@@ -351,7 +349,7 @@ export const confirmEmail = safeAction
 const updateTokens = async (data: RefreshToken) => {
   await update({
     user: {
-      auth: {
+      tokens: {
         access_token: data.access_token,
         refresh_token: data.refresh_token,
         session_token: data.session_token,
@@ -366,7 +364,6 @@ const updateTokens = async (data: RefreshToken) => {
  * @param user
  */
 export const refreshAccessToken = async (user: User): Promise<unknown> => {
-  console.log(user.auth.refresh_token);
   const [error, data] = await safeFetch(
     RefreshTokenSchema,
     '/auth/refresh-token',
@@ -374,12 +371,12 @@ export const refreshAccessToken = async (user: User): Promise<unknown> => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.auth.refresh_token}`,
+        Authorization: `Bearer ${user.tokens.refresh_token}`,
         Accept: 'application/json',
       },
       cache: 'no-store',
       body: JSON.stringify({
-        session_token: user.auth.session_token,
+        session_token: user.tokens.session_token,
         user_id: user.id,
       }),
     },
