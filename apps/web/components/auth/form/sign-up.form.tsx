@@ -62,6 +62,7 @@ const SignUpForm = () => {
                       Email
                     </Label>
                     <Input
+                      disabled={isExecuting}
                       name="email"
                       id="email"
                       type="email"
@@ -84,18 +85,19 @@ const SignUpForm = () => {
                       </Label>
                     </div>
                     <Input
+                      disabled={isExecuting}
                       name="password"
                       id="password"
                       type="password"
                       onChange={handleChange}
                       required
                     />
-                    <PasswordValidErrors password={formData.password} />
                     {validationErrors?.password?._errors?.[0] && (
                       <p className="text-xs text-red-500">
                         {validationErrors.password._errors[0]}
                       </p>
                     )}
+                    <PasswordValidErrors password={formData.password} />
                   </div>
                   <div className="text-sm">
                     Already have an account?{' '}

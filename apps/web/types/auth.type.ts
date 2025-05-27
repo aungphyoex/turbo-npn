@@ -103,6 +103,10 @@ export const ChangePasswordSchema = z
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: "Passwords don't match",
     path: ['confirmNewPassword'], // GlobalError path for mismatch
+  })
+  .refine((data) => data.password !== data.newPassword, {
+    message: "Don't use same password!",
+    path: ['newPassword'],
   });
 
 /**

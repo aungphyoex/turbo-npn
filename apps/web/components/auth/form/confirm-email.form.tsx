@@ -57,6 +57,7 @@ const ConfirmEmailForm = () => {
               <div className="grid gap-6">
                 <div className="grid gap-2 place-items-center">
                   <InputOTP
+                    disabled={isExecuting}
                     className="w-full"
                     autoFocus
                     onChange={(token) => {
@@ -104,10 +105,9 @@ const ConfirmEmailForm = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-5">
                   <div />
-                  <SubmitButton
-                    isLoading={isExecuting}
-                    name={'Confirm email'}
-                  />
+                  <SubmitButton isLoading={isExecuting}>
+                    Confirm email
+                  </SubmitButton>
                 </div>
               </div>
             </form>

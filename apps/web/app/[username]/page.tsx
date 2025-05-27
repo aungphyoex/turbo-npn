@@ -10,6 +10,7 @@ import SessionsSettings from '@/components/profile/sessions-settings';
 import { getUser } from '@/server/user.server';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/shadcn/card';
 import { Tabs, TabsContent } from '@repo/shadcn/tabs';
+import { cookies } from 'next/headers';
 
 const Page = async ({
   params,
@@ -21,6 +22,9 @@ const Page = async ({
   const { username } = await params;
   const session = await auth();
   const user = await getUser(username);
+  const cookie = await cookies();
+  const select_font = cookie?.get('select-font')?.value ?? '--font-geist';
+
   if (!user) {
     return <NotFound />;
   }
@@ -67,7 +71,7 @@ const Page = async ({
             <SessionsSettings />
           </TabsContent>
           <TabsContent value="appearance">
-            <AppearanceSettings />
+            <AppearanceSettings select_font={select_font} />
           </TabsContent>
         </div>
       </Tabs>

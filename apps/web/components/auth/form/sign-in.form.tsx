@@ -77,6 +77,7 @@ const SignInForm = () => {
                       Email
                     </Label>
                     <Input
+                      disabled={isExecuting}
                       name="identifier"
                       id="email"
                       placeholder="acme@example.com"
@@ -104,6 +105,7 @@ const SignInForm = () => {
                       </Link>
                     </div>
                     <Input
+                      disabled={isExecuting}
                       name="password"
                       id="password"
                       type="password"

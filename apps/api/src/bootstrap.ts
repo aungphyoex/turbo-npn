@@ -4,7 +4,7 @@ import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
-import { Logger } from 'nestjs-pino';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 /**
  * This function initializes the NestJS application with various middlewares, settings, and configurations.
@@ -77,6 +77,9 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
   if (configService.get('NODE_ENV') !== 'production') {
     await swagger(app);
   }
+
+  // Nestjs pino error logger interceptor
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   // Start the application
   await app.listen(configService.get('PORT')!, () => {

@@ -152,6 +152,7 @@ export class AuthService {
       });
       return { data: user };
     } catch (e) {
+      this.logger.error(e);
       throw new BadRequestException('Something went wrong!');
     }
   }
