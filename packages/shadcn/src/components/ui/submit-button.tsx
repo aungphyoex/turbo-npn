@@ -10,6 +10,7 @@ const SubmitButton = ({
   size,
   asChild = false,
   isLoading,
+  children,
   name,
   ...props
 }: React.ComponentProps<'button'> &
@@ -30,7 +31,7 @@ const SubmitButton = ({
           Waiting...
         </>
       ) : (
-        name
+        (children ?? name)
       )}
     </Button>
   );

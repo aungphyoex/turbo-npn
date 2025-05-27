@@ -1,15 +1,37 @@
 import Providers from '@/components/providers';
 import { APP_NAME, APP_URL } from '@repo/constants/app';
 import { cn } from '@repo/shadcn/lib/utils';
-import '@repo/shadcn/shadcn.css';
 import { Metadata } from 'next';
-import { JetBrains_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Roboto, Roboto_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 
-const jetBrainsMono = JetBrains_Mono({
+/** Tailwindcss **/
+import '@repo/shadcn/shadcn.css';
+import { Toaster } from '@repo/shadcn/sonner';
+import { cookies } from 'next/headers';
+
+const geist = Geist({
   subsets: ['latin'],
-  variable: '--font-jetbrains',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-geist',
+});
+
+const geist_mono = Geist_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-geist-mono',
+});
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-roboto',
+});
+
+const roboto_mono = Roboto_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-roboto-mono',
 });
 
 export const metadata = {
@@ -80,13 +102,25 @@ const RootLayout = async ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
+  const cookie = await cookies();
+  const select_font = cookie.get('select-font')?.value ?? '--font-geist';
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn('antialiased', jetBrainsMono.variable)}
+        className={cn(
+          'antialiased tracking-normal leading-normal',
+          geist.variable,
+          geist_mono.variable,
+          roboto.variable,
+          roboto_mono.variable,
+        )}
+        style={{
+          fontFamily: `var(${select_font})`,
+        }}
         suppressHydrationWarning
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

@@ -73,6 +73,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
                       Email or Username
                     </Label>
                     <Input
+                      disabled={isExecuting}
                       name="identifier"
                       id="email"
                       placeholder="acme@example.com or your username"
@@ -94,6 +95,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
                       </Label>
                     </div>
                     <Input
+                      disabled={isExecuting}
                       name="newPassword"
                       id="newPassword"
                       type="password"
@@ -115,6 +117,7 @@ const ResetPasswordForm = ({ session }: { session: Session | null }) => {
                       </Label>
                     </div>
                     <InputOTP
+                      disabled={isExecuting}
                       className="w-full"
                       onChange={(resetToken) => {
                         setFormData((prevState) => ({

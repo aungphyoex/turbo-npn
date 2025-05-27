@@ -1,4 +1,5 @@
 import { JwtAuthGuard, RolesGuard } from '@/common/guards';
+import { LoggerMiddleware } from '@/common/middlewares';
 import {
   LoggerModule,
   NodeMailerModule,
@@ -7,7 +8,7 @@ import {
 import { validateEnv } from '@/common/utils';
 import { DatabaseModule } from '@/database';
 import { UsersModule } from '@/features/users/users.module';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -49,4 +50,8 @@ import { MailModule } from './features/mail/mail.module';
     HealthModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

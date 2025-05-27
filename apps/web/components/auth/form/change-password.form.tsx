@@ -1,7 +1,6 @@
 'use client';
 import PasswordValidErrors from '@/components/auth/form/password-valid-errors';
 import { changePassword } from '@/server/auth.server';
-import { Button } from '@repo/shadcn/button';
 import {
   Card,
   CardContent,
@@ -12,10 +11,11 @@ import {
 } from '@repo/shadcn/card';
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
-import { Loader2 } from '@repo/shadcn/lucide-react';
+import { cn } from '@repo/shadcn/lib/utils';
+import { toast } from '@repo/shadcn/sonner';
+import SubmitButton from '@repo/shadcn/submit-button';
 import { useAction } from 'next-safe-action/hooks';
 import { ChangeEvent, useState } from 'react';
-
 const ChangePasswordForm = () => {
   const [formData, setFormData] = useState({
     password: '',
@@ -34,7 +34,6 @@ const ChangePasswordForm = () => {
       [event.target.name]: event.target.value,
     }));
   };
-
   return (
     <form
       onSubmit={async (event) => {
@@ -46,6 +45,9 @@ const ChangePasswordForm = () => {
             newPassword: '',
             confirmNewPassword: '',
           });
+          toast.success('Password changed successfully.', {
+            position: 'top-right',
+          });
         }
       }}
       className="space-y-6"
@@ -53,8 +55,8 @@ const ChangePasswordForm = () => {
       <Card>
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
-          <CardDescription>
-            Update your password to keep your account secure
+          <CardDescription className={cn(serverError && 'text-red-500')}>
+            {serverError ?? 'Update your password to keep your account secure'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -63,13 +65,17 @@ const ChangePasswordForm = () => {
               Current Password
             </Label>
             <Input
+              disabled={isExecuting}
               onChange={handleChange}
+              value={formData.password}
               name="password"
               id="current-password"
               type="password"
             />
-            {serverError && (
-              <p className="text-xs text-red-500">{serverError}</p>
+            {validationErrors?.password?._errors?.[0] && (
+              <p className="text-xs text-red-500">
+                {validationErrors?.password?._errors?.[0]}
+              </p>
             )}
           </div>
 
@@ -78,17 +84,19 @@ const ChangePasswordForm = () => {
               New Password
             </Label>
             <Input
+              disabled={isExecuting}
               onChange={handleChange}
+              value={formData.newPassword}
               name="newPassword"
               id="new-password"
               type="password"
             />
-            <PasswordValidErrors password={formData.newPassword} />
             {validationErrors?.newPassword?._errors?.[0] && (
               <p className="text-xs text-red-500">
                 {validationErrors?.newPassword?._errors?.[0]}
               </p>
             )}
+            <PasswordValidErrors password={formData.newPassword} />
           </div>
 
           <div className="space-y-2">
@@ -96,7 +104,9 @@ const ChangePasswordForm = () => {
               Confirm New Password
             </Label>
             <Input
+              disabled={isExecuting}
               onChange={handleChange}
+              value={formData.confirmNewPassword}
               name="confirmNewPassword"
               id="confirm-password"
               type="password"
@@ -109,10 +119,7 @@ const ChangePasswordForm = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button disabled={isExecuting} type="submit">
-            {isExecuting && <Loader2 className="size4 animate-spin mr-2" />}{' '}
-            Update Password
-          </Button>
+          <SubmitButton isLoading={isExecuting}>Update Password</SubmitButton>
         </CardFooter>
       </Card>
     </form>
