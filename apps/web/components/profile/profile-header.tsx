@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
+import ProfileAvatarEditor from '@/components/profile/profile-avatar-editor';
 import { User } from '@/types/user.type';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/shadcn/avatar';
 import { Button } from '@repo/shadcn/button';
 import { Camera, Edit } from '@repo/shadcn/lucide-react';
 import Image from 'next/image';
@@ -32,19 +32,7 @@ const ProfileHeader = async ({ user }: { user: User }) => {
       {/* Profile Photo and Name */}
       <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-16 sm:-mt-20 ml-0 sm:ml-8 relative z-10">
         <div className="relative">
-          <Avatar className="h-32 w-32 border-4 border-white">
-            <AvatarImage src={'/assets/placeholder.svg'} alt={'placeholder'} />
-            <AvatarFallback>
-              {user.profile.name ?? session?.user.name?.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <Button
-            size="icon"
-            variant="secondary"
-            className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
-          >
-            <Camera className="h-4 w-4" />
-          </Button>
+          <ProfileAvatarEditor />
         </div>
 
         <div className="flex flex-col sm:flex-row items-center sm:items-end gap-2 sm:gap-4 mb-2 sm:mb-4">

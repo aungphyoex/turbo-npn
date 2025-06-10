@@ -1,7 +1,7 @@
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export const swagger = async (app: NestExpressApplication) => {
+export const swagger = async (app: NestFastifyApplication) => {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Turbo repo')
     .addBearerAuth()

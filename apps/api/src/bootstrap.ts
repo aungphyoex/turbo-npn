@@ -1,10 +1,11 @@
 import { Env } from '@/common/utils';
 import { swagger } from '@/swagger';
-import { RequestMethod, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import helmet from 'helmet';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+import { join } from 'path';
 
 /**
  * This function initializes the NestJS application with various middlewares, settings, and configurations.
@@ -14,7 +15,7 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
  *
  * @returns {Promise<void>} Resolves when the application has started.
  */
-export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
+export const bootstrap = async (app: NestFastifyApplication): Promise<void> => {
   // Logger instance for logging application events
   const logger = app.get(Logger);
 
@@ -29,28 +30,31 @@ export const bootstrap = async (app: NestExpressApplication): Promise<void> => {
   );
 
   // Global API prefix setup, excluding certain paths from the prefix
-  app.setGlobalPrefix('api', {
-    exclude: [
-      {
-        path: '/',
-        method: RequestMethod.GET,
-      },
-      {
-        path: '/api-docs',
-        method: RequestMethod.GET,
-      },
-      {
-        path: '/health',
-        method: RequestMethod.GET,
-      },
-    ],
-  });
+  // app.setGlobalPrefix('api', {
+  //   exclude: [
+  //     {
+  //       path: '/',
+  //       method: RequestMethod.GET,
+  //     },
+  //     {
+  //       path: '/api-docs',
+  //       method: RequestMethod.GET,
+  //     },
+  //     {
+  //       path: '/health',
+  //       method: RequestMethod.GET,
+  //     },
+  //   ],
+  // });
 
-  // Static asset handling (for uploads)
-  app.useStaticAssets('./uploads', {
-    prefix: '/assets',
+  // Static asset handling (for storage)
+  // For express nest application
+  app.useStaticAssets({
+    dotfiles: 'deny',
+    prefix: '/assets/',
+    root: join(__dirname, '..', 'storage'),
+    serve: true,
   });
-
   // CORS setup allowing specific origins and methods
   app.enableCors({
     credentials: true,

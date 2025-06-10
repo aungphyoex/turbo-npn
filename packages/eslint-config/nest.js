@@ -8,7 +8,7 @@ const default_ignores_pool = [
   '**/.git/**/*',
   '**/dist/**/*',
   '**/node_modules/**/*',
-  '**/uploads/**/*',
+  '**/storage/**/*',
 ];
 
 /**
