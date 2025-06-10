@@ -23,14 +23,14 @@ export class ReqLogInterceptor implements NestInterceptor {
      * */
     this.logger.log(concatStr([req.method, req.originalUrl]));
     return next.handle().pipe(
-      tap(() =>
+      tap(() => {
         /* *
          * After the request is handled, log the response details
          * */
-        this.logger.log(
-          concatStr([req.method, req.originalUrl, res.statusCode]),
-        ),
-      ),
+        // this.logger.log(
+        //   concatStr([req.method, req.originalUrl, res.statusCode]),
+        // );
+      }),
     );
   }
 }

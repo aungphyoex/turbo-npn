@@ -24,6 +24,7 @@ import {
   SignOutUserDto,
   ValidateUserDto,
 } from '@/features/auth/dto';
+import { DeleteUserDto } from '@/features/auth/dto/delete-user.dto';
 import { Otp } from '@/features/auth/entities/otp.entity';
 import { Session } from '@/features/auth/entities/session.entity';
 import { MailService } from '@/features/mail/mail.service';
@@ -382,5 +383,25 @@ export class AuthService {
     });
     if (!session) throw new NotFoundException('Session not found!');
     return session;
+  }
+
+  /**
+   * @description Delete User Account
+   * @param dto
+   * @return Promise<void>
+   */
+  async deleteAccount(dto: DeleteUserDto) {
+    console.log(dto);
+    const user = await this.UserRepository.findOne({
+      where: { id: dto.user_id },
+    });
+    if (!user) throw new NotFoundException('User not found');
+    const isValidPassword = validateString(dto.password, user.password);
+    if (!isValidPassword) throw new BadRequestException('Invalid credentials');
+    try {
+      await this.UserRepository.remove(user);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 }

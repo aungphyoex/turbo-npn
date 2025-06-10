@@ -6,6 +6,7 @@ import { getDeviceInfo } from '@/lib/device';
 import {
   ChangePasswordSchema,
   ConfirmEmailSchema,
+  DeleteAccountSchema,
   ForgotPasswordSchema,
   GetSession,
   GetSessionSchema,
@@ -402,3 +403,34 @@ export const validateSessionIfExist = async (): Promise<GetSession> => {
   console.log('Validate session success');
   return data;
 };
+
+/**
+ * @description Delete account
+ * @schema DeleteAccountSchema
+ * @param parsedInput
+ * @returns Promise<MessageResponse>
+ */
+export const deleteAccount = safeAction
+  .schema(DeleteAccountSchema)
+  .action(async ({ parsedInput }) => {
+    const session = await auth();
+    const [error] = await safeFetch(
+      DefaultReturnSchema,
+      '/auth/delete-account',
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.user?.tokens.access_token}`,
+          Accept: 'application/json',
+        },
+        cache: 'no-store',
+        body: JSON.stringify({
+          user_id: session?.user.id,
+          password: parsedInput.password,
+        }),
+      },
+    );
+    if (error) throw new Error(error);
+    redirect('/auth/sign-in');
+  });

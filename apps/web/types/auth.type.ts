@@ -144,3 +144,12 @@ export const RefreshTokenSchema = z.object({
 });
 
 export type RefreshToken = z.infer<typeof RefreshTokenSchema>;
+
+/**
+ * Delete user account schema
+ */
+export const DeleteAccountSchema = z.object({
+  password: z.string().min(1),
+});
+
+export const DeleteAccountData = z.object({});

@@ -9,12 +9,23 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
         return {
           forRoutes: ['*'],
           pinoHttp: {
-            quietReqLogger: true,
-            quietResLogger: true,
+            // quietReqLogger: true,
+            // quietResLogger: true,
             name: APP_NAME,
             autoLogging: true,
             transport: {
-              target: 'pino-pretty',
+              targets: [
+                {
+                  target: 'pino-pretty',
+                },
+                {
+                  target: 'pino-pretty',
+                  options: {
+                    destination: `./storage/logs/${new Date().toISOString().split('T')[0]}.log`,
+                    mkdir: true,
+                  },
+                },
+              ],
             },
           },
         };

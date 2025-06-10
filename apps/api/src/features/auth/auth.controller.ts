@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -22,6 +23,7 @@ import {
 import { ChangePasswordDto } from '@/features/auth/dto/change-password.dto';
 import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
 import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
+import { DeleteUserDto } from '@/features/auth/dto/delete-user.dto';
 import { ForgotPasswordDto } from '@/features/auth/dto/forgot-password.dto';
 import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
 import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
@@ -183,5 +185,18 @@ export class AuthController {
       access_token_refresh_time: data.access_token_refresh_time,
       session_token: data.session_token,
     };
+  }
+
+  /**
+   * @description Deletes the user account.
+   * @param deleteUserDto
+   * @returns Promise<MessageResponse>
+   */
+  @Delete('delete-account')
+  async deleteUser(
+    @Body() deleteUserDto: DeleteUserDto,
+  ): Promise<MessageResponse> {
+    await this.authService.deleteAccount(deleteUserDto);
+    return { message: 'User deleted successfully' };
   }
 }

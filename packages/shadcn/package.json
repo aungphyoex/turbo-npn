@@ -51,6 +51,8 @@
     "input-otp": "^1.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-image-crop": "^11.0.10",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.0.1",
     "vaul": "^1.1.2"

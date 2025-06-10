@@ -17,9 +17,11 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@fastify/static": "^8.2.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/platform-fastify": "^11.1.3",
     "argon2": "^0.43.0",
     "helmet": "^8.1.0",
     "multer": "2.0.0",

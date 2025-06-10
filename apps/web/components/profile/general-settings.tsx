@@ -2,6 +2,17 @@
 
 import type React from 'react';
 
+import { deleteAccount } from '@/server/auth.server';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@repo/shadcn/alert-dialog';
 import { Button } from '@repo/shadcn/button';
 import {
   Card,
@@ -14,6 +25,7 @@ import {
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
 import { useSession } from 'next-auth/react';
+import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
 
 export default function GeneralSettings() {
@@ -33,6 +45,13 @@ export default function GeneralSettings() {
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const [password, setPassword] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const {
+    executeAsync,
+    isExecuting,
+    result: { data, validationErrors, serverError },
+  } = useAction(deleteAccount);
   return (
     <div className="space-y-6">
       <Card>
@@ -98,9 +117,48 @@ export default function GeneralSettings() {
           </p>
         </CardContent>
         <CardFooter>
-          <Button disabled variant="destructive">
-            Delete Account
-          </Button>
+          <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">Delete Account</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action is permanent and will remove all your personal
+                  information, settings, and associated data from our system.
+                  You will not be able to recover your account after this
+                  action.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <Input
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                type="password"
+                placeholder="Enter your account password"
+              />
+              {(validationErrors?.password || serverError) && (
+                <p className="text-sm text-red-500">
+                  {serverError || validationErrors?.password?._errors?.[0]}
+                </p>
+              )}
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button
+                  disabled={isExecuting}
+                  onClick={async () => {
+                    const data = await executeAsync({
+                      password,
+                    });
+                    console.log(data);
+                  }}
+                >
+                  {isExecuting && '...'}
+                  Yes, delete my account
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardFooter>
       </Card>
     </div>
