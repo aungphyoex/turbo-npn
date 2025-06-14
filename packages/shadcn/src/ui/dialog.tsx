@@ -1,10 +1,9 @@
 'use client';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { cn } from '@repo/shadcn/lib/utils';
 import { XIcon } from 'lucide-react';
 import * as React from 'react';
-
-import { cn } from '@repo/shadcn/lib/utils';
 
 function Dialog({
   ...props

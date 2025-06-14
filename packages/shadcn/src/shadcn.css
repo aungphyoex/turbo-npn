@@ -3,7 +3,7 @@
 
 @plugin "@tailwindcss/typography"; /* Add Tailwind CSS typography plugin */
 
-@source './components/ui'; /* Import custom UI components */
+@source './ui'; /* Import custom UI components */
 
 /* Custom Dark Mode Variant */
 @custom-variant dark (&:is(.dark *));
@@ -47,6 +47,24 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }
 
 :root {
@@ -178,5 +196,14 @@
 @layer components {
   .prose-article {
     @apply prose dark:prose-invert prose-sm sm:prose-base focus:outline-none max-w-full;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

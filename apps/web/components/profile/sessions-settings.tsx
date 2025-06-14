@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/shadcn/card';
-import { Laptop, Smartphone, TriangleAlert } from '@repo/shadcn/lucide-react';
+import { Laptop, Smartphone, TriangleAlert } from '@repo/shadcn/lucide';
 import { formatDate } from '@repo/utils';
 
 const SessionsSettings = async () => {

@@ -1,4 +1,4 @@
-import { convertImageToBase64 } from '@repo/utils';
+import { convertImageToBase64 } from '@repo/utils/file';
 import { useCallback, useEffect, useRef, useState } from 'react';
 interface UseImageUploadProps {
   onUpload?: (url: string) => void;

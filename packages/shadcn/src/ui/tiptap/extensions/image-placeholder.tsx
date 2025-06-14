@@ -7,7 +7,7 @@ import { Input } from '@repo/shadcn/input';
 import {
   NODE_HANDLES_SELECTED_STYLE_CLASSNAME,
   isValidUrl,
-} from '@repo/shadcn/lib/tiptap-utils';
+} from '@repo/shadcn/lib/tiptap-utils.js';
 import { cn } from '@repo/shadcn/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/shadcn/tabs';
 import {

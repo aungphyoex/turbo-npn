@@ -9,7 +9,7 @@ import {
   Smartphone,
   User as UserIcon,
   UserPenIcon,
-} from '@repo/shadcn/lucide-react';
+} from '@repo/shadcn/lucide';
 import { TabsList, TabsTrigger } from '@repo/shadcn/tabs';
 
 const ProfileSidebar = () => {

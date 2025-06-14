@@ -50,7 +50,7 @@ export default function GeneralSettings() {
   const {
     executeAsync,
     isExecuting,
-    result: { data, validationErrors, serverError },
+    result: { validationErrors, serverError },
   } = useAction(deleteAccount);
   return (
     <div className="space-y-6">

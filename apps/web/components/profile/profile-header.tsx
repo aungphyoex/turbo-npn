@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import ProfileAvatarEditor from '@/components/profile/profile-avatar-editor';
 import { User } from '@/types/user.type';
 import { Button } from '@repo/shadcn/button';
-import { Camera, Edit } from '@repo/shadcn/lucide-react';
+import { Camera, Edit } from '@repo/shadcn/lucide';
 import Image from 'next/image';
 import Link from 'next/link';
 

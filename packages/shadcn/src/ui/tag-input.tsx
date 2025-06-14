@@ -1,8 +1,8 @@
 'use client';
 
 import { CheckIcon, Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
-import { useOnClickOutside } from '@repo/shadcn/hooks/use-click-outside';
-import { useTags } from '@repo/shadcn/hooks/use-tags';
+import { useOnClickOutside } from '@repo/shadcn/hooks/use-click-outside.js';
+import { useTags } from '@repo/shadcn/hooks/use-tags.js';
 import { cn } from '@repo/shadcn/lib/utils';
 import { RefObject, useRef, useState } from 'react';
 

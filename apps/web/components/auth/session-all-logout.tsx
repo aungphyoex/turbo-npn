@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@repo/shadcn/alert-dialog';
 import { Button } from '@repo/shadcn/button';
-import { Loader2, LogOut } from '@repo/shadcn/lucide-react';
+import { Loader2, LogOut } from '@repo/shadcn/lucide';
 import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
 

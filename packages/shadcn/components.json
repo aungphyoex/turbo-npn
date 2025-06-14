@@ -4,15 +4,15 @@
   "rsc": true,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.ts",
+    "config": "",
     "css": "src/shadcn.css",
     "baseColor": "zinc",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "@repo/shadcn/components",
-    "ui": "@repo/shadcn/components/ui",
+    "components": "@repo/shadcn",
+    "ui": "@repo/shadcn/ui",
     "utils": "@repo/shadcn/lib/utils",
     "lib": "@repo/shadcn/lib",
     "hooks": "@repo/shadcn/hooks"
