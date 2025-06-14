@@ -1,4 +1,4 @@
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { CodeBlock } from '@repo/shadcn/tiptap/extensions/code-block';
 import { ImageExtension } from '@repo/shadcn/tiptap/extensions/image';
 import { ImagePlaceholder } from '@repo/shadcn/tiptap/extensions/image-placeholder';

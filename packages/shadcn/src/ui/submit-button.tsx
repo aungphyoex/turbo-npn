@@ -1,5 +1,5 @@
 import { Button, buttonVariants } from '@repo/shadcn/button';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { IconLoader } from '@tabler/icons-react';
 import type { VariantProps } from 'class-variance-authority';
 import * as React from 'react';

@@ -1,4 +1,4 @@
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 
 export const RetroGrid = ({
   angle = 65,

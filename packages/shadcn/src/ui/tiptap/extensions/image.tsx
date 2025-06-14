@@ -33,7 +33,7 @@ import {
 } from '@repo/shadcn/dropdown-menu';
 import { useImageUpload } from '@repo/shadcn/hooks/v/use-image-upload';
 import { Input } from '@repo/shadcn/input';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Separator } from '@repo/shadcn/separator';
 
 export const ImageExtension = Image.extend({

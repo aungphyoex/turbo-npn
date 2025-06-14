@@ -1,5 +1,5 @@
 'use client';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { defaultExtensions } from '@repo/shadcn/tiptap/extensions/extension';
 import { TipTapFloatingMenu } from '@repo/shadcn/tiptap/extensions/floating-menu';
 import { CodeLanguage } from '@repo/shadcn/tiptap/toolbars/code-language';

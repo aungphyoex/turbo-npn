@@ -8,7 +8,7 @@ import {
   CommandList,
 } from '@repo/shadcn/command';
 import { useDebounce } from '@repo/shadcn/hooks/v/use-debounce';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
 import type { Editor } from '@tiptap/core';
 import { FloatingMenu } from '@tiptap/react';

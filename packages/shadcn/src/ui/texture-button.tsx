@@ -1,7 +1,7 @@
 'use client';
 
 import { Slot } from '@radix-ui/react-slot';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { cva } from 'class-variance-authority';
 import * as React from 'react';
 

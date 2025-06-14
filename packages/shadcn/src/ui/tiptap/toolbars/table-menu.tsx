@@ -1,5 +1,5 @@
 import { Button } from '@repo/shadcn/button';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import {
   Tooltip,

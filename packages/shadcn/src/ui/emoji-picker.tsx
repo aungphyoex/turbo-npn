@@ -9,7 +9,7 @@ import {
 import { LoaderIcon, SearchIcon } from 'lucide-react';
 import type * as React from 'react';
 
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 
 function EmojiPicker({
   className,

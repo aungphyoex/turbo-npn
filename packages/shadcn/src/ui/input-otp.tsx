@@ -10,7 +10,7 @@ import {
 import { MinusIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 
 function InputOTP({
   className,

@@ -3,7 +3,7 @@
 import { SeparatorHorizontal } from 'lucide-react';
 
 import { Button, type ButtonProps } from '@repo/shadcn/button';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 
 export const HorizontalRuleToolbar = ({

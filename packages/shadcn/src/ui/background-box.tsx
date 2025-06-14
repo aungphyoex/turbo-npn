@@ -1,5 +1,5 @@
 'use client';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import * as motion from 'motion/react-client';
 import React from 'react';
 

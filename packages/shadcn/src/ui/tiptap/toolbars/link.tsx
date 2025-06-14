@@ -8,7 +8,7 @@ import { Button, type ButtonProps } from '@repo/shadcn/button';
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
 import { getUrlFromString } from '@repo/shadcn/lib/tiptap-utils.js';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 

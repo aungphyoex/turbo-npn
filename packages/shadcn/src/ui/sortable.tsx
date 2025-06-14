@@ -40,7 +40,7 @@ import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
 
 import { useComposedRefs } from '@repo/shadcn/lib/compose-refs.js';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import * as ReactDOM from 'react-dom';
 
 const orientationConfig = {

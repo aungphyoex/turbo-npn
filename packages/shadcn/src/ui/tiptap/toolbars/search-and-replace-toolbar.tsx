@@ -8,7 +8,7 @@ import { Button } from '@repo/shadcn/button';
 import { Checkbox } from '@repo/shadcn/checkbox';
 import { Input } from '@repo/shadcn/input';
 import { Label } from '@repo/shadcn/label';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import { Separator } from '@repo/shadcn/separator';
 import { type SearchAndReplaceStorage } from '@repo/shadcn/tiptap/extensions/search-and-replace';

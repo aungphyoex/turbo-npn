@@ -1,6 +1,6 @@
 import { Button } from '@repo/shadcn/button';
 import { Input } from '@repo/shadcn/input';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@repo/shadcn/popover';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
 import { Editor } from '@tiptap/core';

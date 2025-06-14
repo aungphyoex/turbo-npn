@@ -1,7 +1,7 @@
 'use client';
 
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import * as React from 'react';
 
 interface DualRangeSliderProps

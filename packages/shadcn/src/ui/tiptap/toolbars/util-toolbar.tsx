@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/shadcn/dropdown-menu';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { ScrollArea, ScrollBar } from '@repo/shadcn/scroll-area';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 import { Editor } from '@tiptap/core';

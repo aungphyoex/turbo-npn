@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/shadcn/dropdown-menu';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 
 export const AlignmentToolbar = () => {

@@ -8,7 +8,7 @@ import {
   NODE_HANDLES_SELECTED_STYLE_CLASSNAME,
   isValidUrl,
 } from '@repo/shadcn/lib/tiptap-utils.js';
-import { cn } from '@repo/shadcn/lib/utils.js';
+import { cn } from '@repo/shadcn/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/shadcn/tabs';
 import {
   type CommandProps,
