@@ -1,5 +1,5 @@
 import { Button } from '@repo/shadcn/button';
-import { ChevronLeft } from '@repo/shadcn/lucide-react';
+import { ChevronLeft } from '@repo/shadcn/lucide';
 import Link from 'next/link';
 const BackNavigation = () => {
   return (

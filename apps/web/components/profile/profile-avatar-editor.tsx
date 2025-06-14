@@ -7,7 +7,7 @@ import {
   ImageCropper,
   useDropzone,
 } from '@repo/shadcn/image-cropper';
-import { Camera } from '@repo/shadcn/lucide-react';
+import { Camera } from '@repo/shadcn/lucide';
 import { useCallback, useState } from 'react';
 
 const accept = {
