@@ -14,7 +14,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@repo/shadcn/dropdown-menu';
-import { useComposedRefs } from '@repo/shadcn/lib/compose-refs.js';
+import { useComposedRefs } from '@repo/shadcn/lib/compose-refs';
 import { cn } from '@repo/shadcn/lib/utils';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/shadcn/tooltip';
 import {

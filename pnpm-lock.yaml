@@ -587,6 +587,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      obra-icons-react:
+        specifier: ^1.23.1
+        version: 1.23.1
       postcss:
         specifier: ^8.5.2
         version: 8.5.4
@@ -6856,6 +6859,9 @@ packages:
   object.values@1.2.1:
     resolution: {integrity: sha512-gXah6aZrcUxjWg2zR2MwouP2eHlCBzdV4pygudehaKXSGW4v2AsRQUK+lwwXhii6KFZcunEnmSUoYp5CXibxtA==}
     engines: {node: '>= 0.4'}
+
+  obra-icons-react@1.23.1:
+    resolution: {integrity: sha512-jbn/1zqBipS3aOd5tTb3JLjWz49pwA0NCEmc/GMvHJG75Tn+jp4KBI4BG032BfYEGl3sYld7RCcRByPle3uymg==}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -15985,6 +15991,8 @@ snapshots:
       call-bound: 1.0.4
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
+
+  obra-icons-react@1.23.1: {}
 
   on-exit-leak-free@2.1.2: {}
 
