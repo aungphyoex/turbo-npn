@@ -18,6 +18,7 @@ import {
   MediaPlayerVolume,
 } from '@repo/shadcn/media-player';
 import { ModeSwitcher } from '@repo/shadcn/mode-switcher';
+import { RichTextEditor } from '@repo/shadcn/tiptap/rich-text-editor';
 import Link from 'next/link';
 
 const Page = async () => {
@@ -58,6 +59,9 @@ const Page = async () => {
             </div>
           </MediaPlayerControls>
         </MediaPlayer>
+      </div>
+      <div className="my-5">
+        <RichTextEditor />
       </div>
       <div className="flex flex-1 flex-col w-full justify-center items-center gap-5">
         <h2>Welcome to the Turborepo</h2>

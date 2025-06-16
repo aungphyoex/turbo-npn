@@ -7,7 +7,7 @@ import {
   CommandItem,
   CommandList,
 } from '@repo/shadcn/command';
-import { useDebounce } from '@repo/shadcn/hooks/v/use-debounce';
+import { useDebounce } from '@repo/shadcn/hooks/t/use-debounce';
 import { cn } from '@repo/shadcn/lib/utils';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
 import type { Editor } from '@tiptap/core';

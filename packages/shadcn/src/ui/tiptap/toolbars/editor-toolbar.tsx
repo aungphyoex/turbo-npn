@@ -1,6 +1,3 @@
-import { ScrollArea, ScrollBar } from '@repo/shadcn/scroll-area';
-import { Separator } from '@repo/shadcn/separator';
-import Ai from '@repo/shadcn/tiptap/extensions/ai';
 import { AlignmentToolbar } from '@repo/shadcn/tiptap/toolbars/alignment';
 import { ColorHighlightToolbar } from '@repo/shadcn/tiptap/toolbars/color-and-highlight';
 import EmojiEditor from '@repo/shadcn/tiptap/toolbars/emoji-toolbar';
@@ -18,44 +15,34 @@ import { Editor } from '@tiptap/core';
 
 export const EditorToolbar = ({ editor }: { editor: Editor }) => {
   return (
-    <div className="sticky top-0 z-20 w-full border-b bg-accent select-none">
+    <div className="sticky top-0 z-20 w-full border-b bg-accent select-none px-2 rounded-md">
       <ToolbarProvider editor={editor}>
         <TooltipProvider>
-          <ScrollArea className="h-fit py-0.5">
-            <div>
-              <div className="flex items-center gap-1 md:px-2 flex-wrap">
-                <div className="w-full md:w-auto flex gap-1 justify-between md:justify-start">
-                  <div className="gap-1 md:flex">
-                    <UndoToolbar />
-                    <RedoToolbar />
-                    <Separator orientation="vertical" className="mx-1 h-7" />
-                  </div>
-                  <TextToolbar />
-                  <div className="flex gap-1">
-                    <LinkToolbar />
-                    <HorizontalRuleToolbar />
-                    <HardBreakToolbar />
-                    <AlignmentToolbar />
-                    <Separator
-                      orientation="vertical"
-                      className="hidden sm:block mx-1 h-7"
-                    />
-                  </div>
+          <div>
+            <div className="flex items-center gap-1 md:px-2 flex-wrap">
+              <div className="w-full md:w-auto flex gap-1 justify-between md:justify-start">
+                <div className="gap-1 md:flex items-center">
+                  <UndoToolbar />
+                  <RedoToolbar />
                 </div>
-                <EmojiEditor />
-                <ColorHighlightToolbar />
-                <Ai editor={editor} />
-                <UtilToolbar />
-                <Separator
-                  orientation="vertical"
-                  className="hidden sm:block mx-1 h-7"
-                />
-                <div className="flex-1" />
+                <TextToolbar />
+                <div className="flex gap-1 items-center">
+                  <LinkToolbar />
+                  <HorizontalRuleToolbar />
+                  <EmojiEditor />
+                  <HardBreakToolbar />
+                  <AlignmentToolbar />
+                </div>
+              </div>
+              <div className="w-full md:w-fit flex-1 flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <ColorHighlightToolbar />
+                  <UtilToolbar />
+                </div>
                 <SearchAndReplaceToolbar />
               </div>
             </div>
-            <ScrollBar className="hidden" orientation="horizontal" />
-          </ScrollArea>
+          </div>
         </TooltipProvider>
       </ToolbarProvider>
     </div>

@@ -2,12 +2,12 @@
 /* eslint-disable */
 // @ts-nocheck
 import { Button } from '@repo/shadcn/button';
-import { useImageUpload } from '@repo/shadcn/hooks/v/use-image-upload';
+import { useImageUpload } from '@repo/shadcn/hooks/t/use-image-upload';
 import { Input } from '@repo/shadcn/input';
 import {
   NODE_HANDLES_SELECTED_STYLE_CLASSNAME,
   isValidUrl,
-} from '@repo/shadcn/lib/tiptap-utils.js';
+} from '@repo/shadcn/lib/tiptap-utils';
 import { cn } from '@repo/shadcn/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/shadcn/tabs';
 import {
