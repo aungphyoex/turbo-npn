@@ -6,6 +6,7 @@ import {
 } from '@/common/modules';
 import { validateEnv } from '@/common/utils';
 import { DatabaseModule } from '@/database';
+import { FileModule } from '@/features/file/file.module';
 import { UsersModule } from '@/features/users/users.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -47,6 +48,7 @@ import { MailModule } from './features/mail/mail.module';
     AuthModule,
     MailModule,
     HealthModule,
+    FileModule,
   ],
 })
 export class AppModule {}

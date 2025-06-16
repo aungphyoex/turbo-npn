@@ -20,6 +20,7 @@ export const EnvSchema = z.object({
   MAIL_HOST: z.string(),
   MAIL_USERNAME: z.string(),
   MAIL_PASSWORD: z.string(),
+  FILE_SYSTEM: z.enum(['s3', 'public']),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

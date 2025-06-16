@@ -185,7 +185,7 @@ export const TextToolbar = ({
           variant="ghost"
           size="sm"
           className={cn(
-            'h-8 w-[128px] gap-2 px-3 font-normal focus-visible:ring-0 focus:outline-none',
+            'h-8 md:h-9 w-[128px] gap-2 px-3 font-normal focus-visible:ring-0 focus:outline-none',
             editor?.isActive('heading') && 'bg-accent',
             className,
           )}
@@ -214,7 +214,7 @@ export const TextToolbar = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-[250px]">
-        <ScrollArea className="w-full h-[200px]">
+        <ScrollArea className="w-full h-[200px] pr-2">
           {textStyles.map(({ icon, name, action, isActive, cmd }) => (
             <DropdownMenuItem
               key={name}

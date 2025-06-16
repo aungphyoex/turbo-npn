@@ -64,8 +64,8 @@ export function SearchAndReplaceToolbar() {
           }}
           className={cn('h-8 w-max px-3 font-normal')}
         >
-          <Repeat className="mr-2 h-4 w-4" />
-          <p>Refactor</p>
+          <Repeat className="h-4 w-4" />
+          {/*<p>Refactor</p>*/}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -76,7 +76,7 @@ export function SearchAndReplaceToolbar() {
         onEscapeKeyDown={() => {
           setOpen(false);
         }}
-        className="relative flex w-full md:w-[400px] px-3 py-2.5"
+        className="relative flex w-vw md:w-[400px] px-3 py-2.5"
       >
         {!replacing ? (
           <div className={cn('w-full relative grid gap-1.5 items-center')}>

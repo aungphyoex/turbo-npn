@@ -124,8 +124,8 @@ const UtilToolbar = ({
           <Ellipsis className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-[250px]" side="bottom">
-        <ScrollArea className="w-full h-[200px]">
+      <DropdownMenuContent align="start" className="md:w-[250px]" side="bottom">
+        <ScrollArea className="w-full">
           {utilStyles.map(
             ({ icon, name, action, isActive, cmd, isDisabled }) => (
               <DropdownMenuItem
