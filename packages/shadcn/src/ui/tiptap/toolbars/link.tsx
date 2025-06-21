@@ -42,7 +42,7 @@ export const LinkToolbar = ({ className, ...props }: ButtonProps) => {
           )}
           {...props}
         >
-          <Link2 className="h-4 w-4" />
+          <Link2 className="size-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -53,7 +53,7 @@ export const LinkToolbar = ({ className, ...props }: ButtonProps) => {
       >
         <div className="relative">
           <PopoverClose className="absolute right-3 top-3">
-            <X className="h-4 w-4" />
+            <X className="size-4" />
           </PopoverClose>
           <form onSubmit={handleSubmit}>
             <Label>Link</Label>
@@ -76,7 +76,7 @@ export const LinkToolbar = ({ className, ...props }: ButtonProps) => {
                       setLink('');
                     }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="size-4" />
                   </Button>
                 )}
                 <Button size="sm" className="h-8">

@@ -25,7 +25,7 @@ export const HorizontalRuleToolbar = ({
       }}
       {...props}
     >
-      {children ?? <SeparatorHorizontal className="h-4 w-4" />}
+      {children ?? <SeparatorHorizontal className="size-4" />}
     </Button>
   );
 };

@@ -43,22 +43,22 @@ export const AlignmentToolbar = () => {
     {
       name: 'Left',
       value: 'left',
-      icon: <AlignLeft className="h-4 w-4" />,
+      icon: <AlignLeft className="size-4" />,
     },
     {
       name: 'Center',
       value: 'center',
-      icon: <AlignCenter className="h-4 w-4" />,
+      icon: <AlignCenter className="size-4" />,
     },
     {
       name: 'Right',
       value: 'right',
-      icon: <AlignRight className="h-4 w-4" />,
+      icon: <AlignRight className="size-4" />,
     },
     {
       name: 'Justify',
       value: 'justify',
-      icon: <AlignJustify className="h-4 w-4" />,
+      icon: <AlignJustify className="size-4" />,
     },
   ];
 

@@ -58,7 +58,7 @@ const ProfileSidebar = () => {
               )}
               value={item.id}
             >
-              <Icon className="mr-2 h-4 w-4" />
+              <Icon className="mr-2 size-4" />
               {item.label}
             </TabsTrigger>
           );

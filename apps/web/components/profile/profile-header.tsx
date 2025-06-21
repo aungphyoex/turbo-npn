@@ -24,7 +24,7 @@ const ProfileHeader = async ({ user }: { user: User }) => {
           variant="secondary"
           className=" absolute bottom-4 right-4 hidden items-center gap-1"
         >
-          <Camera className="h-4 w-4" />
+          <Camera className="size-4" />
           <span>Edit Cover Photo</span>
         </Button>
       </div>
@@ -58,7 +58,7 @@ const ProfileHeader = async ({ user }: { user: User }) => {
             variant="outline"
             className=" hidden items-center gap-1"
           >
-            <Edit className="h-4 w-4" />
+            <Edit className="size-4" />
             <span>Edit Profile</span>
           </Button>
         </div>

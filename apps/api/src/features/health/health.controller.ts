@@ -9,8 +9,22 @@ import {
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
+/**
+ * Controller for health checks of various system components.
+ *
+ * Provides endpoints to check the health of the database, external HTTP service, disk storage, and memory usage.
+ */
 @Controller('health')
 export class HealthController {
+  /**
+   * Creates an instance of HealthController.
+   *
+   * @param health - Service to perform health checks.
+   * @param http - HTTP health indicator for external service checks.
+   * @param db - Database health indicator.
+   * @param disk - Disk storage health indicator.
+   * @param memory - Memory usage health indicator.
+   */
   constructor(
     private health: HealthCheckService,
     private http: HttpHealthIndicator,
@@ -19,6 +33,11 @@ export class HealthController {
     private readonly memory: MemoryHealthIndicator,
   ) {}
 
+  /**
+   * Checks the health of the database connection.
+   *
+   * @returns The result of the database ping health check.
+   */
   @Public()
   @Get('database')
   @HealthCheck()
@@ -26,6 +45,11 @@ export class HealthController {
     return this.health.check([() => this.db.pingCheck('database')]);
   }
 
+  /**
+   * Checks the health of an external HTTP service.
+   *
+   * @returns The result of the HTTP ping health check.
+   */
   @Public()
   @Get()
   @HealthCheck()
@@ -36,6 +60,11 @@ export class HealthController {
     ]);
   }
 
+  /**
+   * Checks the health of the disk storage.
+   *
+   * @returns The result of the disk storage health check.
+   */
   @Public()
   @Get('disk')
   @HealthCheck()
@@ -46,6 +75,11 @@ export class HealthController {
     ]);
   }
 
+  /**
+   * Checks the heap memory usage.
+   *
+   * @returns The result of the memory heap health check.
+   */
   @Public()
   @Get('memory')
   @HealthCheck()

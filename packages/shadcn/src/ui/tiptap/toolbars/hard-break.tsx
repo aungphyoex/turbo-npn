@@ -25,7 +25,7 @@ const HardBreakToolbar = ({
       }}
       {...props}
     >
-      {children ?? <WrapText className="h-4 w-4" />}
+      {children ?? <WrapText className="size-4" />}
     </Button>
   );
 };

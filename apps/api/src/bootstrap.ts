@@ -1,18 +1,19 @@
 import { Env } from '@/common/utils';
 import { swagger } from '@/swagger';
+import helmet from '@fastify/helmet';
+import fastifyMultipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import helmet from 'helmet';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { join } from 'path';
 
 /**
- * This function initializes the NestJS application with various middlewares, settings, and configurations.
- * It is used to set up global configurations for security, validation, logging, CORS, and more.
+ * Initializes the NestJS application with Fastify, configuring middleware, security, validation,
+ * CORS, static assets, logging, and API documentation.
  *
- * @param app The NestExpressApplication instance.
- *
+ * @param {NestFastifyApplication} app - The NestFastifyApplication instance.
  * @returns {Promise<void>} Resolves when the application has started.
  */
 export const bootstrap = async (app: NestFastifyApplication): Promise<void> => {
@@ -22,40 +23,21 @@ export const bootstrap = async (app: NestFastifyApplication): Promise<void> => {
   // Configuration service to get environment variables and other settings
   const configService = app.get(ConfigService<Env>);
 
-  // Set up security headers using helmet
-  app.use(
-    helmet({
-      permittedCrossDomainPolicies: false,
-    }),
-  );
-
-  // Global API prefix setup, excluding certain paths from the prefix
-  // app.setGlobalPrefix('api', {
-  //   exclude: [
-  //     {
-  //       path: '/',
-  //       method: RequestMethod.GET,
-  //     },
-  //     {
-  //       path: '/api-docs',
-  //       method: RequestMethod.GET,
-  //     },
-  //     {
-  //       path: '/health',
-  //       method: RequestMethod.GET,
-  //     },
-  //   ],
-  // });
-
-  // Static asset handling (for storage)
-  // For express nest application
-  app.useStaticAssets({
-    dotfiles: 'deny',
-    prefix: '/assets/',
-    root: join(__dirname, '..', 'storage'),
-    serve: true,
+  // Set up security headers using helmet (Fastify plugin)
+  await app.register(helmet, {
+    global: true,
+    permittedCrossDomainPolicies: false,
   });
-  // CORS setup allowing specific origins and methods
+
+  // Serve static assets using Fastify's static plugin
+  await app.register(fastifyStatic, {
+    root: join(__dirname, '..', 'storage', 'public'),
+    prefix: '/assets/',
+    decorateReply: false,
+    dotfiles: 'deny',
+  });
+
+  // Enable CORS with allowed origins and methods
   app.enableCors({
     credentials: true,
     origin: configService.get('ALLOW_CORS_URL').split(','),
@@ -68,25 +50,28 @@ export const bootstrap = async (app: NestFastifyApplication): Promise<void> => {
   // Global validation pipe for request validation
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // Only allows properties defined in DTOs
-      forbidNonWhitelisted: true, // Rejects any extra properties in the request
-      transform: true, // Transforms payloads to DTO types
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: {
-        enableImplicitConversion: true, // Enable implicit conversion of types
+        enableImplicitConversion: true,
       },
     }),
   );
 
-  // Swagger setup to enable API documentation
+  // Swagger setup to enable API documentation in non-production environments
   if (configService.get('NODE_ENV') !== 'production') {
     await swagger(app);
   }
 
-  // Nestjs pino error logger interceptor
+  // Global error logging interceptor
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  // Start the application
-  await app.listen(configService.get('PORT')!, () => {
+  // Register Fastify multipart plugin for file uploads
+  await app.register(fastifyMultipart);
+
+  // Start the application and listen on the configured port and host
+  await app.listen(configService.get('PORT')!, '0.0.0.0', () => {
     logger.log(
       `This application started at ${configService.get('HOST')}:${configService.get('PORT')}`,
     );

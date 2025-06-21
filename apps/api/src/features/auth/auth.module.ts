@@ -1,3 +1,4 @@
+import { TransactionService } from '@/database';
 import { Otp } from '@/features/auth/entities/otp.entity';
 import { Session } from '@/features/auth/entities/session.entity';
 import { MailModule } from '@/features/mail/mail.module';
@@ -14,6 +15,6 @@ import { AuthService } from './auth.service';
     MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, TransactionService],
 })
 export class AuthModule {}

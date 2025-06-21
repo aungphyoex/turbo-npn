@@ -26,7 +26,7 @@ export function RedoToolbar({
       disabled={!editor?.can().chain().focus().redo().run()}
       {...props}
     >
-      {children ?? <Redo2 className="h-4 w-4" />}
+      {children ?? <Redo2 className="size-4" />}
     </Button>
   );
 }

@@ -3,10 +3,11 @@ import { AdapterSession, AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
 
 /**
- * @description Session callback function for NextAuth
- * @param session
- * @param token
- * @return Session
+ * Maps the JWT token data to the NextAuth session object.
+ *
+ * @param session - The current session object.
+ * @param token - The JWT token containing user information.
+ * @returns The updated session with detailed user data from the token.
  */
 export const sessionCallback = ({
   session,

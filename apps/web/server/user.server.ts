@@ -9,7 +9,7 @@ import {
 } from '@/types/user.type';
 
 /**
- * @description Get all users
+ * Get all users
  * @returns GetAllUsers
  */
 export const getAllUsers = async (): Promise<GetAllUsers> => {
@@ -24,7 +24,7 @@ export const getAllUsers = async (): Promise<GetAllUsers> => {
 };
 
 /**
- * @description Get user by identifier (Email or Username)
+ * Get user by identifier (Email or Username)
  * @param identifier
  * @returns User | null
  */

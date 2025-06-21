@@ -26,7 +26,7 @@ const SessionAllLogout = () => {
           variant="outline"
           className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-destructive dark:hover:text-white"
         >
-          <LogOut className="h-4 w-4 mr-1" />
+          <LogOut className="size-4 lg:size-5mr-1" />
           Sign Out All Devices
         </Button>
       </AlertDialogTrigger>
@@ -51,7 +51,9 @@ const SessionAllLogout = () => {
               }
             }}
           >
-            {isExecuting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isExecuting && (
+              <Loader2 className="mr-2 size-4 lg:size-5animate-spin" />
+            )}
             Sign Out
           </Button>
         </AlertDialogFooter>

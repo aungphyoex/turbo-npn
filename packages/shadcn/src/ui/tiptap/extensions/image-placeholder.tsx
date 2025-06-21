@@ -189,7 +189,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
                 size="icon"
                 onClick={() => setIsExpanded(false)}
               >
-                <X className="h-4 w-4" />
+                <X className="size-4" />
               </Button>
             </div>
 
@@ -200,11 +200,11 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
             >
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="upload">
-                  <Upload className="mr-2 h-4 w-4" />
+                  <Upload className="mr-2 size-4" />
                   Upload
                 </TabsTrigger>
                 <TabsTrigger value="url">
-                  <Link className="mr-2 h-4 w-4" />
+                  <Link className="mr-2 size-4" />
                   URL
                 </TabsTrigger>
               </TabsList>
@@ -244,7 +244,7 @@ function ImagePlaceholderComponent(props: NodeViewProps) {
                           </Button>
                           <Button disabled={uploading}>
                             {uploading && (
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              <Loader2 className="mr-2 size-4 lg:size-5animate-spin" />
                             )}
                             Upload
                           </Button>

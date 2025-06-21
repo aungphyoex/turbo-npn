@@ -12,7 +12,9 @@ type DeviceInfo = {
 };
 
 /**
- * Get IP and location from ipinfo.io
+ * Fetches the IP address and approximate location using the ipinfo.io API.
+ *
+ * @returns An object containing `ip` and `location` (city/region).
  */
 export const getLocationFromIp = async (): Promise<{
   ip: string;
@@ -28,7 +30,11 @@ export const getLocationFromIp = async (): Promise<{
 };
 
 /**
- * Parse device and browser info from User-Agent
+ * Parses device and browser information from the User-Agent header,
+ * and enriches it with IP and location data.
+ *
+ * @returns A `DeviceInfo` object containing device type, OS, name,
+ * browser, IP address, location, and the full user-agent string.
  */
 export const getDeviceInfo = async (): Promise<DeviceInfo> => {
   const header = await headers();

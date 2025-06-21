@@ -17,6 +17,11 @@ import { AuthModule } from './features/auth/auth.module';
 import { HealthModule } from './features/health/health.module';
 import { MailModule } from './features/mail/mail.module';
 
+/**
+ * The root module of the application.
+ *
+ * Configures global guards, environment validation, and imports all feature modules.
+ */
 @Module({
   providers: [
     {
