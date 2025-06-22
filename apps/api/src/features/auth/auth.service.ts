@@ -1,4 +1,10 @@
 import {
+  AuthTokensInterface,
+  LoginUserInterface,
+  RefreshTokenInterface,
+  RegisterUserInterface,
+} from '@/common/interfaces';
+import {
   Env,
   extractName,
   generateOTP,
@@ -6,16 +12,12 @@ import {
   hashString,
   validateString,
 } from '@/common/utils';
-import {
-  AuthTokensInterface,
-  LoginUserInterface,
-  RefreshTokenInterface,
-  RegisterUserInterface,
-} from '@/features/auth/auth.interface';
+import { TransactionService } from '@/database';
 import {
   ChangePasswordDto,
   ConfirmEmailDto,
   CreateUserDto,
+  DeleteUserDto,
   ForgotPasswordDto,
   RefreshTokenDto,
   ResetPasswordDto,
@@ -24,7 +26,6 @@ import {
   SignOutUserDto,
   ValidateUserDto,
 } from '@/features/auth/dto';
-import { DeleteUserDto } from '@/features/auth/dto/delete-user.dto';
 import { Otp } from '@/features/auth/entities/otp.entity';
 import { Session } from '@/features/auth/entities/session.entity';
 import { MailService } from '@/features/mail/mail.service';
@@ -49,8 +50,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Logger } from 'nestjs-pino';
 import { Repository } from 'typeorm';
 
+/**
+ * Service for handling authentication, registration, session, and user security logic.
+ */
 @Injectable()
 export class AuthService {
+  /**
+   * Creates an instance of AuthService.
+   *
+   * @param {JwtService} jwtService - JWT service for token operations.
+   * @param {ConfigService<Env>} config - Configuration service for environment variables.
+   * @param {Repository<User>} UserRepository - Repository for user entities.
+   * @param {Repository<Profile>} profileRepository - Repository for profile entities.
+   * @param {Repository<Session>} SessionRepository - Repository for session entities.
+   * @param {Repository<Otp>} OtpRepository - Repository for OTP entities.
+   * @param {TransactionService} transactionService - TransactionService to run typeorm query
+   * @param {MailService} mailService - Service for sending emails.
+   * @param {Logger} logger - Logger instance.
+   */
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<Env>,
@@ -62,14 +79,16 @@ export class AuthService {
     private readonly SessionRepository: Repository<Session>,
     @InjectRepository(Otp)
     private readonly OtpRepository: Repository<Otp>,
+    private readonly transactionService: TransactionService,
     private readonly mailService: MailService,
     private readonly logger: Logger,
   ) {}
 
   /**
-   * @description Generate Refresh Token and Access Token
-   * @param user
-   * @return Promise<AuthTokensInterface>
+   * Generates access and refresh tokens for a user.
+   *
+   * @param {User} user - User entity.
+   * @returns {Promise<AuthTokensInterface>} Object containing access and refresh tokens.
    */
   async generateTokens(user: User): Promise<AuthTokensInterface> {
     const [access_token, refresh_token] = await Promise.all([
@@ -96,7 +115,6 @@ export class AuthService {
         },
       ),
     ]);
-
     return {
       access_token,
       refresh_token,
@@ -104,9 +122,12 @@ export class AuthService {
   }
 
   /**
-   * @description Validate User with identifier and password
-   * @param dto
-   * @return Promise<User>
+   * Validates a user with identifier and password.
+   *
+   * @param {ValidateUserDto} dto - Validation DTO containing identifier and password.
+   * @returns {Promise<User>} The validated user entity.
+   * @throws {NotFoundException} If user is not found.
+   * @throws {UnauthorizedException} If credentials are invalid.
    */
   async validateUser(dto: ValidateUserDto): Promise<User> {
     const user = await this.UserRepository.findOne({
@@ -120,38 +141,46 @@ export class AuthService {
   }
 
   /**
-   * @description Register user account with email and password
-   * @param createUserDto
-   * @return Promise<RegisterUserInterface>
+   * Registers a new user account with email and password.
+   *
+   * @param {CreateUserDto} createUserDto - Data for creating a new user.
+   * @returns {Promise<RegisterUserInterface>} Registered user data.
+   * @throws {BadRequestException} If registration fails.
    */
   async register(createUserDto: CreateUserDto): Promise<RegisterUserInterface> {
     const email_confirmation_otp = await generateOTP();
-    // Create and insert user
     try {
-      const user = this.UserRepository.create(createUserDto);
-      await this.UserRepository.insert(user);
-      const profile = this.profileRepository.create({
-        user_id: user.id,
-        name: extractName(createUserDto.email),
-      });
-      await this.profileRepository.insert(profile);
-      const token = this.OtpRepository.create({
-        otp: email_confirmation_otp,
-        type: 'EMAIL_CONFIRMATION',
-        expires: new Date(
-          Date.now() + 1000 * 60 * 60 * 24, // 1 day
-        ),
-      });
-      await this.OtpRepository.save(token);
+      const result = await this.transactionService.runInTransaction(
+        async (manager) => {
+          const user = manager.create(User, createUserDto);
+          await manager.insert(User, user);
+
+          const profile = manager.create(Profile, {
+            user_id: user.id,
+            name: extractName(createUserDto.email),
+          });
+          await manager.insert(Profile, profile);
+
+          const otp = manager.create(Otp, {
+            otp: email_confirmation_otp,
+            type: 'EMAIL_CONFIRMATION',
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+          });
+          await manager.insert(Otp, otp);
+
+          return { user, profile, otp };
+        },
+      );
+
       await this.mailService.sendEmail({
-        to: [user.email],
+        to: [result.user.email],
         subject: 'Confirm your email',
         html: RegisterSuccessMail({
-          name: profile.name,
+          name: result.profile.name,
           otp: email_confirmation_otp,
         }),
       });
-      return { data: user };
+      return { data: result.user };
     } catch (e) {
       this.logger.error(e);
       throw new BadRequestException('Something went wrong!');
@@ -159,9 +188,10 @@ export class AuthService {
   }
 
   /**
-   * @description SignIn User Account
-   * @param dto
-   * @return Promise<LoginUserInterface>
+   * Signs in a user account.
+   *
+   * @param {SignInUserDto} dto - Sign-in DTO.
+   * @returns {Promise<LoginUserInterface>} Login response with user data and tokens.
    */
   async signIn(dto: SignInUserDto): Promise<LoginUserInterface> {
     const user = await this.validateUser(dto);
@@ -188,7 +218,7 @@ export class AuthService {
         device: session.device_name,
       }),
     });
-    const session_refresh_time = await generateRefreshTime(); //3 days default
+    const session_refresh_time = await generateRefreshTime();
     return {
       data: user,
       tokens: { ...tokens, session_token: session.id, session_refresh_time },
@@ -196,9 +226,12 @@ export class AuthService {
   }
 
   /**
-   * @description Confirm Email Account
-   * @param dto
-   * @return Promise<void>
+   * Confirms the user's email account.
+   *
+   * @param {ConfirmEmailDto} dto - Confirmation DTO.
+   * @returns {Promise<void>}
+   * @throws {NotFoundException} If user or OTP is not found.
+   * @throws {BadRequestException} If the confirmation code is invalid or expired.
    */
   async confirmEmail(dto: ConfirmEmailDto): Promise<void> {
     const user = await this.UserRepository.findOne({
@@ -228,9 +261,11 @@ export class AuthService {
   }
 
   /**
-   * @description Forgot your password, to get your password reset token
-   * @param dto
-   * @return Promise<void>
+   * Sends a password reset token to the user's email.
+   *
+   * @param {ForgotPasswordDto} dto - Forgot password DTO.
+   * @returns {Promise<void>}
+   * @throws {NotFoundException} If user is not found.
    */
   async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
     const user = await this.UserRepository.findOne({
@@ -242,9 +277,7 @@ export class AuthService {
     const otp = this.OtpRepository.create({
       otp: passwordResetToken,
       type: 'PASSWORD_RESET',
-      expires: new Date(
-        Date.now() + 1000 * 60 * 60 * 24, // 1 day
-      ),
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
     });
     await this.OtpRepository.save(otp);
     await this.mailService.sendEmail({
@@ -258,9 +291,12 @@ export class AuthService {
   }
 
   /**
-   * @description Reset your password with your password reset token
-   * @param dto
-   * @return Promise<void>
+   * Resets the user's password using a reset token.
+   *
+   * @param {ResetPasswordDto} dto - Reset password DTO.
+   * @returns {Promise<void>}
+   * @throws {NotFoundException} If user or OTP is not found.
+   * @throws {BadRequestException} If the reset token is invalid or expired.
    */
   async resetPassword(dto: ResetPasswordDto): Promise<void> {
     const user = await this.UserRepository.findOne({
@@ -289,9 +325,10 @@ export class AuthService {
   }
 
   /**
-   * @description Change your password
-   * @param dto
-   * @return Promise<void>
+   * Changes the user's password.
+   *
+   * @param {ChangePasswordDto} dto - Change password DTO.
+   * @returns {Promise<void>}
    */
   async changePassword(dto: ChangePasswordDto): Promise<void> {
     const user = await this.validateUser(dto);
@@ -307,9 +344,11 @@ export class AuthService {
   }
 
   /**
-   * @description Sign Out User Account
-   * @param dto
-   * @return Promise<void>
+   * Signs out the user from the current session.
+   *
+   * @param {SignOutUserDto} dto - Sign out DTO.
+   * @returns {Promise<void>}
+   * @throws {NotFoundException} If session is not found.
    */
   async signOut(dto: SignOutUserDto): Promise<void> {
     const session = await this.SessionRepository.findOne({
@@ -320,18 +359,21 @@ export class AuthService {
   }
 
   /**
-   * @description Sign Out All Device By User ID
-   * @param dto
-   * @return Promise<void>
+   * Signs out the user from all devices by user ID.
+   *
+   * @param {SignOutAllDeviceUserDto} dto - Sign out all devices DTO.
+   * @returns {Promise<void>}
    */
   async signOutAllDevices(dto: SignOutAllDeviceUserDto): Promise<void> {
     await this.SessionRepository.delete({ user_id: dto.userId });
   }
 
   /**
-   * @description Refresh User Access Token
-   * @param dto
-   * @return Promise<RefreshTokenInterface>
+   * Refreshes the user's access token.
+   *
+   * @param {RefreshTokenDto} dto - Refresh token DTO.
+   * @returns {Promise<RefreshTokenInterface>} New tokens and session info.
+   * @throws {NotFoundException} If user or session is not found.
    */
   async refreshToken(dto: RefreshTokenDto): Promise<RefreshTokenInterface> {
     const user = await this.UserRepository.findOne({
@@ -358,9 +400,10 @@ export class AuthService {
   }
 
   /**
-   * @description Get All Sessions By User ID
-   * @param userId
-   * @return Promise<Session[]>
+   * Retrieves all sessions for a user by user ID.
+   *
+   * @param {string} userId - User ID.
+   * @returns {Promise<Session[]>} List of sessions.
    */
   async getSessions(userId: string): Promise<Session[]> {
     return await this.SessionRepository.find({
@@ -371,9 +414,11 @@ export class AuthService {
   }
 
   /**
-   * @description Get Session By ID
-   * @param id
-   * @return Promise<Session>
+   * Retrieves a session by session ID.
+   *
+   * @param {string} id - Session ID.
+   * @returns {Promise<Session>} Session entity.
+   * @throws {NotFoundException} If session is not found.
    */
   async getSession(id: string): Promise<Session> {
     const session = await this.SessionRepository.findOne({
@@ -386,12 +431,14 @@ export class AuthService {
   }
 
   /**
-   * @description Delete User Account
-   * @param dto
-   * @return Promise<void>
+   * Deletes a user account.
+   *
+   * @param {DeleteUserDto} dto - Delete user DTO.
+   * @returns {Promise<void>}
+   * @throws {NotFoundException} If user is not found.
+   * @throws {BadRequestException} If credentials are invalid or deletion fails.
    */
-  async deleteAccount(dto: DeleteUserDto) {
-    console.log(dto);
+  async deleteAccount(dto: DeleteUserDto): Promise<void> {
     const user = await this.UserRepository.findOne({
       where: { id: dto.user_id },
     });

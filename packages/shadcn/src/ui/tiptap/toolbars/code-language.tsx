@@ -78,7 +78,7 @@ export const CodeLanguage = ({ editor }: { editor: Editor | null }) => {
           {editorState.getLanguage && (
             <Button className="" variant="outline" size="sm">
               {editorState.getLanguage}
-              <ChevronDownIcon className="size-4 ms-1 text-default-foreground" />
+              <ChevronDownIcon className="size-4 lg:size-5ms-1 text-default-foreground" />
             </Button>
           )}
         </PopoverTrigger>

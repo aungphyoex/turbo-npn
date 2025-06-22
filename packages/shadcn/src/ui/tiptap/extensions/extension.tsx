@@ -3,6 +3,7 @@ import { CodeBlock } from '@repo/shadcn/tiptap/extensions/code-block';
 import { ImageExtension } from '@repo/shadcn/tiptap/extensions/image';
 import { ImagePlaceholder } from '@repo/shadcn/tiptap/extensions/image-placeholder';
 import SearchAndReplace from '@repo/shadcn/tiptap/extensions/search-and-replace';
+import { YouTubeExtension } from '@repo/shadcn/tiptap/extensions/youtube';
 import { mergeAttributes } from '@tiptap/core';
 import CharacterCount from '@tiptap/extension-character-count';
 import { Color } from '@tiptap/extension-color';
@@ -233,7 +234,7 @@ export const defaultExtensions = [
   TableRow,
   TiptapTableCell,
   TiptapLink,
-  TiptapYoutube,
+  YouTubeExtension,
   TiptapCharacterCount,
   TiptapImage,
   Underline,

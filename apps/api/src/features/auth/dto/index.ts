@@ -1,6 +1,7 @@
 export * from './change-password.dto';
 export * from './confirm-email.dto';
 export * from './create-user.dto';
+export * from './delete-user.dto';
 export * from './forgot-password.dto';
 export * from './refresh-token.dto';
 export * from './reset-password.dto';

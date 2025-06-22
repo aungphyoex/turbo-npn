@@ -3,6 +3,12 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+/**
+ * Module for configuring and providing the Nodemailer-based mailer service.
+ *
+ * Sets up the mail transport using environment variables for host, username, and password.
+ * Integrates with NestJS ConfigModule for dynamic configuration.
+ */
 @Module({
   imports: [
     MailerModule.forRootAsync({

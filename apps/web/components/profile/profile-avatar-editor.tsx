@@ -70,7 +70,7 @@ const ProfileAvatarEditor = () => {
           className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
         >
           <input {...getInputProps()} />
-          <Camera className="h-4 w-4" />
+          <Camera className="size-4" />
         </Button>
       </div>
     </div>

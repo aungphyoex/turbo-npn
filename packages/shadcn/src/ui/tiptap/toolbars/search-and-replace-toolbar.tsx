@@ -1,7 +1,13 @@
 'use client';
 /* eslint-disable */
 // @ts-nocheck
-import { ArrowLeftIcon, ArrowRightIcon, Repeat, X } from 'lucide-react';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  Repeat,
+  Replace,
+  X,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@repo/shadcn/button';
@@ -64,7 +70,7 @@ export function SearchAndReplaceToolbar() {
           }}
           className={cn('h-8 w-max px-3 font-normal')}
         >
-          <Repeat className="h-4 w-4" />
+          <Replace className="size-4" />
           {/*<p>Refactor</p>*/}
         </Button>
       </PopoverTrigger>
@@ -108,7 +114,7 @@ export function SearchAndReplaceToolbar() {
                   className="size-7"
                   variant="ghost"
                 >
-                  <ArrowRightIcon className="h-4 w-4" />
+                  <ArrowRightIcon className="size-4" />
                 </Button>
                 <Separator orientation="vertical" className="h-7 mx-0.5" />
                 <Button
@@ -119,7 +125,7 @@ export function SearchAndReplaceToolbar() {
                   className="size-7"
                   variant="ghost"
                 >
-                  <Repeat className="h-4 w-4" />
+                  <Repeat className="size-4" />
                 </Button>
                 <Button
                   onClick={() => {
@@ -129,7 +135,7 @@ export function SearchAndReplaceToolbar() {
                   className="size-7"
                   variant="ghost"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="size-4" />
                 </Button>
               </div>
             </div>
@@ -140,7 +146,7 @@ export function SearchAndReplaceToolbar() {
               onClick={() => {
                 setOpen(false);
               }}
-              className="absolute right-3 top-3 h-4 w-4 cursor-pointer"
+              className="absolute right-3 top-3 size-4 lg:size-5cursor-pointer"
             />
             <div className="flex w-full items-center gap-3">
               <Button
@@ -151,7 +157,7 @@ export function SearchAndReplaceToolbar() {
                   setReplacing(false);
                 }}
               >
-                <ArrowLeftIcon className="h-4 w-4" />
+                <ArrowLeftIcon className="size-4" />
               </Button>
               <h2 className="text-sm font-medium">Search and replace</h2>
             </div>
@@ -209,7 +215,7 @@ export function SearchAndReplaceToolbar() {
                   className="h-7 w-7"
                   variant="secondary"
                 >
-                  <ArrowLeftIcon className="h-4 w-4" />
+                  <ArrowLeftIcon className="size-4" />
                 </Button>
                 <Button
                   onClick={selectNext}
@@ -217,7 +223,7 @@ export function SearchAndReplaceToolbar() {
                   className="h-7 w-7"
                   variant="secondary"
                 >
-                  <ArrowRightIcon className="h-4 w-4" />
+                  <ArrowRightIcon className="size-4" />
                 </Button>
               </div>
 

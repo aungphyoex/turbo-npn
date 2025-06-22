@@ -52,11 +52,11 @@ const AppearanceSettings = ({ select_font }: { select_font: string }) => {
                         <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                       </div>
                       <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs">
-                        <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+                        <div className="size-4 lg:size-5rounded-full bg-[#ecedef]" />
                         <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                       </div>
                       <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs">
-                        <div className="h-4 w-4 rounded-full bg-[#ecedef]" />
+                        <div className="size-4 lg:size-5rounded-full bg-[#ecedef]" />
                         <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                       </div>
                     </div>
@@ -77,11 +77,11 @@ const AppearanceSettings = ({ select_font }: { select_font: string }) => {
                         <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
                       </div>
                       <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs">
-                        <div className="h-4 w-4 rounded-full bg-slate-400" />
+                        <div className="size-4 lg:size-5rounded-full bg-slate-400" />
                         <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
                       </div>
                       <div className="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-xs">
-                        <div className="h-4 w-4 rounded-full bg-slate-400" />
+                        <div className="size-4 lg:size-5rounded-full bg-slate-400" />
                         <div className="h-2 w-[100px] rounded-lg bg-slate-400" />
                       </div>
                     </div>

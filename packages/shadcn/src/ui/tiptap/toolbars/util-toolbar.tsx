@@ -12,7 +12,7 @@ import { ScrollArea, ScrollBar } from '@repo/shadcn/scroll-area';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 import { Editor } from '@tiptap/core';
 import {
-  Ellipsis,
+  CircleEllipsis,
   Image,
   List,
   ListOrdered,
@@ -24,7 +24,7 @@ import React, { Fragment } from 'react';
 const utilStyles = [
   {
     name: 'Ordered List',
-    icon: <ListOrdered className="size-4 dark:text-white" />,
+    icon: <ListOrdered className="size-4 lg:size-5dark:text-white" />,
     type: 'orderedList',
     action: (editor: Editor) => {
       return editor.chain().focus().toggleOrderedList().run();
@@ -39,7 +39,7 @@ const utilStyles = [
   },
   {
     name: 'Bullet List',
-    icon: <List className="size-4 dark:text-white" />,
+    icon: <List className="size-4 lg:size-5dark:text-white" />,
     type: 'bulletList',
     action: (editor: Editor) => {
       editor.chain().focus().toggleBulletList().run();
@@ -54,7 +54,7 @@ const utilStyles = [
   },
   {
     name: 'Task List',
-    icon: <ListTodo className="size-4 dark:text-white" />,
+    icon: <ListTodo className="size-4 lg:size-5dark:text-white" />,
     type: 'taskList',
     action: (editor: Editor) => {
       editor.chain().focus().toggleTaskList().run();
@@ -69,7 +69,7 @@ const utilStyles = [
   },
   {
     name: 'Table',
-    icon: <Table className="size-4 dark:text-white" />,
+    icon: <Table className="size-4 lg:size-5dark:text-white" />,
     type: 'table',
     action: (editor: Editor) => {
       editor
@@ -92,7 +92,7 @@ const utilStyles = [
   },
   {
     name: 'Image',
-    icon: <Image className="size-4 dark:text-white" />,
+    icon: <Image className="size-4 lg:size-5dark:text-white" />,
     type: 'image-placeholder',
     action: (editor: Editor) => {
       editor?.chain().focus().insertImagePlaceholder().run();
@@ -121,7 +121,7 @@ const UtilToolbar = ({
           )}
           {...props}
         >
-          <Ellipsis className="h-4 w-4" />
+          <CircleEllipsis className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="md:w-[250px]" side="bottom">

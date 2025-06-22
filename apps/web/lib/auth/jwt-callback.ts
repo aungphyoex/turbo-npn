@@ -4,12 +4,16 @@ import { AdapterUser } from 'next-auth/adapters';
 import { JWT } from 'next-auth/jwt';
 
 /**
- * @description JWT callback function for NextAuth
- * @param token
- * @param user
- * @param trigger
- * @param session
- * @return JWT
+ * Handles the JWT callback in NextAuth to customize the token payload.
+ *
+ * When triggered by "update", merges the session user data into the existing token.
+ * When triggered by "signIn", initializes the token with detailed user information.
+ *
+ * @param token - The current JWT token.
+ * @param user - The user object returned on sign-in or adapter user.
+ * @param trigger - The trigger event, e.g. 'signIn' or 'update'.
+ * @param session - The current session data.
+ * @returns The updated JWT token.
  */
 export const jwtCallback = ({
   token,
@@ -31,6 +35,7 @@ export const jwtCallback = ({
       },
     };
   }
+
   if (trigger === 'signIn') {
     if (user) {
       return {
@@ -49,5 +54,6 @@ export const jwtCallback = ({
       };
     }
   }
+
   return token;
 };

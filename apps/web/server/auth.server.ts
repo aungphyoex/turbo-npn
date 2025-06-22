@@ -28,7 +28,7 @@ import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { redirect } from 'next/navigation';
 
 /**
- * @description Parses and sends credential-based login with device info to backend.
+ * Parses and sends credential-based login with device info to backend.
  * @param credentials
  */
 export const authorizeSignIn = async (
@@ -64,7 +64,7 @@ export const authorizeSignIn = async (
 };
 
 /**
- * @description UI Sign-in action using credentials.
+ * UI Sign-in action using credentials.
  * @schema SignInSchema
  */
 export const signInWithCredentials = safeAction
@@ -87,7 +87,7 @@ export const signInWithCredentials = safeAction
   });
 
 /**
- * @description UI Sign-up action with auto login.
+ * UI Sign-up action with auto login.
  * @schema SignUpSchema
  */
 export const signUpWithCredentials = safeAction
@@ -114,7 +114,7 @@ export const signUpWithCredentials = safeAction
   });
 
 /**
- * @description Sign out a device by session token.
+ * Sign out a device by session token.
  * @param token
  */
 const signOutBySessionToken = async (token: string) => {
@@ -136,7 +136,7 @@ const signOutBySessionToken = async (token: string) => {
 };
 
 /**
- * @description Sign out from current device.
+ * Sign out from current device.
  */
 export const signOutCurrentDevice = safeAction.action(async () => {
   const session = await auth();
@@ -149,7 +149,7 @@ export const signOutCurrentDevice = safeAction.action(async () => {
 });
 
 /**
- * @description Sign out from a different device by session token.
+ * Sign out from a different device by session token.
  * @schema SignOutSchema
  */
 export const signOutOtherDevice = safeAction
@@ -160,7 +160,7 @@ export const signOutOtherDevice = safeAction
   });
 
 /**
- * @description Sign out from all devices.
+ * Sign out from all devices.
  */
 export const signOutAllDevice = safeAction.action(async () => {
   const session = await auth();
@@ -186,7 +186,7 @@ export const signOutAllDevice = safeAction.action(async () => {
 });
 
 /**
- * @description Change password for the current user.
+ * Change password for the current user.
  * @schema ChangePasswordSchema
  */
 export const changePassword = safeAction
@@ -218,7 +218,7 @@ export const changePassword = safeAction
   });
 
 /**
- * @description Send forgot password email.
+ * Send forgot password email.
  * @schema ForgotPasswordSchema
  */
 export const forgotPassword = safeAction
@@ -244,7 +244,7 @@ export const forgotPassword = safeAction
   });
 
 /**
- * @description Reset password using token.
+ * Reset password using token.
  * @schema ResetPasswordSchema
  */
 export const resetPassword = safeAction
@@ -268,7 +268,7 @@ export const resetPassword = safeAction
   });
 
 /**
- * @description Get current session by token.
+ * Get current session by token.
  * @schema GetSessionSchema
  */
 export const getSessionById = async () => {
@@ -289,7 +289,7 @@ export const getSessionById = async () => {
 };
 
 /**
- * @description Get all active sessions for the user.
+ * Get all active sessions for the user.
  */
 export const getAuthSessions = async (): Promise<Session[]> => {
   const session = await auth();
@@ -313,7 +313,7 @@ export const getAuthSessions = async (): Promise<Session[]> => {
 };
 
 /**
- * @description Confirm email with token
+ * Confirm email with token
  * @schema ConfirmEmailSchema
  */
 export const confirmEmail = safeAction
@@ -344,7 +344,7 @@ export const confirmEmail = safeAction
   });
 
 /**
- * @description Update tokens in auth session
+ * Update tokens in auth session
  * @param data
  */
 const updateTokens = async (data: RefreshToken) => {
@@ -361,7 +361,7 @@ const updateTokens = async (data: RefreshToken) => {
 };
 
 /**
- * @description Refresh access token with refresh token
+ * Refresh access token with refresh token
  * @param user
  */
 export const refreshAccessToken = async (user: User): Promise<unknown> => {
@@ -390,7 +390,7 @@ export const refreshAccessToken = async (user: User): Promise<unknown> => {
 };
 
 /**
- * @description Validate session if exist from server session
+ * Validate session if exist from server session
  */
 export const validateSessionIfExist = async (): Promise<GetSession> => {
   const [error, data] = await getSessionById();
@@ -405,7 +405,7 @@ export const validateSessionIfExist = async (): Promise<GetSession> => {
 };
 
 /**
- * @description Delete account
+ * Delete account
  * @schema DeleteAccountSchema
  * @param parsedInput
  * @returns Promise<MessageResponse>

@@ -10,7 +10,7 @@ import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
 import type { Extension } from '@tiptap/core';
 import type { ColorOptions } from '@tiptap/extension-color';
 import type { HighlightOptions } from '@tiptap/extension-highlight';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, PaintbrushVertical } from 'lucide-react';
 
 type TextStylingExtensions =
   | Extension<ColorOptions, any>
@@ -71,21 +71,24 @@ const ColorHighlightButton = ({
       </div>
       <span>{name}</span>
     </div>
-    {isActive && <CheckIcon className="h-4 w-4" />}
+    {isActive && <CheckIcon className="size-4" />}
   </button>
 );
 
 export const ColorHighlightToolbar = () => {
   const { editor } = useToolbar();
 
-  const currentColor = editor?.getAttributes('textStyle').color;
-  const currentHighlight = editor?.getAttributes('highlight').color;
+  const currentColor =
+    editor?.getAttributes('textStyle').color ?? 'var(--editor-text-default)';
+  const currentHighlight =
+    editor?.getAttributes('highlight').color ??
+    'var(--editor-highlight-default)';
 
   const handleSetColor = (color: string) => {
     editor
       ?.chain()
       .focus()
-      .setColor(color === currentColor ? '' : color)
+      .setColor(color === currentColor ? 'var(--editor-text-default)' : color)
       .run();
   };
 
@@ -93,7 +96,11 @@ export const ColorHighlightToolbar = () => {
     editor
       ?.chain()
       .focus()
-      .setHighlight(color === currentHighlight ? { color: '' } : { color })
+      .setHighlight(
+        color === currentHighlight
+          ? { color: 'var(--editor-highlight-default)' }
+          : { color },
+      )
       .run();
   };
 
@@ -113,17 +120,13 @@ export const ColorHighlightToolbar = () => {
             }}
             className={cn('h-8 w-8 p-0 sm:h-9 sm:w-9')}
           >
-            <div className="flex items-center space-x-2">
-              <div
-                className="rounded-sm border px-1 py-px font-medium dark:border-neutral-600"
-                style={{
-                  backgroundColor: currentHighlight,
-                  color: currentColor,
-                }}
-              >
-                A
-              </div>
-            </div>
+            <PaintbrushVertical
+              className="size-4"
+              style={{
+                backgroundColor: currentHighlight,
+                color: currentColor,
+              }}
+            />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-56 p-1 dark:bg-gray-2">

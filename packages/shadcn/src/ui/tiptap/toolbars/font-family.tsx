@@ -33,7 +33,7 @@ const FontFamilyItem = ({ font, isActive, onClick }: FontFamilyItemProps) => (
     type="button"
   >
     <span style={{ fontFamily: font }}>{font}</span>
-    {isActive && <CheckIcon className="h-4 w-4" />}
+    {isActive && <CheckIcon className="size-4" />}
   </button>
 );
 
@@ -59,7 +59,7 @@ export const FontFamilyToolbar = () => {
           <span className="truncate" style={{ fontFamily: currentFont }}>
             {currentFont || 'Font'}
           </span>
-          <ChevronDownIcon className="ml-2 h-4 w-4" />
+          <ChevronDownIcon className="ml-2 size-4" />
         </Button>
 
         <PopoverContent align="start" className="w-56 p-1 dark:bg-gray-2">

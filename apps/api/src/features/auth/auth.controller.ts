@@ -1,3 +1,24 @@
+import { Public } from '@/common/decorators';
+import { JwtRefreshGuard } from '@/common/guards/jwt-refresh.guard';
+import {
+  MessageResponse,
+  RefreshTokenResponse,
+  SessionResponse,
+  SessionsResponse,
+  SignInResponse,
+} from '@/common/interfaces';
+import {
+  ChangePasswordDto,
+  ConfirmEmailDto,
+  CreateUserDto,
+  DeleteUserDto,
+  ForgotPasswordDto,
+  RefreshTokenDto,
+  ResetPasswordDto,
+  SignInUserDto,
+  SignOutAllDeviceUserDto,
+  SignOutUserDto,
+} from '@/features/auth/dto';
 import {
   Body,
   Controller,
@@ -8,37 +29,25 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-
-import { Public } from '@/common/decorators';
-import { JwtRefreshGuard } from '@/common/guards/jwt-refresh.guard';
 import { AuthService } from './auth.service';
 
-import {
-  MessageResponse,
-  RefreshTokenResponse,
-  SessionResponse,
-  SessionsResponse,
-  SignInResponse,
-} from '@/features/auth/auth.interface';
-import { ChangePasswordDto } from '@/features/auth/dto/change-password.dto';
-import { ConfirmEmailDto } from '@/features/auth/dto/confirm-email.dto';
-import { CreateUserDto } from '@/features/auth/dto/create-user.dto';
-import { DeleteUserDto } from '@/features/auth/dto/delete-user.dto';
-import { ForgotPasswordDto } from '@/features/auth/dto/forgot-password.dto';
-import { RefreshTokenDto } from '@/features/auth/dto/refresh-token.dto';
-import { ResetPasswordDto } from '@/features/auth/dto/reset-password.dto';
-import { SignInUserDto } from '@/features/auth/dto/signIn-user.dto';
-import { SignOutUserDto } from '@/features/auth/dto/signOut-user.dto';
-import { SignOutAllDeviceUserDto } from '@/features/auth/dto/signOutAllDevice-user.dto';
-
+/**
+ * Controller for handling authentication and user account related endpoints.
+ */
 @Controller('auth')
 export class AuthController {
+  /**
+   * Creates an instance of AuthController.
+   *
+   * @param {AuthService} authService - The authentication service.
+   */
   constructor(private readonly authService: AuthService) {}
 
   /**
-   * @description Registers a new user.
-   * @param createUserDto
-   * @returns Promise<MessageResponse>
+   * Registers a new user.
+   *
+   * @param {CreateUserDto} createUserDto - Data for creating a new user.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Public()
   @Post('sign-up')
@@ -50,9 +59,10 @@ export class AuthController {
   }
 
   /**
-   * @description Signs in a user.
-   * @param signInUserDto
-   * @returns Promise<SignInResponse>
+   * Signs in a user.
+   *
+   * @param {SignInUserDto} signInUserDto - User credentials for sign in.
+   * @returns {Promise<SignInResponse>} Sign-in response with tokens and user data.
    */
   @Public()
   @Post('sign-in')
@@ -68,9 +78,10 @@ export class AuthController {
   }
 
   /**
-   * @description Signs out the user from the current session.
-   * @param signOutUserDto
-   * @returns Promise<MessageResponse>
+   * Signs out the user from the current session.
+   *
+   * @param {SignOutUserDto} signOutUserDto - Data for signing out.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Post('sign-out')
   async signOut(
@@ -81,9 +92,10 @@ export class AuthController {
   }
 
   /**
-   * @description Signs out the user from all devices.
-   * @param dto
-   * @returns {Promise<MessageResponse>}
+   * Signs out the user from all devices.
+   *
+   * @param {SignOutAllDeviceUserDto} dto - Data for signing out from all devices.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Post('sign-out-allDevices')
   async signOutAllDevices(
@@ -94,9 +106,10 @@ export class AuthController {
   }
 
   /**
-   * @description Retrieves all sessions for a user.
-   * @param userId
-   * @returns Promise<SessionsResponse>
+   * Retrieves all sessions for a user.
+   *
+   * @param {string} userId - ID of the user.
+   * @returns {Promise<SessionsResponse>} List of user sessions.
    */
   @Get('sessions/:userId')
   async sessions(@Param('userId') userId: string): Promise<SessionsResponse> {
@@ -105,9 +118,10 @@ export class AuthController {
   }
 
   /**
-   * @description Retrieves a session by ID.
-   * @param id
-   * @returns Promise<SessionResponse>
+   * Retrieves a session by ID.
+   *
+   * @param {string} id - Session ID.
+   * @returns {Promise<SessionResponse>} Session details.
    */
   @Get('session/:id')
   async session(@Param('id') id: string): Promise<SessionResponse> {
@@ -116,9 +130,10 @@ export class AuthController {
   }
 
   /**
-   * @description Confirms the user's email.
-   * @param confirmEmailDto
-   * @returns Promise<MessageResponse>
+   * Confirms the user's email.
+   *
+   * @param {ConfirmEmailDto} confirmEmailDto - Email confirmation data.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Patch('confirm-email')
   async confirmEmail(
@@ -129,9 +144,10 @@ export class AuthController {
   }
 
   /**
-   * @description Sends a password reset email.
-   * @param forgotPasswordDto
-   * @returns Promise<MessageResponse>
+   * Sends a password reset email.
+   *
+   * @param {ForgotPasswordDto} forgotPasswordDto - Data for password reset request.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Public()
   @Patch('forgot-password')
@@ -143,9 +159,10 @@ export class AuthController {
   }
 
   /**
-   * @description Resets the user's password using a token.
-   * @param dto
-   * @returns Promise<MessageResponse>
+   * Resets the user's password using a token.
+   *
+   * @param {ResetPasswordDto} dto - Data for resetting password.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Public()
   @Patch('reset-password')
@@ -155,9 +172,10 @@ export class AuthController {
   }
 
   /**
-   * @description Changes the user's password.
-   * @param dto
-   * @returns Promise<MessageResponse>
+   * Changes the user's password.
+   *
+   * @param {ChangePasswordDto} dto - Data for changing password.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Patch('change-password')
   async changePassword(
@@ -168,9 +186,10 @@ export class AuthController {
   }
 
   /**
-   * @description Refreshes the access token using a refresh token.
-   * @param  dto
-   * @returns Promise<RefreshTokenResponse>
+   * Refreshes the access token using a refresh token.
+   *
+   * @param {RefreshTokenDto} dto - Data for refreshing the token.
+   * @returns {Promise<RefreshTokenResponse>} Refresh token response.
    */
   @UseGuards(JwtRefreshGuard)
   @Patch('refresh-token')
@@ -188,9 +207,10 @@ export class AuthController {
   }
 
   /**
-   * @description Deletes the user account.
-   * @param deleteUserDto
-   * @returns Promise<MessageResponse>
+   * Deletes the user account.
+   *
+   * @param {DeleteUserDto} deleteUserDto - Data for deleting the user.
+   * @returns {Promise<MessageResponse>} Response message.
    */
   @Delete('delete-account')
   async deleteUser(

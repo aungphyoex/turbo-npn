@@ -356,6 +356,7 @@ function TiptapImage(props: NodeViewProps) {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
+                side="bottom"
                 alignOffset={-90}
                 className="mt-1 text-sm"
               >
@@ -384,12 +385,12 @@ function TiptapImage(props: NodeViewProps) {
                         >
                           {uploading ? (
                             <>
-                              <Loader2 className="h-4 w-4 animate-spin" />
+                              <Loader2 className="size-4 lg:size-5animate-spin" />
                               <span>Uploading...</span>
                             </>
                           ) : (
                             <>
-                              <ImageIcon className="h-4 w-4" />
+                              <ImageIcon className="size-4" />
                               <span>Choose Image</span>
                             </>
                           )}

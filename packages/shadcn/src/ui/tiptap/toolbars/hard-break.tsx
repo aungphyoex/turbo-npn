@@ -1,10 +1,9 @@
 'use client';
 
-import { WrapText } from 'lucide-react';
-
 import { Button, type ButtonProps } from '@repo/shadcn/button';
 import { cn } from '@repo/shadcn/lib/utils';
 import { useToolbar } from '@repo/shadcn/tiptap/toolbars/toolbar-provider';
+import { IconTextWrap } from '@tabler/icons-react';
 
 const HardBreakToolbar = ({
   className,
@@ -25,7 +24,7 @@ const HardBreakToolbar = ({
       }}
       {...props}
     >
-      {children ?? <WrapText className="h-4 w-4" />}
+      {children ?? <IconTextWrap className="size-4" />}
     </Button>
   );
 };

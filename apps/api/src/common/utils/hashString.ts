@@ -1,9 +1,10 @@
 import argon2 from 'argon2';
 
 /**
- * @description Plain text transform to hex
- * @param password
- * @return Promise<string>
+ * Hashes a plain text password using Argon2id algorithm.
+ *
+ * @param {string} password - The plain text password to hash.
+ * @returns {Promise<string>} The hashed password as a string.
  */
 const hashString = async (password: string): Promise<string> => {
   return await argon2.hash(password, {
@@ -15,10 +16,11 @@ const hashString = async (password: string): Promise<string> => {
 };
 
 /**
- * @description Compare plain password with hashed password
- * @param plainPassword
- * @param hashedPassword
- * @return Promise<boolean>
+ * Compares a plain text password with a hashed password.
+ *
+ * @param {string} plainPassword - The plain text password to verify.
+ * @param {string} hashedPassword - The hashed password to compare against.
+ * @returns {Promise<boolean>} True if the passwords match, false otherwise.
  */
 const validateString = async (
   plainPassword: string,
@@ -26,7 +28,7 @@ const validateString = async (
 ): Promise<boolean> => {
   try {
     return await argon2.verify(hashedPassword, plainPassword);
-  } catch (e) {
+  } catch {
     return false;
   }
 };

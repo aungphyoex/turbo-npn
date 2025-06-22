@@ -31,7 +31,7 @@ import React, { Fragment } from 'react';
 const textStyles = [
   {
     name: 'Paragraph',
-    icon: <Pilcrow className="size-4 dark:text-white scale-x-[-1]" />,
+    icon: <Pilcrow className="size-4 lg:size-5dark:text-white scale-x-[-1]" />,
     type: 'paragraph',
     action: (editor: Editor) => {
       editor.chain().focus().setParagraph().run();
@@ -43,7 +43,7 @@ const textStyles = [
   },
   {
     name: 'Heading 1',
-    icon: <Heading1Icon className="size-4 dark:text-white" />,
+    icon: <Heading1Icon className="size-4 lg:size-5dark:text-white" />,
     type: 1,
     action: (editor: Editor) => {
       editor.chain().focus().toggleHeading({ level: 1 }).run();
@@ -55,7 +55,7 @@ const textStyles = [
   },
   {
     name: 'Heading 2',
-    icon: <Heading2Icon className="size-4 dark:text-white" />,
+    icon: <Heading2Icon className="size-4 lg:size-5dark:text-white" />,
     type: 2,
     action: (editor: Editor) => {
       editor.chain().focus().toggleHeading({ level: 2 }).run();
@@ -67,7 +67,7 @@ const textStyles = [
   },
   {
     name: 'Heading 3',
-    icon: <Heading3Icon className="size-4 dark:text-white" />,
+    icon: <Heading3Icon className="size-4 lg:size-5dark:text-white" />,
     type: 3,
     action: (editor: Editor) => {
       editor.chain().focus().toggleHeading({ level: 3 }).run();
@@ -78,7 +78,7 @@ const textStyles = [
     cmd: ['⌘', '⌥', '3'],
   },
   {
-    icon: <BoldIcon className="size-4 dark:text-white" />,
+    icon: <BoldIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Bold',
     type: 'bold',
     action: (editor: Editor) => {
@@ -90,7 +90,7 @@ const textStyles = [
     cmd: ['⌘', 'b'],
   },
   {
-    icon: <ItalicIcon className="size-4 dark:text-white" />,
+    icon: <ItalicIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Italic',
     type: 'italic',
     action: (editor: Editor) => {
@@ -102,7 +102,7 @@ const textStyles = [
     cmd: ['⌘', 'i'],
   },
   {
-    icon: <StrikethroughIcon className="size-4 dark:text-white" />,
+    icon: <StrikethroughIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Strikethrough',
     type: 'strike',
     action: (editor: Editor) => {
@@ -114,7 +114,7 @@ const textStyles = [
     cmd: ['⌘', '⇧', 's'],
   },
   {
-    icon: <UnderlineIcon className="size-4 dark:text-white" />,
+    icon: <UnderlineIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Underline',
     type: 'underline',
     action: (editor: Editor) => {
@@ -126,7 +126,7 @@ const textStyles = [
     cmd: ['⌘', '⇧', 'u'],
   },
   {
-    icon: <CodeIcon className="size-4 dark:text-white" />,
+    icon: <CodeIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Code',
     type: 'code',
     action: (editor: Editor) => {
@@ -138,7 +138,7 @@ const textStyles = [
     cmd: ['⌘', 'e'],
   },
   {
-    icon: <CodeIcon className="size-4 dark:text-white" />,
+    icon: <CodeIcon className="size-4 lg:size-5dark:text-white" />,
     name: 'Code Block',
     type: 'code-block',
     action: (editor: Editor) => {
@@ -151,7 +151,7 @@ const textStyles = [
   },
   {
     name: 'Blockquote',
-    icon: <IconBlockquote className="size-4 tdark:ext-white" />,
+    icon: <IconBlockquote className="size-4 lg:size-5tdark:ext-white" />,
     type: 'blockquote',
     action: (editor: Editor) => {
       editor.chain().focus().toggleBlockquote().run();
@@ -204,13 +204,13 @@ export const TextToolbar = ({
                 </>
               ) : (
                 <>
-                  <Zap className="size-4 dark:text-white" />
+                  <Zap className="size-4 lg:size-5dark:text-white" />
                   Other
                 </>
               )}
             </>
           )}
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-[250px]">

@@ -20,7 +20,7 @@ function UndoToolbar({ className, onClick, children, ...props }: ButtonProps) {
       disabled={!editor?.can().chain().focus().undo().run()}
       {...props}
     >
-      {children ?? <Undo2 className="h-4 w-4" />}
+      {children ?? <Undo2 className="size-4" />}
     </Button>
   );
 }

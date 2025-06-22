@@ -23,6 +23,9 @@ export const generateRefreshTime = async (day = 3): Promise<string> => {
   return refreshTime.toISOString();
 };
 
+export * from './amazon-s3';
+export * from './file';
+export * from './file-s3';
 export * from './hashString';
 export * from './otp';
 export * from './validateEnv';
