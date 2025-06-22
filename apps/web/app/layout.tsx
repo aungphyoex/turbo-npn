@@ -102,8 +102,8 @@ const RootLayout = async ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
-  const cookie = await cookies();
-  const select_font = cookie.get('select-font')?.value ?? '--font-geist';
+  const select_font =
+    (await cookies()).get('select-font')?.value ?? '--font-geist';
   return (
     <html lang="en" suppressHydrationWarning>
       <body

@@ -10,6 +10,43 @@
 
 /* Root CSS Variables for Color Palette */
 :root {
+  --expo-in: linear(
+    0 0%,
+    0.0085 31.26%,
+    0.0167 40.94%,
+    0.0289 48.86%,
+    0.0471 55.92%,
+    0.0717 61.99%,
+    0.1038 67.32%,
+    0.1443 72.07%,
+    0.1989 76.7%,
+    0.2659 80.89%,
+    0.3465 84.71%,
+    0.4419 88.22%,
+    0.554 91.48%,
+    0.6835 94.51%,
+    0.8316 97.34%,
+    1 100%
+  );
+  --expo-out: linear(
+    0 0%,
+    0.1684 2.66%,
+    0.3165 5.49%,
+    0.446 8.52%,
+    0.5581 11.78%,
+    0.6535 15.29%,
+    0.7341 19.11%,
+    0.8011 23.3%,
+    0.8557 27.93%,
+    0.8962 32.68%,
+    0.9283 38.01%,
+    0.9529 44.08%,
+    0.9711 51.14%,
+    0.9833 59.06%,
+    0.9915 68.74%,
+    1 100%
+  );
+
   --background: oklch(0.9911 0 0);
   --foreground: oklch(0.2046 0 0);
   --card: oklch(0.9911 0 0);
@@ -42,9 +79,6 @@
   --sidebar-accent-foreground: oklch(0.2435 0 0);
   --sidebar-border: oklch(0.9037 0 0);
   --sidebar-ring: oklch(0.8348 0.1302 160.908);
-  --font-sans: Outfit, sans-serif;
-  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-mono: monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
@@ -119,9 +153,6 @@
   --sidebar-accent-foreground: oklch(0.9851 0 0);
   --sidebar-border: oklch(0.2809 0 0);
   --sidebar-ring: oklch(0.8003 0.1821 151.711);
-  --font-sans: Outfit, sans-serif;
-  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-mono: monospace;
   --radius: 0.5rem;
   --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
@@ -196,10 +227,6 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -240,6 +267,12 @@
       transform: translateY(calc(-100% - var(--gap)));
     }
   }
+
+  @keyframes scale {
+    to {
+      mask-size: 200vmax;
+    }
+  }
 }
 
 /* Utility for Container */
@@ -269,6 +302,24 @@
     background: hsl(var(--border));
   }
 
+  /* View Transition Animations */
+  ::view-transition-new(root) {
+    z-index: 500000;
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="white"/></svg>')
+      center / 0 no-repeat;
+    animation: scale 1s;
+  }
+
+  ::view-transition-old(root),
+  .dark::view-transition-old(root) {
+    z-index: -1;
+    animation: none;
+  }
+  .dark::view-transition-new(root) {
+    z-index: 500000;
+    animation: scale 1s;
+  }
+
   /* No Scrollbar Utility */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -277,26 +328,6 @@
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
-  }
-
-  /* View Transition Animations */
-  ::view-transition-group(root) {
-    animation-duration: 0.7s;
-    animation-timing-function: cubic-bezier(0.65, 0.05, 0.36, 1);
-  }
-
-  ::view-transition-new(root) {
-    animation-name: reveal-light;
-  }
-
-  ::view-transition-old(root),
-  .dark::view-transition-old(root) {
-    z-index: -1;
-    animation: none;
-  }
-
-  .dark::view-transition-new(root) {
-    animation-name: reveal-dark;
   }
 }
 
@@ -307,14 +338,5 @@
 
   .w-vw {
     @apply w-[calc(100vw_-_((_var(--spacing)_*_5_)_*_2))]! md:w-[400px]!;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

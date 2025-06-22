@@ -10,6 +10,7 @@ import {
 import { useDebounce } from '@repo/shadcn/hooks/t/use-debounce';
 import { cn } from '@repo/shadcn/lib/utils';
 import { ScrollArea } from '@repo/shadcn/scroll-area';
+import { IconBrandYoutubeFilled } from '@tabler/icons-react';
 import type { Editor } from '@tiptap/core';
 import { FloatingMenu } from '@tiptap/react';
 import {
@@ -122,6 +123,36 @@ const groups: CommandGroupType[] = [
         icon: Minus,
         keywords: 'horizontal rule divider',
         command: (editor) => editor.chain().focus().setHorizontalRule().run(),
+      },
+      {
+        title: 'Youtube',
+        description: 'Add a youtube embedded',
+        icon: IconBrandYoutubeFilled,
+        keywords: 'youtube insert',
+        command: (editor) => {
+          const videoLink = prompt('Please enter Youtube Video Link');
+          //From https://regexr.com/3dj5t
+          const ytregex = new RegExp(
+            /^((?:https?:)?\/\/)?((?:www|m)\.)?(youtube\.com|youtu.be)(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/,
+          );
+
+          if (videoLink && ytregex.test(videoLink)) {
+            editor.commands.insertContent({
+              type: 'youtube',
+              attrs: {
+                src: videoLink,
+                width: '100%',
+                align: 'center',
+                height: '550',
+                caption: 'Youtube Video Link',
+              },
+            });
+          } else {
+            if (videoLink !== null) {
+              alert('Please enter a correct Youtube Video Link');
+            }
+          }
+        },
       },
     ],
   },
